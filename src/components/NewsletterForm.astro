@@ -72,7 +72,7 @@ const selected = tag === "shopify" ? "shopify" : tag ? "pages" : "tout";
             <legend class="text-[13px] leading-5 text-[#95959b]">{tr ? tr.newsletterTopic : "Je veux recevoir les guides sur"}</legend>
             <div class="mt-2 flex flex-wrap gap-2">
               {interests.map((item) => (
-                <label class="inline-flex h-[30px] cursor-pointer items-center rounded-full border border-[#3a3a3c] bg-[#202020] px-3 text-[13px] font-medium text-[#d1d1d6] transition-colors hover:border-[#8e8e93] has-checked:border-white has-checked:bg-white has-checked:text-black has-focus-visible:ring-2 has-focus-visible:ring-white has-focus-visible:ring-offset-2 has-focus-visible:ring-offset-black">
+                <label class="inline-flex h-[30px] cursor-pointer items-center rounded-[var(--id-radius-field)] border border-[#3a3a3c] bg-[#202020] px-3 text-[13px] font-medium text-[#d1d1d6] transition-colors hover:border-[#8e8e93] has-checked:border-white has-checked:bg-white has-checked:text-black has-focus-visible:ring-2 has-focus-visible:ring-white has-focus-visible:ring-offset-2 has-focus-visible:ring-offset-black">
                   <input type="radio" name="tags" value={item.tags.join(",")} checked={item.id === selected} class="sr-only" />
                   {item.label}
                 </label>
@@ -90,14 +90,14 @@ const selected = tag === "shopify" ? "shopify" : tag ? "pages" : "tout";
             inputmode="email"
             placeholder={lang === "pt" ? "voce@exemplo.com" : lang === "en" ? "you@example.com" : "vous@exemple.com"}
             aria-describedby="newsletter-help"
-            class="h-[39px] w-full min-w-0 rounded-full min-[480px]:flex-1 border border-[#3a3a3c] bg-black px-4 text-[14px] text-white outline-none transition-shadow placeholder:text-[#808086] focus:ring-2 focus:ring-white focus:border-white aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-[#ff453a]"
+            class="h-[39px] w-full min-w-0 rounded-[var(--id-radius-field)] min-[480px]:flex-1 border border-[#3a3a3c] bg-black px-3.5 text-[14px] text-white outline-none transition-shadow placeholder:text-[#808086] focus:ring-2 focus:ring-white focus:border-white aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-[#ff453a]"
           />
           <div aria-hidden="true" style="position: absolute; left: -5000px;">
             <input type="text" name={newsletterHoneypot} tabindex="-1" value="" />
           </div>
           <button
             type="submit"
-            class="inline-flex h-[39px] min-w-[120px] items-center justify-center gap-2 rounded-full bg-white px-6 text-[14px] font-medium text-black transition-colors hover:bg-[#e5e5e5] disabled:cursor-wait"
+            class="inline-flex h-[39px] min-w-[120px] items-center justify-center gap-2 rounded-[var(--id-radius-field)] bg-white px-6 text-[14px] font-medium text-black transition-colors hover:bg-[#e5e5e5] disabled:cursor-wait"
           >
             <span data-newsletter-spinner hidden class="newsletter-spinner" aria-hidden="true"></span>
             <span data-newsletter-label>{messages.button}</span>

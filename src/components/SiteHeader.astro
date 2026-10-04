@@ -39,8 +39,9 @@ function isCurrent(target: string) {
 }
 ---
 
-<!-- Le padding du bas garde la page à la même hauteur qu'avant (la ligne des langues est passée dans le menu). -->
-<header class="px-5 pb-[52px] pt-6 sm:px-8">
+<!-- En-tête fixe en haut (demande de Dário, 04/10/2026) : fond noir, trait fin après défilement.
+     En dessous du menu latéral (z-[60]) ; la barre newsletter et le bandeau cookies sont en bas. -->
+<header data-sticky-header class="sticky top-0 z-40 border-b border-transparent bg-black px-5 py-6 transition-colors duration-200 data-[scrolled]:border-[#292929] sm:px-8">
   <div class="flex items-center justify-between">
     <a href={href(homeHref)} aria-label={ui[lang].home} class="flex items-center gap-2 text-white">
       <DottedMark />
@@ -60,6 +61,18 @@ function isCurrent(target: string) {
     </button>
   </div>
 </header>
+<script is:inline>
+  // En-tête fixe : un trait fin en bas seulement après défilement.
+  (function () {
+    var header = document.querySelector("[data-sticky-header]");
+    if (!header) return;
+    var update = function () { header.toggleAttribute("data-scrolled", window.scrollY > 4); };
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+  })();
+</script>
+<!-- Espace : garde la page à la même hauteur qu'avant (l'en-tête avait 52px de padding en bas). -->
+<div aria-hidden="true" class="h-7"></div>
 
 <!-- Menu latéral : glisse depuis la droite, sur toute la hauteur, au-dessus de la page assombrie. -->
 <div id="site-menu" hidden class="group/drawer fixed inset-0 z-[60]" data-menu-drawer>

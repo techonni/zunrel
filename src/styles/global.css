@@ -10,6 +10,8 @@
 html {
   background: var(--id-bg);
   color-scheme: dark;
+  /* Les ancres ne passent pas sous l'en-tête fixe. */
+  scroll-padding-top: 88px;
 }
 
 body {
