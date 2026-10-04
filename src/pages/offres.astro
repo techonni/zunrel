@@ -50,10 +50,10 @@ const offers = [
   </p>
   <p class="mt-3 text-[13px] leading-5 text-[#808086]">Offres vérifiées le {formatDate(verifiedOn)}</p>
 
-  <div class="mt-10 space-y-8">
+  <div class="mt-10 space-y-12">
     {
       offers.map((offer) => (
-        <section class="rounded-[20px] border border-[#3a3a3c] bg-[#202020] p-6">
+        <section class="m-flat">
           <h2 class="text-[13px] leading-5 text-[#95959b]">{offer.name}</h2>
           <p class="mt-2 text-[18px] font-semibold leading-6 text-white">{offer.headline}</p>
           <ul class="mt-4 list-disc space-y-1.5 pl-5 text-[15px] leading-6 text-[#95959b]">
@@ -71,11 +71,12 @@ const offers = [
           </a>
           <p class="mt-3 text-[13px] leading-5 text-[#808086]">Lien affilié : il ne change pas le prix pour vous.</p>
           <h3 class="mt-6 text-[13px] leading-5 text-[#95959b]">Pour en profiter</h3>
-          <ul class="mt-2 space-y-1.5">
+          <ul class="mt-2 m-list">
             {offer.guides.map((guide) => (
               <li>
-                <a href={href(`/guides/${guide.slug}`)} class="text-[15px] leading-6 text-white hover:underline">
-                  {guide.question} →
+                <a href={href(`/guides/${guide.slug}`)} class="m-row group !py-3 text-[15px] leading-6 text-white">
+                  <span class="m-body">{guide.question}</span>
+                  <span class="m-arrow" aria-hidden="true">→</span>
                 </a>
               </li>
             ))}

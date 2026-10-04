@@ -1,6 +1,6 @@
 import { Container, Graphics, Rectangle } from 'pixi.js';
 import gsap from 'gsap';
-import { C, R } from '../theme';
+import { C } from '../theme';
 import { makeText } from '../text';
 
 export interface MenuItem {
@@ -12,6 +12,8 @@ export interface MenuItem {
 
 const ROW_H = 46;
 const MENU_W = 240;
+/** Linha fina entre as opções (#292929, como os sites). */
+const HAIRLINE = 0x292929;
 
 /** Menu "hambúrguer": lista que abre por baixo do botão ☰, alinhada à direita. */
 export class Menu extends Container {
@@ -32,32 +34,41 @@ export class Menu extends Container {
   open(items: MenuItem[], right: number, top: number, W: number, H: number): void {
     this.backdrop.clear().rect(0, 0, W, H).fill({ color: 0x000000, alpha: 0.5 });
     this.panel.removeChildren().forEach((c) => c.destroy({ children: true }));
-    const h = items.length * ROW_H + 12;
+    // Estilo minimalista (pedido do Dário, 04/10/2026): sem cartão arredondado.
+    // Painel preto com contorno fino, linhas finas entre as opções e uma seta › à direita
+    // que avança e fica branca ao passar o rato.
+    const h = items.length * ROW_H;
     this.panel.addChild(
       new Graphics()
-        .roundRect(0, 4, MENU_W, h, R.input)
-        .fill({ color: 0x000000, alpha: 0.5 })
-        .roundRect(0, 0, MENU_W, h, R.input)
-        .fill(C.bgPanel)
-        .stroke({ width: 1, color: C.border, alignment: 1 }),
+        .rect(0, 0, MENU_W, h)
+        .fill(C.bgBase)
+        .stroke({ width: 1, color: HAIRLINE, alignment: 1 }),
     );
     items.forEach((it, i) => {
       const row = new Container();
-      const hover = new Graphics().roundRect(6, 0, MENU_W - 12, ROW_H, R.small).fill(C.bgSoft);
-      hover.alpha = 0;
       const icon = new Graphics();
       it.icon(icon);
-      icon.position.set(28, ROW_H / 2);
+      icon.position.set(24, ROW_H / 2);
       const label = makeText(it.label, { fontSize: 15, fontWeight: '500', fill: C.text });
       label.anchor.set(0, 0.5);
-      label.position.set(50, ROW_H / 2);
-      row.addChild(hover, icon, label);
-      row.position.set(0, 6 + i * ROW_H);
+      label.position.set(46, ROW_H / 2);
+      const arrow = makeText('›', { fontSize: 20, fontWeight: '400', fill: C.textMuted });
+      arrow.anchor.set(1, 0.5);
+      arrow.position.set(MENU_W - 16, ROW_H / 2 - 1);
+      row.addChild(icon, label, arrow);
+      if (i > 0) row.addChild(new Graphics().rect(0, 0, MENU_W, 1).fill(HAIRLINE));
+      row.position.set(0, i * ROW_H);
       row.eventMode = 'static';
       row.cursor = 'pointer';
-      row.hitArea = new Rectangle(6, 0, MENU_W - 12, ROW_H);
-      row.on('pointerover', () => (hover.alpha = 1));
-      row.on('pointerout', () => (hover.alpha = 0));
+      row.hitArea = new Rectangle(0, 0, MENU_W, ROW_H);
+      row.on('pointerover', () => {
+        arrow.style.fill = C.text;
+        arrow.x = MENU_W - 13;
+      });
+      row.on('pointerout', () => {
+        arrow.style.fill = C.textMuted;
+        arrow.x = MENU_W - 16;
+      });
       row.on('pointertap', () => {
         this.close();
         it.onTap();

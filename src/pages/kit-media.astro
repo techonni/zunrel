@@ -48,10 +48,10 @@ const principles = [
     automatiquement à partir du contenu publié.
   </p>
 
-  <div class="mt-10 grid grid-cols-2 gap-3 min-[640px]:grid-cols-4">
+  <div class="mt-10 grid grid-cols-2 gap-x-6 gap-y-6 min-[640px]:grid-cols-4">
     {
       stats.map((stat) => (
-        <div class="rounded-[20px] bg-[#202020] p-4">
+        <div class="border-t border-[#292929] pt-4">
           <p class="text-[22px] font-semibold leading-7 text-white">{stat.value}</p>
           <p class="mt-1 text-[13px] leading-5 text-[#95959b]">{stat.label}</p>
         </div>

@@ -49,7 +49,7 @@ const searchPage = href("/recherche");
   <p data-search-status aria-live="polite" class:list={["text-[15px] leading-6 text-[#95959b]", page ? "mt-10" : "mt-6 empty:hidden"]}>
     {page ? "Tapez un mot : domaine, formulaire, boutique, produit…" : ""}
   </p>
-  <div data-search-results class:list={["hidden space-y-8", page ? "mt-10" : "mt-6"]}></div>
+  <div data-search-results class:list={["hidden m-list", page ? "mt-10" : "mt-6"]}></div>
   <a data-search-more href={searchPage} class="mt-6 hidden text-[14px] font-medium leading-5 text-white hover:underline"></a>
 </div>
 
@@ -91,11 +91,17 @@ const searchPage = href("/recherche");
   function row(result: PagefindResult) {
     const link = document.createElement("a");
     link.href = result.url;
-    link.className = "group block";
+    link.className = "m-row group";
+    const body = document.createElement("span");
+    body.className = "m-body";
+    const arrow = document.createElement("span");
+    arrow.className = "m-arrow";
+    arrow.setAttribute("aria-hidden", "true");
+    arrow.textContent = "→";
 
     const title = document.createElement("span");
-    title.className = "block text-[15px] font-medium leading-5 text-white group-hover:underline";
-    title.textContent = `${result.meta.title ?? result.url} →`;
+    title.className = "block text-[15px] font-medium leading-5 text-white";
+    title.textContent = result.meta.title ?? result.url;
 
     // L'extrait vient de Pagefind : texte échappé, seuls les mots trouvés sont entourés de <mark>.
     const excerpt = document.createElement("span");
@@ -103,13 +109,14 @@ const searchPage = href("/recherche");
       "mt-1 block text-[14px] leading-5 text-[#95959b] [&_mark]:bg-transparent [&_mark]:font-medium [&_mark]:text-white";
     excerpt.innerHTML = result.excerpt || result.meta.summary || "";
 
-    link.append(title, excerpt);
+    body.append(title, excerpt);
     if (result.meta.minutes) {
       const minutes = document.createElement("span");
       minutes.className = "mt-1 block text-[13px] leading-5 text-[#808086]";
       minutes.textContent = `Lecture : ${result.meta.minutes} min`;
-      link.append(minutes);
+      body.append(minutes);
     }
+    link.append(body, arrow);
     return link;
   }
 

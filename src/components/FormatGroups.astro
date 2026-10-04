@@ -21,7 +21,7 @@ const groups = formats
         <a href={href(`/formats/${item.slug}`)} class="text-[13px] font-medium leading-5 text-white hover:underline">
           {item.name} <span class="font-normal text-[#808086]">· {list.length}</span>
         </a>
-        <div class="mt-5 space-y-8">
+        <div class="mt-5 m-list">
           {list.map((guide) => <GuideRow guide={guide} />)}
         </div>
       </div>

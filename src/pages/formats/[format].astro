@@ -29,7 +29,7 @@ const total = guidesInFormat(item.format).length;
           <a href={href(`/themes/${theme.slug}`)} class="text-[13px] leading-5 text-[#95959b] hover:underline">
             {theme.name}
           </a>
-          <div class="mt-5 space-y-8">
+          <div class="mt-5 m-list">
             {list.map((guide) => <GuideRow guide={guide} />)}
           </div>
         </section>

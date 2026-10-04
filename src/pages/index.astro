@@ -34,39 +34,45 @@ import { href } from "../lib/paths";
     <a href="/en/" hreflang="en" class="underline underline-offset-4 hover:text-white">guides in English</a>
   </p>
 
-  <a href={href("/offres")} class="mt-10 block rounded-[20px] border border-[#3a3a3c] bg-[#202020] p-5 hover:border-[#8e8e93]">
-    <span class="block text-[15px] font-medium leading-5 text-white">Meilleures offres du moment →</span>
-    <span class="mt-1 block text-[14px] leading-5 text-[#95959b]">Shopify à 1 € par mois, Leadpages et HTML Pub gratuits pendant 7 jours : les offres vérifiées ce mois-ci.</span>
-  </a>
+  <div class="mt-10 m-list">
+    <a href={href("/offres")} class="m-row group">
+      <span class="m-body">
+        <span class="block text-[15px] font-medium leading-5 text-white">Meilleures offres du moment</span>
+        <span class="mt-1 block text-[14px] leading-5 text-[#95959b]">Shopify à 1 € par mois, Leadpages et HTML Pub gratuits pendant 7 jours : les offres vérifiées ce mois-ci.</span>
+      </span>
+      <span class="m-arrow" aria-hidden="true">→</span>
+    </a>
+  </div>
 
   <section class="mt-[72px]">
     <h2 class="text-[13px] leading-5 text-[#95959b]">Nouveaux guides</h2>
-    <div class="mt-6 space-y-8">
+    <div class="mt-6 m-list">
       {latestGuides().map((guide) => <GuideRow guide={guide} />)}
     </div>
   </section>
 
   <section class="mt-16">
     <h2 class="text-[13px] leading-5 text-[#95959b]">Les questions les plus fréquentes</h2>
-    <div class="mt-6 space-y-8">
+    <div class="mt-6 m-list">
       {popularGuides().map((guide) => <GuideRow guide={guide} />)}
     </div>
   </section>
 
   <section class="mt-16">
     <h2 class="text-[13px] leading-5 text-[#95959b]">Par thème</h2>
-    <div class="mt-6 space-y-8">
+    <div class="mt-6 m-list">
       {
         themes.map((theme) => {
           const count = guidesInTheme(theme.slug).length;
           return (
-            <a href={href(`/themes/${theme.slug}`)} class="group block">
-              <span class="block text-[15px] font-medium leading-5 text-white group-hover:underline">
-                {theme.name} →
+            <a href={href(`/themes/${theme.slug}`)} class="m-row group">
+              <span class="m-body">
+                <span class="block text-[15px] font-medium leading-5 text-white">{theme.name}</span>
+                <span class="mt-1 block text-[14px] leading-5 text-[#95959b]">
+                  {theme.blurb} {count} {count === 1 ? "guide" : "guides"}.
+                </span>
               </span>
-              <span class="mt-1 block text-[14px] leading-5 text-[#95959b]">
-                {theme.blurb} {count} {count === 1 ? "guide" : "guides"}.
-              </span>
+              <span class="m-arrow" aria-hidden="true">→</span>
             </a>
           );
         })
@@ -74,7 +80,7 @@ import { href } from "../lib/paths";
     </div>
   </section>
 
-  <section class="mt-16 rounded-[20px] bg-[#202020] p-6">
+  <section class="mt-16 m-flat">
     <h2 class="text-[15px] font-medium leading-5 text-white">Comment on écrit ces guides</h2>
     <p class="mt-3 text-[14px] leading-6 text-[#95959b]">
       Chaque guide suit le même format : les étapes dans l'ordre, les erreurs fréquentes et les liens vers l'aide

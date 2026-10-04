@@ -122,7 +122,7 @@ const howTo = {
 
   <AffiliateCta shop={isShop} placement="haut" shopHref={shopHref} />
 
-  <section class="mt-10 rounded-[20px] border border-[#3a3a3c] bg-[#202020] p-6">
+  <section class="mt-10 m-flat">
     <h2 class="text-[15px] font-medium leading-5 text-white">
       {guideFormat(guide) === "complet" ? "Le parcours en bref" : "L'essentiel en 30 secondes"}
     </h2>
@@ -166,7 +166,7 @@ const howTo = {
 
   {
     guide.pitfalls.length > 0 ? (
-      <section class="mt-14 rounded-[20px] bg-[#1e1a10] border border-[#4a3f1f] p-6">
+      <section class="mt-14 border-l-2 border-[#6b5a26] pl-5">
         <h2 class="text-[15px] font-medium leading-5 text-white">Erreurs fréquentes</h2>
         <ul class="mt-4 list-disc space-y-2 pl-5 text-[15px] leading-6 text-[#e8d9a8]">
           {guide.pitfalls.map((pitfall) => <li>{pitfall}</li>)}
@@ -179,7 +179,7 @@ const howTo = {
     tools.length > 0 ? (
       <section class="mt-14">
         <h2 class="text-[13px] leading-5 text-[#95959b]">Outils utiles</h2>
-        <div class="mt-6 space-y-6">
+        <div class="mt-6 m-list">
           {tools.map((item) => <ToolRow tool={item.tool} note={item.why} />)}
         </div>
       </section>
@@ -225,7 +225,7 @@ const howTo = {
     related.length > 0 ? (
       <section class="mt-14">
         <h2 class="text-[13px] leading-5 text-[#95959b]">À lire ensuite</h2>
-        <div class="mt-6 space-y-8">
+        <div class="mt-6 m-list">
           {related.map((item) => <GuideRow guide={item} />)}
         </div>
       </section>

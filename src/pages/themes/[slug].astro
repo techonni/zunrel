@@ -29,7 +29,7 @@ const themeTools = tools.filter((tool) => tool.themes.includes(theme.slug));
     themeTools.length > 0 ? (
       <section class="mt-16">
         <h2 class="text-[13px] leading-5 text-[#95959b]">Outils pour ce thème</h2>
-        <div class="mt-6 space-y-6">
+        <div class="mt-6 m-list">
           {themeTools.map((tool) => <ToolRow tool={tool} />)}
         </div>
       </section>

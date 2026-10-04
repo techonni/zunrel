@@ -33,7 +33,7 @@ const cta = shop
 
 {
   placement === "haut" ? (
-    <aside data-pagefind-ignore class="no-print mt-6 flex flex-col gap-3 rounded-[20px] border border-[#3a3a3c] bg-[#202020] p-4 min-[480px]:flex-row min-[480px]:items-center">
+    <aside data-pagefind-ignore class="no-print mt-6 flex flex-col gap-3 border-t border-[#292929] pt-4 min-[480px]:flex-row min-[480px]:items-center">
       <p class="flex-1 text-[14px] leading-6 text-[#95959b]">
         {cta.short} <span class="text-[#808086]">Lien affilié.</span>
       </p>
@@ -49,7 +49,7 @@ const cta = shop
       </a>
     </aside>
   ) : (
-    <section data-pagefind-ignore class="mt-14 rounded-[20px] bg-[#202020] p-6">
+    <section data-pagefind-ignore class="mt-14 m-flat">
       <h2 class="text-[15px] font-medium leading-5 text-white">Essayer par vous-même</h2>
       <p class="mt-3 text-[14px] leading-6 text-[#95959b]">{cta.text}</p>
       <a

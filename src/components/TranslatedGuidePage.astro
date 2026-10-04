@@ -84,7 +84,7 @@ const howTo = {
     });
   </script>
 
-  <aside class="no-print mt-6 flex flex-col gap-3 rounded-[20px] border border-[#3a3a3c] bg-[#202020] p-4 min-[480px]:flex-row min-[480px]:items-center">
+  <aside class="no-print mt-6 flex flex-col gap-3 border-t border-[#292929] pt-4 min-[480px]:flex-row min-[480px]:items-center">
     <p class="flex-1 text-[14px] leading-6 text-[#95959b]">
       {cta.short} <span class="text-[#808086]">{t.affiliateShort}</span>
     </p>
@@ -100,7 +100,7 @@ const howTo = {
     </a>
   </aside>
 
-  <section class="mt-10 rounded-[20px] border border-[#3a3a3c] bg-[#202020] p-6">
+  <section class="mt-10 m-flat">
     <h2 class="text-[15px] font-medium leading-5 text-white">{t.inShort}</h2>
     <ol class="mt-4 list-decimal space-y-1.5 pl-5 text-[15px] leading-6 text-[#d1d1d6]">
       {item.steps.map((step) => <li>{step.title}</li>)}
@@ -137,7 +137,7 @@ const howTo = {
     </ol>
   </section>
 
-  <section class="mt-14 rounded-[20px] bg-[#202020] p-6">
+  <section class="mt-14 m-flat">
     <h2 class="text-[15px] font-medium leading-5 text-white">{t.tryYourself}</h2>
     <p class="mt-3 text-[14px] leading-6 text-[#95959b]">{cta.text}</p>
     <a
@@ -155,7 +155,7 @@ const howTo = {
 
   {
     item.pitfalls.length > 0 ? (
-      <section class="mt-14 rounded-[20px] bg-[#1e1a10] border border-[#4a3f1f] p-6">
+      <section class="mt-14 border-l-2 border-[#6b5a26] pl-5">
         <h2 class="text-[15px] font-medium leading-5 text-white">{t.pitfalls}</h2>
         <ul class="mt-4 list-disc space-y-2 pl-5 text-[15px] leading-6 text-[#e8d9a8]">
           {item.pitfalls.map((pitfall) => <li>{pitfall}</li>)}
@@ -185,12 +185,15 @@ const howTo = {
 
   <section class="mt-14">
     <h2 class="text-[13px] leading-5 text-[#95959b]">{t.readNext}</h2>
-    <div class="mt-6 space-y-8">
+    <div class="mt-6 m-list">
       {
         related.map((entry) => (
-          <a href={translatedPath(lang, entry.localSlug)} class="group block">
-            <span class="block text-[15px] font-medium leading-5 text-white group-hover:underline">{entry.question} →</span>
-            <span class="mt-1 block text-[14px] leading-5 text-[#95959b]">{entry.summary}</span>
+          <a href={translatedPath(lang, entry.localSlug)} class="m-row group">
+            <span class="m-body">
+              <span class="block text-[15px] font-medium leading-5 text-white">{entry.question}</span>
+              <span class="mt-1 block text-[14px] leading-5 text-[#95959b]">{entry.summary}</span>
+            </span>
+            <span class="m-arrow" aria-hidden="true">→</span>
           </a>
         ))
       }

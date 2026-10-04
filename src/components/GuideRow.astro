@@ -9,10 +9,12 @@ interface Props {
 const { guide } = Astro.props;
 ---
 
-<a href={href(`/guides/${guide.slug}`)} class="group block">
-  <span class="block text-[15px] font-medium leading-5 text-white group-hover:underline">
-    {guide.question} →
+<!-- Ligne de liste minimaliste (classes m-row / m-arrow dans global.css). -->
+<a href={href(`/guides/${guide.slug}`)} class="m-row group">
+  <span class="m-body">
+    <span class="block text-[15px] font-medium leading-5 text-white">{guide.question}</span>
+    <span class="mt-1 block text-[14px] leading-5 text-[#95959b]">{guide.summary}</span>
+    <span class="mt-1 block text-[13px] leading-5 text-[#808086]">Lecture : {readingMinutes(guide)} min</span>
   </span>
-  <span class="mt-1 block text-[14px] leading-5 text-[#95959b]">{guide.summary}</span>
-  <span class="mt-1 block text-[13px] leading-5 text-[#808086]">Lecture : {readingMinutes(guide)} min</span>
+  <span class="m-arrow" aria-hidden="true">→</span>
 </a>

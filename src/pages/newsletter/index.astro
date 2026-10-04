@@ -31,7 +31,7 @@ const latest = [...guides].sort((a, b) => b.updatedOn.localeCompare(a.updatedOn)
 
   <section class="mt-14">
     <h2 class="text-[13px] leading-5 text-[#95959b]">Les derniers guides</h2>
-    <div class="mt-6 space-y-8">
+    <div class="mt-6 m-list">
       {latest.map((guide) => <GuideRow guide={guide} />)}
     </div>
   </section>

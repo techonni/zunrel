@@ -20,12 +20,12 @@ const links = [
 
 <footer class="mt-28 pb-16">
   {lang === "fr" ? (
-  <nav class="flex flex-wrap gap-[11px]">
+  <nav class="flex flex-wrap gap-x-5 gap-y-2 border-t border-[#292929] pt-6">
     {
       links.map((link) => (
         <a
           href={href(link.href)}
-          class="inline-flex h-[30px] items-center rounded-full bg-[#202020] px-3 text-[13px] text-[#95959b] hover:text-white"
+          class="text-[13px] leading-5 text-[#95959b] hover:text-white"
         >
           {link.label}
         </a>
