@@ -28,9 +28,9 @@ export const newsletter = {
 };
 export const freeGuide = "Guide gratuit : un iPhone épuré en 20 minutes";
 
-export type Post = { title: string; description: string; slug?: string; date?: string; dateLabel?: string };
+export type Post = { title: string; description: string; slug: string; date: string; dateLabel: string };
 
-// Blog : seul le premier article est publié. Les autres sont annoncés (« Bientôt »), sans lien.
+// Blog : les six articles publiés, dans l'ordre du blog. Le texte de chaque article est dans src/lib/articles/.
 export const posts: Post[] = [
   {
     title: "Une seule liste pour la semaine",
@@ -39,11 +39,11 @@ export const posts: Post[] = [
     date: "2026-10-04",
     dateLabel: "4 oct. 2026",
   },
-  { title: "Choisir des apps iPhone épurées", description: "Une fonction, pas de compte obligatoire, pas de notifications par défaut : trois critères simples." },
-  { title: "Des widgets calmes sur l'écran verrouillé", description: "L'heure, le prochain rendez-vous, la météo. Ce qui informe d'un coup d'œil, sans attirer le regard." },
-  { title: "Une to-do sans bruit avec Rappels", description: "Des dates seulement quand il le faut, des alertes seulement pour ce qui a une heure." },
-  { title: "Désencombrer l'écran d'accueil en 20 minutes", description: "Une page, quatre apps dans le dock, le reste rangé dans la Bibliothèque d'apps." },
-  { title: "Les notifications, à heures fixes", description: "Regrouper les alertes non urgentes en deux ou trois rendez-vous par jour." },
+  { title: "Choisir des apps iPhone épurées", description: "Une fonction, pas de compte obligatoire, pas de notifications par défaut : trois critères simples.", slug: "choisir-des-apps-iphone-epurees", date: "2026-10-05", dateLabel: "5 oct. 2026" },
+  { title: "Des widgets calmes sur l'écran verrouillé", description: "L'heure, le prochain rendez-vous, la météo. Ce qui informe d'un coup d'œil, sans attirer le regard.", slug: "des-widgets-calmes-sur-l-ecran-verrouille", date: "2026-10-05", dateLabel: "5 oct. 2026" },
+  { title: "Une to-do sans bruit avec Rappels", description: "Des dates seulement quand il le faut, des alertes seulement pour ce qui a une heure.", slug: "une-to-do-sans-bruit-avec-rappels", date: "2026-10-05", dateLabel: "5 oct. 2026" },
+  { title: "Désencombrer l'écran d'accueil en 20 minutes", description: "Une page, quatre apps dans le dock, le reste rangé dans la Bibliothèque d'apps.", slug: "desencombrer-l-ecran-d-accueil-en-20-minutes", date: "2026-10-05", dateLabel: "5 oct. 2026" },
+  { title: "Les notifications, à heures fixes", description: "Regrouper les alertes non urgentes en deux ou trois rendez-vous par jour.", slug: "les-notifications-a-heures-fixes", date: "2026-10-05", dateLabel: "5 oct. 2026" },
 ];
 
 // Boutique : exemples, rien n'est en vente.

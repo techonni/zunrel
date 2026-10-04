@@ -1,5 +1,5 @@
-// Article complet : « Une seule liste pour la semaine ».
-export type Block = ["p" | "h2", string] | ["ol" | "ul", string[]] | ["figure"];
+// Article : « Une seule liste pour la semaine ».
+import type { Block } from "./common";
 
 export const body: Block[] = [
   ["p", "Une liste pour le travail, une pour la maison, une pour les idées, une autre pour les courses. Chaque nouvelle liste semble utile au moment où on la crée. Au bout de quelques semaines, il faut en ouvrir quatre pour savoir quoi faire aujourd'hui, et certaines ne sont plus jamais relues."],
@@ -27,12 +27,6 @@ export const body: Block[] = [
   ["ul", ["Une liste « Semaine » dans Rappels, avec une section par jour et une section « Plus tard ».", "Trois tâches par jour au maximum, écrites comme des actions.", "Des dates et des alertes seulement pour ce qui a une heure.", "Une minute le matin, dix minutes le dimanche."]],
   ["p", "Tu as ta propre façon de tenir la semaine ? Réponds à la lettre du dimanche pour la partager : les meilleures idées des lecteurs alimentent les prochains articles."],
 ];
-
-const words = body
-  .flatMap((b) => (b[0] === "ol" || b[0] === "ul" ? b[1] : b[0] === "figure" ? [] : [b[1]]))
-  .join(" ")
-  .split(/\s+/).length;
-export const minutes = Math.max(1, Math.round(words / 220));
 
 export const caption = "Avant : plusieurs listes à vérifier. Après : une seule liste, une section par jour, et « Plus tard » pour le reste.";
 

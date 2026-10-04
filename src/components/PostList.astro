@@ -7,14 +7,14 @@ import { f, posts } from "../lib/site";
     posts.map((post) => {
       const inner = (
         <Fragment>
-          {post.date ? <time datetime={post.date}>{post.dateLabel}</time> : <span class="soon">Bientôt</span>}
+          <time datetime={post.date}>{post.dateLabel}</time>
           <div class="tx">
             <h3>{f(post.title)}</h3>
             <p>{f(post.description)}</p>
           </div>
         </Fragment>
       );
-      return <li>{post.slug ? <a href={`/blog/${post.slug}/`}>{inner}</a> : <div class="it">{inner}</div>}</li>;
+      return <li><a href={`/blog/${post.slug}/`}>{inner}</a></li>;
     })
   }
 </ol>

@@ -2,7 +2,7 @@
 // Page d'arrivée après la confirmation d'inscription (redirection réglée dans Mailchimp).
 import Base from "../../layouts/Base.astro";
 import { f, posts } from "../../lib/site";
-const latest = posts.filter((post) => post.slug);
+const latest = posts.slice(0, 3);
 ---
 
 <Base title="Inscription confirmée" description="Ton inscription à la lettre du dimanche est confirmée." noindex>
@@ -11,7 +11,7 @@ const latest = posts.filter((post) => post.slug);
       <h1>{f("C'est confirmé, merci !")}</h1>
       <p class="lead">{f("La lettre du dimanche arrive dans ta boîte mail chaque semaine. Désinscription en un clic depuis chaque e-mail.")}</p>
       <p class="lead">{f("Pour ne pas la manquer, ajoute contact@zunrel.com à tes contacts.")}</p>
-      <p class="links">En attendant : {latest.map((post) => <a href={`/blog/${post.slug}/`}>{f(post.title)}</a>)}</p>
+      <p class="links">En attendant : {latest.map((post, i) => <Fragment>{i ? " · " : ""}<a href={`/blog/${post.slug}/`}>{f(post.title)}</a></Fragment>)}</p>
     </section>
   </main>
 </Base>
