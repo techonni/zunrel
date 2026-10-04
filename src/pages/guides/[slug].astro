@@ -17,10 +17,7 @@ import {
   getTheme,
   getTool,
   guides,
-  shopifyPricingGuides,
-  shopifyPricingLink,
   type Guide,
-  type NewsletterTag,
   type Tool,
 } from "../../lib/guides";
 import { href } from "../../lib/paths";
@@ -37,11 +34,6 @@ const tools = guide.tools
   .filter((item): item is { tool: Tool; why: string } => item.tool !== undefined);
 const related = getRelatedGuides(guide);
 
-const isShop = guide.theme === "boutique";
-const shopHref = shopifyPricingGuides.includes(guide.slug) ? shopifyPricingLink : undefined;
-// Centre d'intérêt envoyé à Mailchimp avec l'inscription.
-const mainTool = guide.tools[0]?.slug;
-const newsletterTag: NewsletterTag = isShop ? "shopify" : mainTool === "leadpages" ? "leadpages" : "htmlpub";
 const alternates = guideAlternates(guide.slug);
 const format = formats.find((item) => item.format === guideFormat(guide));
 const howTo = {
@@ -120,7 +112,7 @@ const howTo = {
     });
   </script>
 
-  <AffiliateCta shop={isShop} placement="haut" shopHref={shopHref} />
+  <AffiliateCta placement="haut" />
 
   <section class="mt-10 m-flat">
     <h2 class="text-[15px] font-medium leading-5 text-white">
@@ -162,7 +154,7 @@ const howTo = {
     </ol>
   </section>
 
-  <AffiliateCta shop={isShop} placement="bas" shopHref={shopHref} />
+  <AffiliateCta placement="bas" />
 
   {
     guide.pitfalls.length > 0 ? (
@@ -214,12 +206,8 @@ const howTo = {
     <ShareButtons title={guide.question} slug={guide.slug} />
   </section>
 
-  <NewsletterForm tag={newsletterTag} />
-  <NewsletterBar
-    gift={isShop
-      ? "Recevez la checklist de lancement Shopify offerte, et les prochains guides."
-      : "Recevez la checklist pour lancer votre landing page, et les prochains guides."}
-  />
+  <NewsletterForm />
+  <NewsletterBar gift="Recevez la checklist de lancement de votre premier tunnel systeme.io, et les prochains guides." />
 
   {
     related.length > 0 ? (

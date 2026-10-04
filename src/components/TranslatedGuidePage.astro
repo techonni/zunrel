@@ -2,7 +2,7 @@
 // Page d'un guide traduit (/pt/guias/… ou /en/guides/…). Texte de la traduction ;
 // sources et bouton affilié repris du guide français.
 import Base from "../layouts/Base.astro";
-import { affiliateLink, getGuide, shopifyLink, type Guide } from "../lib/guides";
+import { affiliateLinks, getGuide, type Guide } from "../lib/guides";
 import NewsletterForm from "./NewsletterForm.astro";
 import {
   localizeSource,
@@ -24,20 +24,19 @@ interface Props {
 const { lang, item } = Astro.props;
 const t = ui[lang];
 const guide = getGuide(item.slug) as Guide;
-const shop = guide.theme === "boutique";
 const other: OtherLang = lang === "pt" ? "en" : "pt";
 const otherItem = getTranslation(other, item.slug);
 const sources = guide.sources
   .map((source) => localizeSource(lang, source))
   .filter((source): source is { label: string; url: string } => source !== null);
-const related = translations[lang].filter((entry) => entry.slug !== item.slug).slice(0, 4);
+// Guides liés du guide français quand ils sont traduits, complétés par les autres traductions.
+const relatedFirst = guide.related.map((slug) => getTranslation(lang, slug)).filter((entry): entry is TranslatedGuide => Boolean(entry));
+const related = [...relatedFirst, ...translations[lang].filter((entry) => entry.slug !== item.slug && !relatedFirst.includes(entry))].slice(0, 4);
 const minutes = Math.max(1, Math.round(item.steps.map((step) => step.text).join(" ").split(/\s+/).length / 200));
 const date = new Intl.DateTimeFormat(lang === "pt" ? "pt-BR" : "en-US", { day: "numeric", month: "long", year: "numeric" }).format(
   new Date(guide.updatedOn),
 );
-const cta = shop
-  ? { href: shopifyLink, tool: "shopify", short: t.ctaShopShort, text: t.ctaShop, label: t.ctaShopLabel }
-  : { href: affiliateLink, tool: "leadpages", short: t.ctaPagesShort, text: t.ctaPages, label: t.ctaPagesLabel };
+const cta = { href: affiliateLinks[lang], tool: "systeme-io", short: t.ctaShort, text: t.cta, label: t.ctaLabel };
 
 const howTo = {
   "@context": "https://schema.org",
@@ -84,20 +83,21 @@ const howTo = {
     });
   </script>
 
-  <aside class="no-print mt-6 flex flex-col gap-3 border-t border-[#292929] pt-4 min-[480px]:flex-row min-[480px]:items-center">
-    <p class="flex-1 text-[14px] leading-6 text-[#95959b]">
-      {cta.short} <span class="text-[#808086]">{t.affiliateShort}</span>
-    </p>
-    <a
-      href={cta.href}
-      target="_blank"
-      rel="sponsored noopener"
-      data-affiliate={cta.tool}
-      data-placement={`haut-${lang}`}
-      class="inline-flex h-[36px] shrink-0 items-center justify-center rounded-full bg-white px-4 text-[14px] font-medium text-black hover:bg-[#e5e5e5]"
-    >
-      {cta.label}
-    </a>
+  <aside class="no-print mt-6 border-t border-[#292929] pt-4">
+    <div class="flex flex-col gap-3 min-[480px]:flex-row min-[480px]:items-center">
+      <p class="flex-1 text-[14px] leading-6 text-[#95959b]">{cta.short}</p>
+      <a
+        href={cta.href}
+        target="_blank"
+        rel="sponsored noopener"
+        data-affiliate={cta.tool}
+        data-placement={`haut-${lang}`}
+        class="inline-flex h-[36px] shrink-0 items-center justify-center rounded-full bg-white px-4 text-[14px] font-medium text-black hover:bg-[#e5e5e5]"
+      >
+        {cta.label}
+      </a>
+    </div>
+    <p class="mt-2 text-[12px] leading-5 text-[#808086]">{t.affiliate}</p>
   </aside>
 
   <section class="mt-10 m-flat">
@@ -181,7 +181,7 @@ const howTo = {
     ) : null
   }
 
-  <NewsletterForm lang={lang} tag={shop ? "shopify" : "leadpages"} />
+  <NewsletterForm lang={lang} />
 
   <section class="mt-14">
     <h2 class="text-[13px] leading-5 text-[#95959b]">{t.readNext}</h2>

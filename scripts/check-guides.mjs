@@ -26,7 +26,7 @@ for (const guide of guides) {
     else if (slug !== guide.slug) inbound[slug]++;
   }
   for (const tool of guide.tools) if (!toolSlugs.has(tool.slug)) errors.push(`${guide.slug} : outil inconnu ${tool.slug}`);
-  if (!existsSync(join(root, "public/pins", `${guide.slug}.jpg`))) warnings.push(`${guide.slug} : pas d'épingle Pinterest`);
+  if (!existsSync(join(root, "public/pins/minimal", `${guide.slug}.jpg`))) warnings.push(`${guide.slug} : pas d'épingle Pinterest`);
 }
 
 const orphans = Object.entries(inbound).filter(([, count]) => count < 2);

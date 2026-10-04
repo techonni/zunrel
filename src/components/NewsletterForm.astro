@@ -6,41 +6,25 @@
 // (point d'accès JSONP « post-json » de Mailchimp) et affiche la réponse dans le bloc.
 // Si Mailchimp ne répond pas, le formulaire est envoyé dans une iframe cachée.
 // Le bloc ne s'affiche que si `newsletterFormUrl` est rempli dans src/lib/guides.ts.
-// Le visiteur choisit son sujet (3 boutons) : le choix part dans le champ `tags` du formulaire,
-// et Mailchimp pose la ou les tags correspondantes. « Tout » reçoit les trois tags, donc
-// chaque envoi ciblé sur une tag atteint aussi ceux qui veulent tout recevoir.
-// `tag` : sujet coché d'avance (celui du guide lu) ; sans `tag`, « Tout » est coché.
-import { newsletterFormUrl, newsletterHoneypot, newsletterTags, type NewsletterTag } from "../lib/guides";
+// Tout le site parle de systeme.io : plus de choix de sujet. Seul le tag de langue de la page
+// part dans le champ caché `tags` (voir `langTags`). Même liste et même formulaire Mailchimp qu'avant.
+import { newsletterFormUrl, newsletterHoneypot } from "../lib/guides";
 import { langTags, ui, type Lang } from "../lib/i18n";
 
 interface Props {
-  tag?: NewsletterTag;
   // Langue de la page : textes du bloc et tag Mailchimp de langue.
   lang?: Lang;
   title?: string;
   text?: string;
 }
 
-const { tag, lang = "fr" } = Astro.props;
+const { lang = "fr" } = Astro.props;
 const tr = lang === "fr" ? undefined : ui[lang];
-// Cadeau annoncé selon le sujet du guide lu.
-const gift =
-  tag === "shopify"
-    ? "la checklist de lancement Shopify"
-    : tag
-      ? "la checklist de lancement d'une landing page et nos modèles de textes"
-      : "une checklist de lancement (Shopify ou landing page)";
 
 const {
-  title = tr ? tr.newsletterTitle : "Recevoir les prochains guides",
-  text = tr ? tr.newsletterText : `Les nouveaux guides Leadpages, HTML Pub et Shopify par e-mail, une fois par quinzaine, avec ${gift} en cadeau. Pas de spam, désinscription en un clic.`,
+  title = tr ? tr.newsletterTitle : "Recevoir les prochains guides systeme.io",
+  text = tr ? tr.newsletterText : "Les nouveaux guides systeme.io par e-mail, avec la checklist de lancement de votre premier tunnel en cadeau. Pas de spam, désinscription en un clic.",
 } = Astro.props;
-
-const interests = [
-  { id: "shopify", label: "Shopify", tags: [newsletterTags.shopify] },
-  { id: "pages", label: "Leadpages & HTML Pub", tags: [newsletterTags.leadpages, newsletterTags.htmlpub] },
-  { id: "tout", label: tr ? tr.newsletterAll : "Tout", tags: [newsletterTags.shopify, newsletterTags.leadpages, newsletterTags.htmlpub] },
-].map((item) => ({ ...item, tags: [...item.tags, langTags[lang]] }));
 
 // Messages affichés par le script, dans la langue de la page.
 const messages =
@@ -49,7 +33,6 @@ const messages =
     : lang === "en"
       ? { send: "Sending…", button: "Subscribe", thanks: "Thank you!", confirm: "Last step: open the email sent to {email} and click the button to confirm.", already: "You are already subscribed.", alreadyText: "Thank you! The next guides will arrive in your inbox.", invalid: "Enter a valid email address, for example you@example.com.", tooMany: "Too many attempts with this address. Try again in a few minutes.", failed: "This address could not be subscribed. Check it and try again." }
       : { send: "Envoi…", button: "S'inscrire", thanks: "Merci !", confirm: "Dernière étape : ouvrez l'e-mail envoyé à {email} et cliquez sur le bouton pour confirmer.", already: "Vous êtes déjà inscrit.", alreadyText: "Merci ! Les prochains guides arrivent dans votre boîte mail.", invalid: "Entrez une adresse e-mail valide, par exemple vous@exemple.com.", tooMany: "Trop de tentatives avec cette adresse. Réessayez dans quelques minutes.", failed: "Cette adresse n'a pas pu être inscrite. Vérifiez-la et réessayez." };
-const selected = tag === "shopify" ? "shopify" : tag ? "pages" : "tout";
 ---
 
 {
@@ -68,18 +51,8 @@ const selected = tag === "shopify" ? "shopify" : tag ? "pages" : "tout";
           data-newsletter
           class="mt-5"
         >
-          <fieldset>
-            <legend class="text-[13px] leading-5 text-[#95959b]">{tr ? tr.newsletterTopic : "Je veux recevoir les guides sur"}</legend>
-            <div class="mt-2 flex flex-wrap gap-2">
-              {interests.map((item) => (
-                <label class="inline-flex h-[30px] cursor-pointer items-center rounded-[var(--id-radius-field)] border border-[#3a3a3c] bg-[#202020] px-3 text-[13px] font-medium text-[#d1d1d6] transition-colors hover:border-[#8e8e93] has-checked:border-white has-checked:bg-white has-checked:text-black has-focus-visible:ring-2 has-focus-visible:ring-white has-focus-visible:ring-offset-2 has-focus-visible:ring-offset-black">
-                  <input type="radio" name="tags" value={item.tags.join(",")} checked={item.id === selected} class="sr-only" />
-                  {item.label}
-                </label>
-              ))}
-            </div>
-          </fieldset>
-          <div class="mt-4 flex flex-col gap-2 min-[480px]:flex-row">
+          <input type="hidden" name="tags" value={langTags[lang]} />
+          <div class="flex flex-col gap-2 min-[480px]:flex-row">
           <label for="newsletter-email" class="sr-only">E-mail</label>
           <input
             id="newsletter-email"

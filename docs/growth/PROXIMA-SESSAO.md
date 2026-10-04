@@ -10,6 +10,16 @@ Data: 28/09/2026 (7.ª sessão do dia: resultados dos lotes 2, P e 4; link Shopi
 
 ---
 
+## Pivot systeme.io (04/10/2026): LER PRIMEIRO
+
+Pedido do Dário: o site passa a falar **só de systeme.io**, com o link de afiliado systeme.io. Tudo o que está abaixo sobre Leadpages, HTML Pub e Shopify é **histórico**.
+
+- **Guias:** 24 guias systeme.io em FR (`src/lib/guides.ts`), 12 essenciais traduzidos em PT e EN (`src/lib/translations/`). Os 56 guias antigos (FR, PT e EN) foram apagados e redirecionados (301) em `public/_redirects` para o guia systeme.io mais próximo.
+- **Afiliação:** `affiliateLinks` em `guides.ts` (FR `systeme.io/fr?sa=…`, PT `systeme.io/pt?sa=…`, EN `systeme.io/?sa=…`). Cada link: `rel="sponsored noopener"`, `target="_blank"` e a menção `affiliateDisclosure` visível ao lado.
+- **Preços e limites:** relevados a 04/10/2026 em systeme.io/fr/pricing (EUR), /pricing (USD) e /pt/pricing (BRL), e no centro de ajuda (aide.systeme.io / help.systeme.io). Revisão mensal: mesma regra de sempre (data + fonte, nunca inventar).
+- **Newsletter:** mesmo formulário e mesma lista Mailchimp. A escolha de assunto (tags Shopify/Leadpages/HTML Pub) foi retirada: só vai a tag de língua. Nenhuma tag nova criada. O email de confirmação no Mailchimp pode ainda falar das ferramentas antigas: rever quando houver inscritos.
+- **Obsoleto:** `pinterest-agendar-3.csv` e `pinterest-agendar-4.csv` (e os outros CSV) apontam para guias antigos (agora redirecionados) e pins apagados. Não agendar. Os pins novos estão só em `public/pins/minimal/`. Os guias das semanas 17 a 20 de `plano-growth.md` (Leadpages/Shopify) já não se publicam.
+
 ## Sessão de 03/10/2026: novo site Techonni (GTA 6)
 
 - **Novo site separado**, sem mexer no Zunrel: repositório `techonni/techonni-jeu`, domínio **techonni.com** (Hostinger, DNS passado para a Cloudflare pelo Cowork). 15 guias GTA 6 em francês com fontes. Tudo o resto (regras, pendentes, próximos passos) está em `docs/PROXIMA-SESSAO.md` desse repositório.
@@ -59,7 +69,7 @@ Data: 28/09/2026 (7.ª sessão do dia: resultados dos lotes 2, P e 4; link Shopi
 2. **Fazer todos os passos de uma lista na mesma sessão** (regra no CLAUDE.md). O que precisar do Techonni fica « pronto, falta o Techonni » e passa-se ao seguinte.
 3. **Newsletter com visual bloqueado.** Ver `docs/newsletter/MODELE-FIGE.md`. Criar só com `scripts/mailchimp.mjs newsletter`. **Nunca enviar aos assinantes sem o « oui » do Techonni** para essa campanha.
 4. **A morada no rodapé dos emails fica como está.**
-5. Só Leadpages, HTML Pub e Shopify. Site anónimo. Links afiliados sempre assinalados. **Nunca inventar preços nem links de afiliação**: preços só com data e fonte (capturas das páginas oficiais).
+5. Só systeme.io (desde 04/10/2026; antes: Leadpages, HTML Pub e Shopify). Site anónimo (exceção: a menção de afiliado pedida pelo Dário diz « je touche une commission »). Links afiliados sempre assinalados. **Nunca inventar preços nem links de afiliação**: preços só com data e fonte (capturas das páginas oficiais).
 6. Antes de apagar algo, mostrar o id e o título.
 7. **Chrome e Claude Code nunca ao mesmo tempo.** O Chrome só lê painéis, tira capturas e publica nas redes; o código e o site são só do Claude Code.
 8. **Bloqueios de segurança do Claude Code:** mudar o CLAUDE.md e correr o script da newsletter (envia um email de teste) podem ser bloqueados. Não insistir por outro caminho: pedir ao Techonni para aprovar o pedido de permissão.
@@ -205,10 +215,10 @@ Data: 28/09/2026 (7.ª sessão do dia: resultados dos lotes 2, P e 4; link Shopi
 ## Próxima sessão (fazer tudo, por esta ordem)
 
 1. Ler as visitas (GA4 ou Cloudflare Web Analytics, se o Techonni o tiver ativado): páginas mais vistas e de onde vêm.
-2. Revisão mensal de `/offres/` e preços a 28/10.
+2. Revisão mensal de `/offres/` e preços systeme.io a 04/11.
 3. Search Console (quando o Techonni der os dados): `seoTitle` / `seoDescription` nas 5 páginas com mais impressões e CTR mais baixo.
 4. GA4, semana de 05/10: `affiliate_click` por `placement` e `guide`; `web_vital` por página; `pdf_download`.
-5. Publicar os guias das semanas 17 a 20 (já escritos em `plano-growth.md`) em FR, PT e EN, sem capturas, com 4 pins (normal, erreurs, minimal, etapes) e 2 links internos.
+5. ~~Guias das semanas 17 a 20~~ (obsoletos com o pivot systeme.io). Em vez disso: traduzir em PT e EN os 12 guias systeme.io que ainda só existem em FR.
 6. Newsletter: **nada** enquanto não houver inscrito real (regra 0). Não perguntar ao Techonni.
 7. `fila-redes.md` tem posts até ao Dia 30 e `posts-x.md` até ao Dia 29: manter 7 dias de avanço. Antes de 24/10: `pinterest-agendar-5.csv` (a partir de 25/10) com os guias novos e uma 5.ª variante de imagem. **Títulos sempre únicos no mesmo CSV, máx. 100 caracteres.**
 8. Atualizar este ficheiro, publicar e enviar ao Techonni.

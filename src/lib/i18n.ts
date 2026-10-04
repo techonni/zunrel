@@ -1,8 +1,9 @@
-// Versions portugaise (/pt/) et anglaise (/en/) des guides les plus lus.
+// Versions portugaise (/pt/) et anglaise (/en/) des guides systeme.io essentiels.
 // Le français reste la langue principale : une traduction reprend les sources et
 // les outils du guide français (même `slug`) et ne contient que le texte.
 import { ptGuides } from "./translations/pt";
 import { enGuides } from "./translations/en";
+import type { Source } from "./guides";
 
 export type Lang = "fr" | "pt" | "en";
 export type OtherLang = Exclude<Lang, "fr">;
@@ -34,69 +35,15 @@ export const langLabels: Record<Lang, string> = { fr: "FR", pt: "PT", en: "US" }
 // Tags Mailchimp de langue (Audience → Tags) : chaque inscription reçoit celui de la page.
 export const langTags: Record<Lang, string> = { fr: "11404680", pt: "11404681", en: "11404682" };
 
-// Sources officielles des guides traduits : même lien dans la langue du lecteur quand il existe,
-// ou `null` pour ne pas afficher une source qui ne concerne que la France.
-const sourceMap: Record<string, Record<OtherLang, { label: string; url: string } | null>> = {
-  "https://www.shopify.com/fr/tarifs": {
-    pt: { label: "Shopify: preços", url: "https://www.shopify.com/pricing" },
-    en: { label: "Shopify pricing", url: "https://www.shopify.com/pricing" },
-  },
-  "https://leadpages.com/pricing": {
-    pt: { label: "Leadpages: planos e preços", url: "https://leadpages.com/pricing" },
-    en: { label: "Leadpages pricing", url: "https://leadpages.com/pricing" },
-  },
-  "https://help.shopify.com/fr": {
-    pt: { label: "Central de Ajuda da Shopify", url: "https://help.shopify.com/pt-BR" },
-    en: { label: "Shopify Help Center", url: "https://help.shopify.com/en" },
-  },
-  "https://support.google.com/analytics/answer/9304153?hl=fr": {
-    pt: { label: "Ajuda do Google Analytics: configurar o Analytics para um site", url: "https://support.google.com/analytics/answer/9304153?hl=pt-BR" },
-    en: { label: "Google Analytics Help: set up Analytics for a website", url: "https://support.google.com/analytics/answer/9304153?hl=en" },
-  },
-  "https://support.leadpages.com/hc/en-us": {
-    pt: { label: "Central de ajuda da Leadpages", url: "https://support.leadpages.com/hc/en-us" },
-    en: { label: "Leadpages Help Center", url: "https://support.leadpages.com/hc/en-us" },
-  },
-  "https://europa.eu/youreurope/citizens/consumers/shopping/guarantees-returns/index_fr.htm": {
-    pt: { label: "Comissão Europeia: direito de rescisão", url: "https://europa.eu/youreurope/citizens/consumers/shopping/guarantees-returns/index_pt.htm" },
-    en: null,
-  },
-  "https://www.cnil.fr/fr/la-prospection-commerciale-par-courrier-electronique": {
-    pt: null,
-    en: { label: "FTC: CAN-SPAM Act compliance guide", url: "https://www.ftc.gov/business-guidance/resources/can-spam-act-compliance-guide-business" },
-  },
-};
-
-const labelWords: Record<OtherLang, [RegExp, string][]> = {
-  pt: [[/connecter un domaine tiers/, "conectar um domínio de terceiros"], [/ajouter des produits/, "adicionar produtos"], [/ajouter les politiques de la boutique/, "adicionar as políticas da loja"], [/protection par mot de passe/, "proteção por senha"], [/préférences de la boutique en ligne/, "preferências da loja virtual"], [/bien démarrer/, "primeiros passos"], [/connecter des intégrations/, "conectar integrações"], [/connecteur MCP pour Claude/, "conector MCP para o Claude"], [/créer des pubs vidéo dans Ad Studio/, "criar anúncios em vídeo no Ad Studio"], [/offres et facturation/, "planos e faturação"], [/récupérer les réponses de formulaires/, "receber as respostas dos formulários"], [/réglages de page/, "configurações da página"], [/utiliser les blogs/, "usar os blogs"], [/utiliser les sites/, "usar os sites"], [/cartes de chaleur/, "mapas de calor"], [/créer un pop-up/, "criar um pop-up"], [/publier un pop-up/, "publicar um pop-up"], [/intégration Shopify/, "integração com a Shopify"], [/intégrations/, "integrações"], [/tests A\/B et Smart Traffic/, "testes A/B e Smart Traffic"], [/tests A\/B/, "testes A/B"], [/conversion analytics/, "análise de conversões"], 
-    [/ \(aide\)/, " (ajuda)"], [/codes de réduction/, "códigos de desconto"], [/utiliser le créateur de pages IA/, "criador de páginas com IA"],
-    [/connecter un domaine/, "conectar um domínio"], [/Connecter votre domaine \(nouveau Leadpages\)/, "Leadpages: conectar o seu domínio"],
-    [/accepter des achats Shopify/, "aceitar compras Shopify"], [/^Aide Shopify/, "Ajuda Shopify"],
-    [/ajouter une page de contact/, "adicionar uma página de contato"], [/modifier les menus/, "editar os menus"],
-    [/variantes de produit/, "variantes de produto"], [/ajouter et mettre à jour des produits/, "adicionar e atualizar produtos"],
-    [/créer et modifier des pages/, "criar e editar páginas"], [/traiter les commandes/, "processar pedidos"], [/: commandes$/, ": pedidos"],
-    [/^Shopify: réductions en pourcentage ou montant fixe$/, "Ajuda Shopify: descontos em percentagem ou valor fixo"], [/zones et tarifs d'expédition/, "zonas e tarifas de envio"], [/tarifs d'expédition/, "tarifas de envio"],
-    [/ajouter et prévisualiser des thèmes/, "adicionar e pré-visualizar temas"], [/publier un thème/, "publicar um tema"],
-    [/récupérer les paiements abandonnés/, "recuperar checkouts abandonados"], [/automatisations de marketing/, "automações de marketing"], [/le compte à rebours \(Classic Builder\)/, "a contagem regressiva (Classic Builder)"], [/l'élément compte à rebours \(Page Studio\)/, "o elemento contagem regressiva (Page Studio)"], [/applications dans les thèmes/, "aplicações nos temas"], [/avis produits/, "avaliações de produtos"], [/créer des collections/, "criar coleções"], [/modèles de pages webinaire/, "modelos de páginas de webinar"], [/ajouter des produits cartes-cadeaux/, "adicionar produtos de cartão-presente"], [/créer une carte-cadeau à la main/, "emitir um cartão-presente"]],
-  en: [[/connecter un domaine tiers/, "connecting a third-party domain"], [/ajouter des produits/, "add products"], [/ajouter les politiques de la boutique/, "add store policies"], [/protection par mot de passe/, "password protection"], [/préférences de la boutique en ligne/, "online store preferences"], [/bien démarrer/, "getting started"], [/connecter des intégrations/, "connecting integrations"], [/connecteur MCP pour Claude/, "Claude MCP connector"], [/créer des pubs vidéo dans Ad Studio/, "video ads in Ad Studio"], [/offres et facturation/, "plans and billing"], [/récupérer les réponses de formulaires/, "collecting form submissions"], [/réglages de page/, "page settings"], [/utiliser les blogs/, "using blogs"], [/utiliser les sites/, "using sites"], [/cartes de chaleur/, "heatmaps"], [/créer un pop-up/, "create a pop-up"], [/publier un pop-up/, "publish a pop-up"], [/intégration Shopify/, "Shopify integration"], [/intégrations/, "integrations"], [/tests A\/B et Smart Traffic/, "A/B testing and Smart Traffic"], [/tests A\/B/, "A/B testing"], [/conversion analytics/, "conversion analytics"], 
-    [/ \(aide\)/, " (help)"], [/codes de réduction/, "discount codes"], [/utiliser le créateur de pages IA/, "using the AI page builder"],
-    [/connecter un domaine/, "connecting a custom domain"], [/Connecter votre domaine \(nouveau Leadpages\)/, "Leadpages: connect your domain"],
-    [/accepter des achats Shopify/, "accept Shopify purchases"], [/^Aide Shopify/, "Shopify Help"],
-    [/ajouter une page de contact/, "add a contact page"], [/modifier les menus/, "edit menus"],
-    [/variantes de produit/, "product variants"], [/ajouter et mettre à jour des produits/, "add and update products"],
-    [/créer et modifier des pages/, "creating and editing pages"], [/traiter les commandes/, "fulfilling orders"], [/: commandes$/, ": orders"],
-    [/^Shopify: réductions en pourcentage ou montant fixe$/, "Shopify Help: percentage or fixed amount discounts"], [/zones et tarifs d'expédition/, "setting up shipping zones and rates"], [/tarifs d'expédition/, "shipping rates"],
-    [/ajouter et prévisualiser des thèmes/, "adding and previewing themes"], [/publier un thème/, "publishing a theme"],
-    [/récupérer les paiements abandonnés/, "recovering abandoned checkouts"], [/automatisations de marketing/, "marketing automations"], [/le compte à rebours \(Classic Builder\)/, "the countdown widget (Classic Builder)"], [/l'élément compte à rebours \(Page Studio\)/, "the countdown element (Page Studio)"], [/applications dans les thèmes/, "apps in themes"], [/avis produits/, "product reviews"], [/créer des collections/, "creating collections"], [/modèles de pages webinaire/, "webinar page templates"], [/ajouter des produits cartes-cadeaux/, "adding gift card products"], [/créer une carte-cadeau à la main/, "issuing a gift card"]],
-};
-
-export function localizeSource(lang: OtherLang, source: { label: string; url: string }) {
-  const mapped = sourceMap[source.url];
-  if (mapped !== undefined) return mapped[lang];
-  let label = source.label.replace(" : ", ": ");
-  for (const [pattern, text] of labelWords[lang]) label = label.replace(pattern, text);
-  const url = source.url.replace("help.shopify.com/fr/", lang === "pt" ? "help.shopify.com/pt-BR/" : "help.shopify.com/en/");
-  return { label, url };
+// Sources officielles des guides traduits : la même page du centre d'aide systeme.io en anglais
+// (champ `en` de la source française). Sans `en`, la source n'est pas affichée.
+export function localizeSource(lang: OtherLang, source: Source) {
+  if (!source.en) return null;
+  if (lang === "en") return { label: source.en.label, url: source.en.url };
+  return {
+    label: source.en.ptLabel ?? source.en.label.replace("systeme.io Help:", "Ajuda systeme.io (em inglês):"),
+    url: source.en.ptUrl ?? source.en.url,
+  };
 }
 
 export const ui = {
@@ -110,11 +57,11 @@ export const ui = {
   pt: {
     home: "Início",
     guides: "Guias",
-    listTitle: "Guias Zunrel em português",
+    listTitle: "Guias systeme.io em português",
     listIntro:
-      "Todos os guias do Zunrel, traduzidos do francês: Leadpages, HTML Pub e Shopify, passo a passo.",
+      "Os guias essenciais do Zunrel sobre o systeme.io, traduzidos do francês: plano gratuito, preços, funis, e-mails, produtos digitais e cursos, passo a passo.",
     uiNote:
-      "Os nomes dos botões vêm do guia original (Shopify em francês, Leadpages em inglês). Na sua conta, os botões aparecem na sua língua.",
+      "Os nomes dos menus e botões estão em inglês, como no centro de ajuda oficial. Na sua conta, podem aparecer em português.",
     stepByStep: "Passo a passo",
     inShort: "O essencial em 30 segundos",
     avoid: "A evitar:",
@@ -125,39 +72,34 @@ export const ui = {
     pitfalls: "Erros frequentes",
     sources: "Fontes oficiais",
     readNext: "Ler a seguir",
-    updated: "Atualizado a",
+    updated: "Atualizado em",
     reading: "Leitura",
     frenchVersion: "Versão original em francês",
     otherLang: "English version",
     tryYourself: "Experimente",
-    affiliate: "Link de afiliado: não muda o preço para si.",
+    affiliate: "Link de afiliado: se você criar uma conta por este link, eu recebo uma comissão, sem custo extra para você.",
     affiliateShort: "Link de afiliado.",
-    ctaShopShort: "Para seguir este guia precisa de uma loja Shopify: a inscrição é grátis e há uma oferta de lançamento (confirme as condições no seu país).",
-    ctaShop: "A Shopify começa grátis e depois tem uma oferta de lançamento a preço reduzido. Pode preparar tudo antes de pagar.",
-    ctaShopLabel: "Experimentar a Shopify ↗",
-    ctaPagesShort: "Para seguir este guia precisa de uma conta Leadpages ou HTML Pub: cada oferta tem 7 dias de teste grátis.",
-    ctaPages: "Todas as ofertas HTML Pub e Leadpages têm 7 dias de teste grátis, com todas as funções.",
-    ctaPagesLabel: "Experimentar a Leadpages 7 dias ↗",
+    ctaShort: "Para seguir este guia, você precisa de uma conta systeme.io: o plano gratuito não pede cartão de crédito.",
+    cta: "O systeme.io tem um plano gratuito, sem cartão de crédito e sem prazo. Você pode montar tudo antes de pagar qualquer coisa.",
+    ctaLabel: "Criar uma conta grátis no systeme.io ↗",
     footer:
-      "Site independente, não editado pela Leadpages nem pela Shopify. Confirme as informações nos sites oficiais antes de decidir. Os links para a Leadpages, o HTML Pub e a Shopify são links de afiliado: não mudam o preço para si.",
-    newsletterTitle: "Receber os próximos guias",
-    newsletterText: "Os novos guias Leadpages, HTML Pub e Shopify por e-mail, de 15 em 15 dias. Sem spam, cancelamento com um clique.",
-    newsletterNote: "Vai receber um e-mail (em francês) para confirmar a inscrição.",
-    newsletterTopic: "Quero receber os guias sobre",
-    newsletterAll: "Tudo",
+      "Site independente, não editado pelo systeme.io. Confirme as informações no site oficial antes de decidir. Os links para o systeme.io são links de afiliado: se você criar uma conta por eles, eu recebo uma comissão, sem custo extra para você.",
+    newsletterTitle: "Receber os próximos guias systeme.io",
+    newsletterText: "Os novos guias systeme.io por e-mail. Sem spam, cancelamento com um clique.",
+    newsletterNote: "Você vai receber um e-mail (em francês) para confirmar a inscrição.",
     newsletterButton: "Inscrever-me",
-    consent: "Usamos o Google Analytics para saber que guias são úteis. Sem publicidade e sem cookies sem o seu acordo.",
+    consent: "Usamos o Google Analytics para saber quais guias são úteis. Sem publicidade e sem cookies sem o seu acordo.",
     accept: "Aceitar",
     refuse: "Recusar",
   },
   en: {
     home: "Home",
     guides: "Guides",
-    listTitle: "Zunrel guides in English",
+    listTitle: "systeme.io guides in English",
     listIntro:
-      "Every Zunrel guide, translated from French: Leadpages, HTML Pub and Shopify, step by step.",
+      "Zunrel's core systeme.io guides, translated from French: free plan, pricing, funnels, emails, digital products and courses, step by step.",
     uiNote:
-      "Button names come from the original guide (Shopify in French, Leadpages in English). In your account, buttons appear in your language.",
+      "Menu and button names come from the official systeme.io Help Center in English.",
     stepByStep: "Step by step",
     inShort: "The essentials in 30 seconds",
     avoid: "Avoid:",
@@ -173,21 +115,16 @@ export const ui = {
     frenchVersion: "Original version in French",
     otherLang: "Versão em português",
     tryYourself: "Try it yourself",
-    affiliate: "Affiliate link: it does not change the price for you.",
+    affiliate: "Affiliate link: if you create an account through this link, I earn a commission, at no extra cost to you.",
     affiliateShort: "Affiliate link.",
-    ctaShopShort: "To follow this guide you need a Shopify store: sign-up is free and there is a launch offer (check the terms in your country).",
-    ctaShop: "Shopify starts free, then has a discounted launch offer. You can set everything up before paying.",
-    ctaShopLabel: "Try Shopify ↗",
-    ctaPagesShort: "To follow this guide you need a Leadpages or HTML Pub account: every plan has a 7-day free trial.",
-    ctaPages: "Every HTML Pub and Leadpages plan has a 7-day free trial, with all features.",
-    ctaPagesLabel: "Try Leadpages for 7 days ↗",
+    ctaShort: "To follow this guide you need a systeme.io account: the free plan needs no credit card.",
+    cta: "systeme.io has a free plan with no credit card and no time limit. You can build everything before paying anything.",
+    ctaLabel: "Create a free systeme.io account ↗",
     footer:
-      "Independent website, not published by Leadpages or Shopify. Check the information on the official websites before deciding. Links to Leadpages, HTML Pub and Shopify are affiliate links: they do not change the price for you.",
-    newsletterTitle: "Get the next guides",
-    newsletterText: "New Leadpages, HTML Pub and Shopify guides by email, every two weeks. No spam, unsubscribe in one click.",
+      "Independent website, not published by systeme.io. Check the information on the official website before deciding. Links to systeme.io are affiliate links: if you create an account through them, I earn a commission, at no extra cost to you.",
+    newsletterTitle: "Get the next systeme.io guides",
+    newsletterText: "New systeme.io guides by email. No spam, unsubscribe in one click.",
     newsletterNote: "You will get an email (in French) to confirm your subscription.",
-    newsletterTopic: "I want guides about",
-    newsletterAll: "Everything",
     newsletterButton: "Subscribe",
     consent: "We use Google Analytics to learn which guides are useful. No ads, no cookies without your consent.",
     accept: "Accept",

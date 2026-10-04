@@ -10,17 +10,17 @@ const activeThemes = themes.filter((theme) => guides.some((guide) => guide.theme
 const stats = [
   { value: String(guides.length), label: "guides publiés" },
   { value: String(complet), label: complet > 1 ? "guides complets (A à Z)" : "guide complet (A à Z)" },
-  { value: String(tools.length), label: "outils couverts" },
+  { value: "3", label: "langues (FR, PT, EN)" },
 ];
 
 const facts = [
   {
     title: "Ce que fait Zunrel",
-    body: "Zunrel publie des guides « comment faire », étape par étape, en français, pour créer ses pages avec Leadpages et HTML Pub, puis vendre en ligne avec Shopify. Chaque guide répond à une seule question qu'un débutant tape sur Google, avec les étapes dans l'ordre réel, les erreurs fréquentes et les liens vers l'aide officielle.",
+    body: "Zunrel publie des guides « comment faire », étape par étape, en français (et en portugais et anglais pour les guides essentiels), pour lancer et développer son activité en ligne avec systeme.io : tunnels de vente, e-mails, produits numériques, formations, affiliation. Chaque guide répond à une seule question qu'un débutant tape sur Google, avec les étapes dans l'ordre réel, les erreurs fréquentes et les liens vers l'aide officielle.",
   },
   {
     title: "Audience",
-    body: "Des francophones qui lancent ou développent une activité en ligne : indépendants, auto-entrepreneurs, créateurs, petites entreprises (1 à 100 personnes). Principalement en Europe francophone (France, Belgique, Suisse). Ils arrivent avec une intention précise : choisir un outil, l'essayer, le configurer.",
+    body: "Des francophones qui lancent ou développent une activité en ligne : indépendants, auto-entrepreneurs, créateurs, petites entreprises (1 à 100 personnes). Principalement en Europe francophone (France, Belgique, Suisse). Ils arrivent avec une intention précise : comprendre systeme.io, l'essayer, le configurer.",
   },
   {
     title: "Formats",
@@ -69,7 +69,7 @@ const principles = [
   }
 
   <section class="mt-10">
-    <h2 class="text-[15px] font-medium leading-5 text-white">Outils et rubriques couverts</h2>
+    <h2 class="text-[15px] font-medium leading-5 text-white">Outil et rubriques couverts</h2>
     <p class="mt-3 text-[15px] leading-6 text-[#95959b]">
       {tools.map((tool) => tool.name).join(", ")}. Rubriques : {activeThemes.map((theme) => theme.name).join(", ")}.
     </p>
@@ -85,9 +85,8 @@ const principles = [
   <section class="mt-10">
     <h2 class="text-[15px] font-medium leading-5 text-white">Travailler avec Zunrel</h2>
     <p class="mt-3 text-[15px] leading-6 text-[#95959b]">
-      Zunrel travaille en affiliation (partage de revenus, idéalement récurrent) avec des outils SaaS utiles aux
-      petites entreprises, via PartnerStack et Impact. Pour une proposition, utilisez la messagerie de votre
-      programme sur l'une de ces plateformes. Des guides dédiés en portugais et en anglais sont prévus.
+      Depuis octobre 2026, Zunrel ne parle que de systeme.io et participe à son programme d'affiliation officiel.
+      Les guides essentiels existent en français, en portugais et en anglais.
     </p>
   </section>
 

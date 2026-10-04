@@ -1,5 +1,8 @@
-// Contenu du site : thèmes, guides « comment faire » Leadpages et HTML Pub, et outils.
-// Le lien d'affiliation est défini une seule fois dans `affiliateLink`.
+// Contenu du site : thèmes, guides « comment faire » systeme.io, et outil présenté.
+// Depuis le 4 octobre 2026, Zunrel ne parle plus que de systeme.io (demande de Dário).
+// Les liens d'affiliation systeme.io sont définis une seule fois dans `affiliateLinks`.
+// Prix et limites : relevés sur les pages officielles le 4 octobre 2026 (voir `verifiedOn`),
+// jamais inventés. À revérifier avant chaque mise à jour.
 
 export type Theme = {
   slug: string;
@@ -12,9 +15,12 @@ export type Step = {
   text: string;
 };
 
+// Source officielle. `en` : la même page dans le centre d'aide en anglais (utilisée par les
+// versions PT et EN des guides) ; sans `en`, la source n'est pas affichée dans les traductions.
 export type Source = {
   label: string;
   url: string;
+  en?: { label: string; url: string; ptLabel?: string; ptUrl?: string };
 };
 
 export type Guide = {
@@ -52,2752 +58,1207 @@ export type Tool = {
   themes: string[];
   goodFor: string;
   watchOut: string;
-  // Icône officielle de la marque (chargée depuis le site de la marque avec `direct: true`).
-  // `direct: true` : l'image est chargée depuis le site de la marque (quand le proxy est refusé).
   logo?: { src: string; fit?: "cover" | "contain"; zoom?: number; direct?: boolean };
 };
 
 export const siteName = "Zunrel";
-export const tagline = "Leadpages, HTML Pub et Shopify : comment faire, étape par étape.";
+export const tagline = "systeme.io : comment faire, étape par étape.";
 
-// Lien d'affiliation Leadpages (PartnerStack). Il mène à leadpages.com.
-export const affiliateLink = "https://try.leadpages.com/94z9pcfn1hu5";
-// Lien d'affiliation Shopify (Impact).
-export const shopifyLink = "https://shopify.pxf.io/6kMJxr";
-// Même lien Impact, mais vers la page des tarifs (shopify.com/fr/tarifs), pour les guides sur les prix.
-export const shopifyPricingLink = "https://shopify.pxf.io/KBdaZa";
-export const shopifyPricingGuides = ["combien-coute-shopify", "choisir-son-forfait-shopify"];
+// Date du dernier relevé des prix et limites sur les pages officielles de systeme.io.
+export const verifiedOn = "2026-10-04";
+
+// Liens d'affiliation systeme.io (paramètre ?sa= de Dário, sans « www », comme le demande l'aide
+// officielle). Vérifié le 04/10/2026 : les trois adresses posent le cookie d'affiliation
+// `systeme_affiliate_systemeio`. Français : /fr, portugais : /pt (site en portugais du Brésil),
+// anglais : la page d'accueil internationale.
+export const affiliateLinks = {
+  fr: "https://systeme.io/fr?sa=sa0210069650f7a7d1911c7693beefdfbcd9f0e9f5",
+  pt: "https://systeme.io/pt?sa=sa0210069650f7a7d1911c7693beefdfbcd9f0e9f5",
+  en: "https://systeme.io/?sa=sa0210069650f7a7d1911c7693beefdfbcd9f0e9f5",
+} as const;
+export const affiliateLink = affiliateLinks.fr;
+
+// Mention affichée à côté de chaque lien affilié (texte validé par Dário le 04/10/2026).
+export const affiliateDisclosure = {
+  fr: "Lien affilié : si vous créez un compte via ce lien, je touche une commission, sans surcoût pour vous.",
+  pt: "Link de afiliado: se você criar uma conta por este link, eu recebo uma comissão, sem custo extra para você.",
+  en: "Affiliate link: if you create an account through this link, I earn a commission, at no extra cost to you.",
+} as const;
+
 // Formulaire Mailchimp « embedded » (Audience → Signup forms → Embedded forms → attribut action du <form>).
-// Vide = le bloc newsletter n'est pas affiché.
+// Vide = le bloc newsletter n'est pas affiché. Même liste qu'avant le passage à systeme.io.
 export const newsletterFormUrl =
   "https://gmail.us9.list-manage.com/subscribe/post?u=13aa96838d6074fef23022e3e&id=893c08eb5d&f_id=0073d9e1f0";
 // Champ anti-robots du même formulaire Mailchimp (nom donné dans le code « embedded »).
 export const newsletterHoneypot = "b_13aa96838d6074fef23022e3e_893c08eb5d";
-// Tags Mailchimp par centre d'intérêt (Audience → Tags). Envoyés avec l'inscription pour
-// pouvoir écrire plus tard seulement aux personnes intéressées par un outil.
-export const newsletterTags = {
-  shopify: "11404677",
-  leadpages: "11404678",
-  htmlpub: "11404679",
-} as const;
-export type NewsletterTag = keyof typeof newsletterTags;
+// Les anciens tags d'intérêt (shopify 11404677, leadpages 11404678, htmlpub 11404679) ne sont plus
+// envoyés : tout le site parle de systeme.io. Seul le tag de langue part avec l'inscription
+// (voir `langTags` dans i18n.ts). Aucun nouveau tag n'a été créé dans Mailchimp.
 
-const help = "https://support.leadpages.com/hc/en-us/articles/";
-const pricing = { label: "Leadpages : offres et tarifs", url: "https://leadpages.com/pricing" };
+// Sources officielles. `aide` = centre d'aide en français, `help` = le même centre en anglais.
+const aide = "https://aide.systeme.io/article/";
+const help = "https://help.systeme.io/article/";
+function src(label: string, frPath: string, enLabel: string, enPath: string): Source {
+  return { label: `Aide systeme.io : ${label}`, url: `${aide}${frPath}`, en: { label: `systeme.io Help: ${enLabel}`, url: `${help}${enPath}` } };
+}
+const S = {
+  pricing: {
+    label: "systeme.io : tarifs et comparatif des plans",
+    url: "https://systeme.io/fr/pricing",
+    en: { label: "systeme.io pricing", url: "https://systeme.io/pricing", ptLabel: "systeme.io: preços", ptUrl: "https://systeme.io/pt/pricing" },
+  },
+  affiliatePage: {
+    label: "systeme.io : programme d'affiliation",
+    url: "https://systeme.io/fr/affiliate-program",
+    en: { label: "systeme.io affiliate program", url: "https://systeme.io/affiliate-program" },
+  },
+  funnel: src("créer un tunnel de vente", "11-comment-creer-un-tunnel-de-vente", "how to create a funnel", "147-how-to-create-a-funnel"),
+  optin: src("créer une page de capture", "14-comment-creer-une-page-de-capture", "how to create an opt-in page", "152-how-to-create-a-opt-in-page"),
+  links: src("relier les pages d'un tunnel", "25-comment-faire-la-liaison-entre-les-pages-dun-tunnel", "how to link funnel pages", "330-how-to-link-between-the-pages-of-a-funnel"),
+  orderForm: src("créer une page de paiement", "13-comment-creer-une-page-de-paiement", "how to create an order form", "252-how-to-create-an-order-form-payment-page"),
+  activatePayments: src("activer les paiements Stripe ou PayPal", "24-comment-activer-les-paiements-par-stripe-ou-paypal", "how to activate Stripe or PayPal payments", "307-how-to-activate-payments-by-stripe-or-paypal"),
+  stripe: src("connecter Stripe", "224-comment-connecter-votre-compte-stripe-a-systeme-io", "how to connect Stripe", "225-how-to-connect-your-stripe-account-to-systeme-io"),
+  paypal: src("connecter PayPal", "48-comment-connecter-votre-compte-paypal-a-systeme-io", "how to integrate PayPal", "132-paypal-integration"),
+  bump: src("ajouter un order bump", "30-comment-ajouter-un-order-bump-sur-la-page-de-paiement", "how to add an order bump", "154-how-to-add-an-order-bump-to-a-payment-page"),
+  upsell: src("créer un upsell et un downsell", "27-comment-creer-un-upsell-et-un-downsell", "how to create an upsell and a downsell", "243-how-to-create-an-upsell-and-a-downsell"),
+  coupon: src("créer un code promo", "32-comment-creer-un-bon-de-reduction-et-linserer-votre-page-de-paiement", "how to create a coupon code", "247-how-to-create-and-add-a-coupon-code-to-your-order-form"),
+  ebook: src("vendre un ebook", "200-comment-vendre-son-ebook", "how to sell your eBook", "155-how-to-sell-your-ebook"),
+  physical: src("créer et vendre un produit physique", "53-comment-creer-et-vendre-un-produit-physique-sur-systeme-io", "how to sell a physical product", "292-how-to-create-and-sell-a-physical-product-on-systeme-io"),
+  sender: src("confirmer l'adresse d'expéditeur", "2069-comment-confirmer-adresse-email-dexpediteur-de-vos-emails", "how to confirm your sender address", "2070-how-to-confirm-your-email-sender-address"),
+  campaign: src("configurer une campagne d'emails", "18-comment-configurer-une-campagne-demail", "how to set up an email campaign", "367-how-to-set-up-an-email-campaign"),
+  newsletter: src("programmer une newsletter", "20-comment-programmer-lenvoi-dune-newsletter", "how to send or schedule a newsletter", "358-how-to-send-or-schedule-a-newsletter"),
+  rules: src("règles d'automatisation", "51-comment-fonctionnent-les-regles-dautomatisation", "how automation rules work", "140-automation-rules"),
+  authDomain: src("authentifier son nom de domaine", "124-comment-mettre-en-place-lauthentification-de-votre-nom-de-domaine-pour-ameliorer-la-deliverabilite-de-vos-emails", "how to authenticate your domain", "316-how-to-authenticate-your-personal-domain-name"),
+  domain: src("connecter son nom de domaine", "52-comment-connecter-votre-nom-de-domaine-a-systeme-io", "how to connect your domain", "135-how-to-connect-your-domain-to-systemeio"),
+  homepage: src("définir la page d'accueil du domaine", "63-comment-definir-la-page-daccueil-de-votre-domaine", "how to define your domain's homepage", "143-how-to-define-a-blog-or-a-page-created-with-systeme-io-as-your-domain-root"),
+  cancel: src("annuler son abonnement", "190-comment-annuler-votre-abonnement-systeme-io", "how to cancel your subscription", "264-cancel-subscription-systeme"),
+  blog: src("créer un blog", "115-comment-creer-un-blog-sur-systemeio", "how to create a blog", "175-how-to-create-a-blog-with-systemeio"),
+  blogPost: src("créer un article de blog", "116-comment-creer-un-article-de-blog", "how to create a blog post", "359-how-to-create-a-blog-post"),
+  course: src("créer une formation", "70-comment-creer-une-formation-sur-systemeio", "how to create a course", "164-how-to-create-a-course-using-systemeio"),
+  sellCourse: src("vendre sa formation en ligne", "72-comment-vendre-votre-formation-en-ligne", "how to sell an online course", "237-how-to-sell-an-online-course"),
+  webinar: src("créer des webinaires automatiques", "50-comment-creer-des-webinaires-automatiques", "how to create automated webinars", "265-how-to-create-automated-webinars"),
+  sioAffiliate: src("le programme d'affiliation de systeme.io", "83-comment-fonctionne-le-programme-daffiliation-de-systeme-io", "how the affiliate program works", "162-how-the-systeme-io-affiliate-program-works"),
+  ownAffiliate: src("créer son propre programme d'affiliation", "253-comment-mettre-en-place-votre-propre-programme-daffiliation", "how to set up your own affiliate program", "699-how-to-set-up-your-own-affiliate-program"),
+  migration: src("migration gratuite", "2003-comment-beneficier-dune-migration-gratuite-vers-systeme-io", "how to get a free migration", "2010-how-to-benefit-from-a-free-migration-to-systeme-io"),
+  clickfunnels: src("migrer depuis ClickFunnels", "2327-comment-migrer-votre-business-de-clickfunnels-vers-systemeio", "migrating from ClickFunnels", "2360-how-to-migrate-your-business-from-clickfunnels-to-systeme-io"),
+  importContacts: src("importer ou exporter une liste", "125-comment-importer-ou-exporter-une-liste-email", "how to import or export contacts", "238-how-to-import-or-export-a-contact-list"),
+  footerBadge: {
+    label: "Aide systeme.io (en anglais) : retirer « Sent with systeme.io »",
+    url: `${help}2008-how-to-remove-sent-with-systemeio-and-customize-your-email-footer`,
+    en: { label: "systeme.io Help: remove “Sent with systeme.io”", url: `${help}2008-how-to-remove-sent-with-systemeio-and-customize-your-email-footer` },
+  },
+  leadpagesPricing: {
+    label: "Leadpages : tarifs",
+    url: "https://leadpages.com/pricing",
+    en: { label: "Leadpages pricing", url: "https://leadpages.com/pricing" },
+  },
+  shopifyPricing: {
+    label: "Shopify : tarifs",
+    url: "https://www.shopify.com/fr/tarifs",
+    en: { label: "Shopify pricing", url: "https://www.shopify.com/pricing" },
+  },
+} satisfies Record<string, Source>;
 
 export const themes: Theme[] = [
-  { slug: "choisir", name: "Choisir son offre", blurb: "HTML Pub ou Leadpages, essai gratuit, changer d'offre." },
-  { slug: "creer", name: "Créer une page", blurb: "Landing page, site ou blog, avec l'IA ou un modèle." },
-  { slug: "publier", name: "Publier", blurb: "Nom de domaine, adresse de page, accès protégé." },
-  { slug: "contacts", name: "Récolter des contacts", blurb: "Formulaires, export et connexion à vos outils." },
-  { slug: "optimiser", name: "Optimiser", blurb: "Tests A/B, cartes de chaleur et Smart Traffic." },
-  { slug: "ia", name: "IA et vidéo", blurb: "Publier depuis Claude, créer des pubs vidéo." },
-  { slug: "boutique", name: "Vendre avec Shopify", blurb: "Ouvrir sa boutique, ajouter ses produits, se faire payer." },
+  { slug: "decouvrir", name: "Découvrir systeme.io", blurb: "Ce que fait l'outil, le plan gratuit, les prix, l'ouverture du compte." },
+  { slug: "tunnels", name: "Pages et tunnels", blurb: "Tunnel de vente, page de capture, nom de domaine, blog." },
+  { slug: "vendre", name: "Vendre en ligne", blurb: "Produits numériques ou physiques, paiements, upsells et codes promo." },
+  { slug: "emails", name: "E-mails et automatisations", blurb: "Newsletters, séquences, règles d'automatisation, délivrabilité." },
+  { slug: "formations", name: "Formations et webinaires", blurb: "Créer et vendre une formation, lancer un webinaire automatique." },
+  { slug: "affiliation", name: "Affiliation", blurb: "Votre propre programme d'affiliés, ou recommander systeme.io." },
+  { slug: "comparer", name: "Comparer et migrer", blurb: "systeme.io face à Leadpages ou Shopify, et passer à systeme.io." },
 ];
 
+const T = { slug: "systeme-io", why: "" };
+const sio = (why: string) => [{ ...T, why }];
+const d = "2026-10-04";
+
 export const guides: Guide[] = [
-  // ——— Choisir son offre ———
+  // ——— Découvrir systeme.io ———
   {
-    slug: "choisir-entre-html-pub-et-leadpages",
-    question: "Comment choisir entre HTML Pub et Leadpages ?",
-    seoDescription: "HTML Pub pour publier simplement, Leadpages pour tester et optimiser vos conversions : comparez les deux offres et choisissez selon votre besoin.",
-    summary: "Publier simplement ou optimiser ses conversions : la bonne offre selon votre besoin.",
-    theme: "choisir",
-    publishedOn: "2026-09-27",
-    updatedOn: "2026-09-27",
+    slug: "c-est-quoi-systeme-io",
+    question: "Qu'est-ce que systeme.io et à qui ça sert ?",
+    seoTitle: "systeme.io, c'est quoi ? L'outil tout-en-un expliqué simplement",
+    seoDescription: "Tunnels de vente, e-mails, formations, blog, boutique, affiliation : ce que fait systeme.io, pour qui, et ses limites, vérifié sur le site officiel.",
+    summary: "Un seul outil pour vos pages, vos e-mails, vos formations et vos ventes : ce qu'il fait, pour qui, et ses limites.",
+    theme: "decouvrir",
+    publishedOn: d,
+    updatedOn: d,
     popular: true,
     intro:
-      "HTML Pub et Leadpages viennent de la même entreprise et utilisent le même moteur. HTML Pub sert à publier. Leadpages ajoute tout ce qui aide à convertir plus de visiteurs.",
+      "systeme.io est un outil en ligne « tout-en-un » pour vendre sur Internet : pages et tunnels de vente, e-mails, automatisations, formations, blog, produits physiques et programme d'affiliation, dans le même compte. Il existe un plan gratuit, sans carte bancaire.",
     steps: [
       {
-        title: "Demandez-vous ce que vous voulez faire",
-        text: "Vous voulez seulement mettre en ligne une page, un petit site ou un blog avec votre nom de domaine ? HTML Pub suffit. Vous voulez tester deux versions d'une page pour savoir laquelle vend le mieux ? Il vous faut Leadpages.",
+        title: "Comprenez l'idée : un seul compte au lieu de cinq outils",
+        text: "Habituellement, on assemble un outil de landing pages, un outil d'e-mails, une plateforme de formations et une boutique, puis on les relie entre eux. systeme.io regroupe ces briques : un contact qui s'inscrit sur une page arrive directement dans vos contacts, reçoit vos e-mails et peut acheter sur la même plateforme.",
       },
       {
-        title: "Regardez les trois offres HTML Pub",
-        text: "Starter : 5 pages et 1 domaine. Pro : 25 pages, 1 blog et l'accès API, pour un créateur seul. Business : 50 pages, 2 domaines et 2 blogs, pour une petite équipe ou une agence. La publication depuis Claude est incluse dans toutes les offres.",
+        title: "Faites le tour de ce qu'il sait faire",
+        text: "D'après la page des tarifs officielle (relevée le 4 octobre 2026) : tunnels de vente et pages, envoi d'e-mails (newsletters et campagnes), règles d'automatisation et workflows, sites web et blogs, formations en ligne et communautés, produits physiques avec stock et variantes, codes promo, upsells et order bumps, calendrier de réservation, programme d'affiliation, et webinaires automatiques sur les plans Webinaire et Illimité.",
       },
       {
-        title: "Regardez les trois offres Leadpages",
-        text: "Grow ajoute les tests A/B manuels, le remplacement dynamique du texte et l'enrichissement des contacts. Optimize ajoute Smart Traffic, les cartes de chaleur et la personnalisation automatique. Scale ajoute l'optimisation automatique complète et un support dédié.",
+        title: "Regardez à qui il s'adresse",
+        text: "Il convient bien aux indépendants, coachs, formateurs et créateurs qui vendent des produits numériques (formation, ebook, accompagnement) et veulent construire une liste d'e-mails. Il sert aussi aux petites boutiques qui vendent quelques produits physiques sans avoir besoin d'un catalogue géant.",
       },
       {
-        title: "Commencez petit",
-        text: "Vos pages et vos domaines vous suivent si vous changez d'offre. Vous pouvez donc démarrer avec HTML Pub et passer à Leadpages le jour où vous avez assez de visiteurs pour tester.",
+        title: "Connaissez ses limites",
+        text: "Le plan gratuit limite le nombre de tunnels, de campagnes, de règles d'automatisation et de contacts. Les webinaires automatiques demandent un plan payant (Webinaire ou Illimité). Pour les produits physiques, l'aide officielle précise que systeme.io ne gère pas l'expédition : vous envoyez les colis vous-même. Il n'y a pas non plus de webinaire en direct.",
       },
       {
-        title: "Vérifiez le prix affiché le jour même",
-        text: "Les prix changent selon les promotions et la facturation mensuelle ou annuelle (environ 20 % de moins à l'année). Consultez la page des tarifs avant de choisir.",
+        title: "Testez avec le plan gratuit",
+        text: "Le plan gratuit n'expire pas et ne demande pas de carte bancaire. Créez un compte, construisez une première page de capture et envoyez-vous un e-mail de test : en une heure, vous saurez si la logique de l'outil vous convient.",
       },
     ],
     pitfalls: [
-      "Prendre Leadpages Optimize dès le départ alors qu'on n'a pas encore de trafic : les tests et les cartes de chaleur ont besoin de visiteurs pour être utiles.",
-      "Croire que HTML Pub fait des tests A/B : ce n'est pas le cas, les tests commencent avec Leadpages Grow.",
+      "Choisir un plan payant avant d'avoir testé le plan gratuit : il suffit souvent pour démarrer.",
+      "Croire que systeme.io expédie vos colis : la livraison des produits physiques reste à votre charge.",
     ],
-    tools: [
-      { slug: "html-pub", why: "Pour publier des pages, un site ou un blog." },
-      { slug: "leadpages", why: "Pour tester et améliorer vos conversions." },
-    ],
-    sources: [pricing],
-    related: ["combien-coute-leadpages", "choisir-entre-leadpages-et-shopify", "essayer-leadpages-gratuitement", "changer-ou-annuler-son-offre-leadpages"],
+    tools: sio("L'outil tout-en-un présenté dans ce guide."),
+    sources: [S.pricing, S.physical],
+    related: ["plan-gratuit-systeme-io", "combien-coute-systeme-io", "creer-son-compte-systeme-io", "lancer-son-business-en-ligne-avec-systeme-io-de-a-a-z"],
   },
   {
-    slug: "essayer-leadpages-gratuitement",
-    question: "Comment essayer Leadpages gratuitement ?",
-    summary: "L'essai de 7 jours, ce qu'il contient et comment ne pas être débité.",
-    theme: "choisir",
-    publishedOn: "2026-09-26",
-    updatedOn: "2026-09-26",
+    slug: "plan-gratuit-systeme-io",
+    question: "Que contient le plan gratuit de systeme.io ?",
+    seoTitle: "Plan gratuit systeme.io : ce qui est inclus et les limites (2026)",
+    seoDescription: "2 000 contacts, 3 tunnels, 1 formation, e-mails illimités : les limites exactes du plan gratuit systeme.io, relevées sur la page officielle des tarifs.",
+    summary: "Les limites exactes du plan gratuit, ce qu'il permet vraiment, et quand passer au plan payant.",
+    theme: "decouvrir",
+    publishedOn: d,
+    updatedOn: d,
     popular: true,
     intro:
-      "Chaque offre HTML Pub et Leadpages s'essaie pendant 7 jours avec toutes ses fonctions. Une carte bancaire est demandée, mais rien n'est prélevé avant le 7e jour.",
+      "Le plan gratuit de systeme.io donne accès aux principales fonctions avec des quantités limitées. Il ne demande pas de carte bancaire. Voici ses limites, relevées sur la page officielle des tarifs le 4 octobre 2026.",
     steps: [
       {
-        title: "Choisissez l'offre à tester",
-        text: "Sur la page des tarifs, choisissez la facturation mensuelle ou annuelle, puis l'offre qui vous intéresse. Testez celle que vous comptez vraiment garder : l'essai donne accès à toutes ses fonctions.",
+        title: "Les contacts et les e-mails",
+        text: "Jusqu'à 2 000 contacts. Envoi d'e-mails illimité et newsletters illimitées. En revanche : 1 campagne d'e-mails (séquence automatique), 1 tag, 1 règle d'automatisation et 1 workflow.",
       },
       {
-        title: "Cliquez sur « Start 7-Day Free Trial »",
-        text: "Créez votre compte avec votre adresse e-mail, puis indiquez une carte bancaire. Elle sert seulement à continuer après l'essai.",
+        title: "Les pages et les sites",
+        text: "3 tunnels de vente avec 15 étapes au total, 1 test A/B, 1 nom de domaine personnalisé, 1 site web (2 langues par site), 1 blog avec un nombre d'articles illimité, 1 page « lien en bio ». Le stockage de fichiers est illimité.",
       },
       {
-        title: "Notez la date de fin",
-        text: "Mettez un rappel dans votre agenda un ou deux jours avant la fin des 7 jours. C'est le moment de décider si vous gardez l'offre.",
+        title: "La vente",
+        text: "0 % de frais de transaction prélevés par systeme.io (votre prestataire de paiement, Stripe ou PayPal par exemple, garde ses propres frais). 1 upsell, 1 order bump, 1 code promo, produits physiques illimités avec jusqu'à 50 variantes.",
       },
       {
-        title: "Utilisez l'essai pour de vrai",
-        text: "Créez une vraie page, connectez votre domaine et votre outil d'e-mails. Vous saurez vite si l'outil vous convient.",
+        title: "Les formations et le reste",
+        text: "1 formation avec jusqu'à 500 élèves, 1 communauté avec membres illimités, 1 événement de calendrier, votre propre programme d'affiliation, et le support par e-mail 24 h/24. Pas de webinaire automatique, pas de séance de coaching de démarrage, pas de migration gratuite.",
       },
       {
-        title: "Gardez ou annulez",
-        text: "Si l'outil vous plaît, ne faites rien : l'abonnement démarre. Sinon, annulez avant le 7e jour depuis les réglages de votre compte. Vos pages restent enregistrées.",
+        title: "Ce qui reste visible sur le plan gratuit",
+        text: "Vos e-mails portent en bas un lien « Sent with systeme.io », qui est un lien d'affiliation de systeme.io. D'après le centre d'aide, on ne peut pas le retirer sur le plan gratuit : il faut un plan payant (Startup, Webinaire ou Illimité).",
+      },
+      {
+        title: "Quand passer au plan payant",
+        text: "Le plan Startup (17 € par mois au 4 octobre 2026) devient utile quand vous dépassez 2 000 contacts, que vous voulez plusieurs séquences d'e-mails ou plus d'une règle d'automatisation, ou une deuxième formation. Le guide sur les prix détaille les quatre plans.",
       },
     ],
     pitfalls: [
-      "Oublier la date de fin et être prélevé sans l'avoir voulu.",
-      "Passer l'essai à regarder les modèles sans publier : on ne découvre pas les vraies limites de l'outil.",
+      "Oublier qu'1 seul tag est inclus : organisez vos contacts simplement tant que vous êtes sur le plan gratuit.",
+      "Construire trois tunnels « pour essayer » et ne plus pouvoir en créer un vrai : supprimez les brouillons inutiles.",
     ],
-    tools: [
-      { slug: "leadpages", why: "Essai de 7 jours, toutes fonctions incluses." },
-      { slug: "html-pub", why: "Essai de 7 jours aussi, pour l'offre la moins chère." },
-    ],
-    sources: [pricing],
-    related: ["combien-coute-leadpages", "choisir-entre-html-pub-et-leadpages", "creer-une-landing-page-avec-l-ia"],
+    tools: sio("Plan gratuit sans carte bancaire et sans limite de durée."),
+    sources: [S.pricing, S.footerBadge],
+    related: ["combien-coute-systeme-io", "c-est-quoi-systeme-io", "creer-son-compte-systeme-io", "lancer-son-business-en-ligne-avec-systeme-io-de-a-a-z", "creer-un-blog-avec-systeme-io"],
   },
   {
-    slug: "changer-ou-annuler-son-offre-leadpages",
-    question: "Comment changer d'offre ou annuler son abonnement Leadpages ?",
-    seoTitle: "Changer d'offre ou annuler son abonnement Leadpages",
-    summary: "Monter ou descendre d'offre, arrêter l'abonnement, et ce que deviennent vos pages.",
-    theme: "choisir",
-    publishedOn: "2026-09-26",
-    updatedOn: "2026-09-26",
+    slug: "combien-coute-systeme-io",
+    question: "Combien coûte systeme.io en 2026 ?",
+    seoTitle: "Prix de systeme.io en 2026 : les 4 plans comparés",
+    seoDescription: "Gratuit, Startup 17 €, Webinaire 47 €, Illimité 97 € par mois : les prix et limites de systeme.io relevés le 4 octobre 2026, mensuel ou annuel.",
+    summary: "Les 4 plans, leurs prix mensuels et annuels, leurs limites, et comment changer ou annuler.",
+    theme: "decouvrir",
+    publishedOn: d,
+    updatedOn: d,
+    popular: true,
     intro:
-      "Vous pouvez changer d'offre ou annuler à tout moment, sans pénalité. Seul le propriétaire du compte peut gérer la facturation.",
+      "systeme.io a quatre plans : Gratuit, Startup, Webinaire et Illimité. Les prix ci-dessous ont été relevés sur la page officielle en français le 4 octobre 2026. Ils peuvent changer : vérifiez toujours la page des tarifs le jour même.",
     steps: [
       {
-        title: "Ouvrez la facturation",
-        text: "En bas du menu de gauche, cliquez sur le nom de votre espace, puis sur « Billing ». Connectez-vous avec le compte propriétaire si le lien n'apparaît pas.",
+        title: "Les prix en paiement mensuel",
+        text: "Gratuit : 0 €. Startup : 17 € par mois. Webinaire : 47 € par mois. Illimité : 97 € par mois.",
       },
       {
-        title: "Changez d'offre",
-        text: "La page affiche toutes les offres, avec « Current Plan » sur la vôtre. Choisissez l'offre supérieure ou inférieure. Le changement prend effet au prochain cycle de facturation.",
+        title: "Les prix en paiement annuel",
+        text: "Le bouton « Facturation annuelle » affiche 170 € par an pour Startup, 470 € pour Webinaire et 970 € pour Illimité, soit l'équivalent de 2 mois gratuits par rapport au mensuel.",
       },
       {
-        title: "Ou annulez",
-        text: "Toujours dans « Billing », utilisez « Manage Subscription » ou « Cancel ». Pendant un essai, la date de fin est indiquée sous votre offre : annulez avant pour ne pas être prélevé.",
+        title: "Ce que change chaque plan",
+        text: "Startup : 5 000 contacts, 10 tunnels, 10 campagnes, 10 règles d'automatisation, 3 domaines, 5 formations, élèves illimités. Webinaire : 10 000 contacts, 50 tunnels, 100 campagnes et règles, 10 domaines, 20 formations, et jusqu'à 10 webinaires automatiques. Illimité : contacts, tunnels, règles, domaines et formations illimités, plus l'accès anticipé aux nouvelles fonctions.",
       },
       {
-        title: "Sachez ce que deviennent vos pages",
-        text: "Si l'abonnement s'arrête, les pages publiées repassent en brouillon. Elles ne sont pas perdues : vous pourrez les republier en réactivant un abonnement.",
+        title: "Ce qui est identique partout",
+        text: "Envoi d'e-mails illimité, stockage illimité, 0 % de frais de transaction côté systeme.io, programme d'affiliation, comptes d'assistant et sous-comptes illimités, support par e-mail 24 h/24. La séance de coaching de démarrage est incluse à partir de Startup.",
+      },
+      {
+        title: "Choisissez selon votre étape",
+        text: "Vous démarrez : le plan Gratuit. Vous dépassez 2 000 contacts ou voulez plusieurs séquences : Startup. Vous voulez des webinaires automatiques : Webinaire (c'est le premier plan qui les inclut). Vous avez une grosse liste ou plusieurs projets : Illimité.",
+      },
+      {
+        title: "Changez ou annulez quand vous voulez",
+        text: "Pour annuler : photo de profil, « Paramètres », « Gérer mes abonnements », les trois points à côté de l'abonnement, puis « Annuler l'abonnement ». L'annulation prend effet à la prochaine date de paiement. La FAQ de la page des tarifs indique que le compte repasse alors au plan gratuit et que les contacts au-delà de la limite sont archivés, pas supprimés.",
       },
     ],
     pitfalls: [
-      "Descendre d'offre sans vérifier les limites : nombre de pages, de domaines ou de blogs inclus.",
-      "Annuler alors que des publicités envoient encore du trafic vers vos pages.",
+      "Comparer un prix annuel avec un prix mensuel : regardez la position du bouton « Facturation mensuelle / annuelle ».",
+      "Prendre le plan Webinaire uniquement « au cas où » : si vous ne faites pas de webinaire automatique, Startup suffit souvent.",
     ],
-    tools: [{ slug: "leadpages", why: "Changement d'offre sans pénalité." }],
-    sources: [
-      { label: "HTML Pub : offres et facturation", url: `${help}43968293046413--HTMLPub-Plans-and-Billing` },
-      pricing,
+    tools: sio("Quatre plans, dont un gratuit."),
+    sources: [S.pricing, S.cancel],
+    related: ["plan-gratuit-systeme-io", "c-est-quoi-systeme-io", "creer-un-webinaire-automatique-systeme-io", "migrer-vers-systeme-io", "devenir-affilie-systeme-io"],
+  },
+  {
+    slug: "creer-son-compte-systeme-io",
+    question: "Comment créer son compte systeme.io et bien le configurer ?",
+    seoTitle: "Créer son compte systeme.io gratuit : les 5 réglages à faire d'abord",
+    seoDescription: "Ouvrir un compte systeme.io gratuit sans carte bancaire, puis les réglages à faire avant tout : expéditeur, domaine, paiements.",
+    summary: "L'inscription gratuite, puis les réglages à faire avant de créer votre première page.",
+    theme: "decouvrir",
+    publishedOn: d,
+    updatedOn: d,
+    intro:
+      "L'inscription au plan gratuit ne demande pas de carte bancaire. Avant de construire vos pages, quelques réglages évitent les mauvaises surprises : e-mails qui n'arrivent pas, paiements impossibles, adresse peu professionnelle.",
+    steps: [
+      {
+        title: "Ouvrez votre compte gratuit",
+        text: "Sur systeme.io, cliquez sur le bouton pour commencer gratuitement et créez votre compte avec votre adresse e-mail. La page des tarifs indique « Aucune carte de crédit requise » pour tous les plans au démarrage.",
+      },
+      {
+        title: "Retrouvez les paramètres",
+        text: "Presque tous les réglages du compte se trouvent au même endroit : cliquez sur votre photo de profil, puis sur « Paramètres ». Le menu de gauche donne accès aux e-mails, aux domaines personnalisés, aux passerelles de paiement, aux abonnements et au programme d'affiliation.",
+      },
+      {
+        title: "Confirmez votre adresse d'expéditeur",
+        text: "Dans « Paramètres », puis « Emails », cliquez sur le lien pour confirmer une adresse, saisissez votre adresse d'expédition et validez le lien reçu par e-mail. Son statut passe à « Vérifié ». L'idéal est une adresse sur votre propre nom de domaine (contact@votresite.fr).",
+      },
+      {
+        title: "Authentifiez votre nom de domaine pour les e-mails",
+        text: "Toujours dans « Paramètres » puis « Emails », section « Domaines », ajoutez votre domaine : systeme.io génère trois enregistrements CNAME et un enregistrement DMARC à copier chez votre hébergeur. L'aide officielle indique que cette authentification est obligatoire pour envoyer des e-mails depuis systeme.io, et qu'elle est impossible avec une adresse Gmail ou Yahoo.",
+      },
+      {
+        title: "Connectez un moyen de paiement si vous vendez",
+        text: "Dans « Paramètres », puis « Passerelles de paiement », cliquez sur « Connecter » à côté de Stripe ou de PayPal et suivez les étapes. Vous pourrez ensuite activer ces moyens de paiement dans chaque tunnel.",
+      },
+      {
+        title: "Créez une première page pour vérifier que tout marche",
+        text: "Créez un tunnel « Créer une audience », inscrivez-vous avec votre propre adresse et vérifiez que le contact apparaît bien et que l'e-mail de bienvenue arrive. Le guide sur la page de capture détaille chaque étape.",
+      },
     ],
-    related: ["choisir-entre-html-pub-et-leadpages"],
+    pitfalls: [
+      "Envoyer ses premiers e-mails avec une adresse Gmail : l'authentification de domaine est impossible et la délivrabilité en souffre.",
+      "Construire un tunnel de vente complet avant d'avoir connecté Stripe ou PayPal : la page de paiement ne pourra pas encaisser.",
+    ],
+    tools: sio("Inscription gratuite, sans carte bancaire."),
+    sources: [S.pricing, S.sender, S.authDomain, S.stripe],
+    related: ["creer-une-page-de-capture-systeme-io", "connecter-stripe-et-paypal-a-systeme-io", "ameliorer-la-delivrabilite-de-ses-e-mails-systeme-io", "connecter-son-nom-de-domaine-a-systeme-io"],
   },
 
+  // ——— Pages et tunnels ———
   {
-    slug: "choisir-entre-leadpages-et-shopify",
-    question: "Leadpages ou Shopify : lequel choisir ?",
-    seoDescription: "Leadpages crée des pages qui convertissent, Shopify gère une boutique complète. Comment choisir, et quand utiliser les deux ensemble.",
-    summary: "Des pages qui convertissent, une boutique complète, ou les deux ensemble.",
-    theme: "choisir",
-    publishedOn: "2026-09-27",
-    updatedOn: "2026-09-27",
+    slug: "creer-un-tunnel-de-vente-systeme-io",
+    question: "Comment créer un tunnel de vente avec systeme.io ?",
+    seoTitle: "Créer un tunnel de vente systeme.io pas à pas",
+    seoDescription: "Les 4 types de tunnels systeme.io, l'ordre des pages, la liaison entre elles et l'activation des paiements, d'après l'aide officielle.",
+    summary: "Les 4 types de tunnels, l'ordre des pages et la façon de les relier entre elles.",
+    theme: "tunnels",
+    publishedOn: d,
+    updatedOn: d,
     popular: true,
     intro:
-      "Leadpages (et HTML Pub) sert à créer des pages qui transforment les visiteurs en contacts ou en clients. Shopify sert à gérer une boutique : produits, stock, paiements et livraisons.",
+      "Un tunnel de vente est une suite de pages qui mène le visiteur vers une seule action : s'inscrire, puis acheter. Dans systeme.io, il remplace à la fois l'outil de landing pages et la page de paiement.",
     steps: [
       {
-        title: "Vous vendez plusieurs produits ? Prenez Shopify",
-        text: "Catalogue, stock, variantes, frais de livraison, taxes, commandes et retours : Shopify gère tout cela. Leadpages n'est pas fait pour tenir une boutique.",
+        title: "Créez le tunnel",
+        text: "Allez dans l'onglet « Sites », puis « Tunnels de vente », et cliquez sur « Créer ». Donnez un nom au tunnel, choisissez le nom de domaine à utiliser et la devise.",
       },
       {
-        title: "Vous voulez récolter des contacts ? Prenez Leadpages ou HTML Pub",
-        text: "Page d'inscription, page d'attente avant un lancement, webinaire, guide gratuit : une landing page avec un formulaire suffit, sans boutique.",
+        title: "Choisissez le bon type",
+        text: "« Créer une audience » crée une page de capture et une page de remerciement : idéal pour récolter des e-mails. « Vendre » crée une page de paiement et une page de remerciement. « Créer un tunnel personnalisé » part de zéro. « Créer un webinaire automatique » crée un tunnel de 3 pages, seulement sur les plans Webinaire et Illimité.",
       },
       {
-        title: "Vous avez un seul produit ou un service ? Commencez simple",
-        text: "Une page HTML Pub avec un bouton de paiement peut suffire pour un produit unique, une formation ou une prestation. Passez à Shopify quand le catalogue grandit.",
+        title: "Ajoutez les pages qui manquent",
+        text: "Dans le menu de gauche du tunnel, cliquez sur « Ajouter une étape », donnez un nom, choisissez le type (page de capture, page de vente, page de paiement, upsell, downsell, page de remerciement…), puis un modèle. Cliquez sur « Modifier la page » pour la personnaliser.",
       },
       {
-        title: "Vous faites de la publicité ? Utilisez les deux",
-        text: "Envoyez vos visiteurs vers une landing page Leadpages centrée sur une offre, puis vers le produit dans votre boutique Shopify. Avec Leadpages, vous pouvez tester deux versions de la page.",
+        title: "Respectez l'ordre des pages",
+        text: "L'ordre type est : page de capture, page de vente, page de paiement, upsell, downsell, page de remerciement. L'aide officielle précise que les pages doivent respecter cet ordre pour que le tunnel fonctionne.",
       },
       {
-        title: "Essayez avant de payer",
-        text: "Leadpages et HTML Pub s'essaient 7 jours, Shopify propose un essai puis une offre de lancement. Vérifiez les conditions du jour sur les pages de tarifs.",
+        title: "Reliez les pages entre elles",
+        text: "Sur la page de capture, réglez l'action du bouton sur « Enregistrer le contact » et la redirection « Vers l'étape suivante du tunnel ». Sur la page de vente, réglez le bouton sur « Rediriger vers une page » avec l'adresse de la page de paiement. Après le paiement, la suite (upsell, downsell, remerciement) s'enchaîne automatiquement.",
+      },
+      {
+        title: "Activez les paiements et testez",
+        text: "Dans les « Paramètres » du tunnel, cochez « Carte de crédit ou de débit (Stripe) » et/ou « PayPal », puis « Sauvegarder » (les comptes doivent être connectés avant). Parcourez ensuite tout le tunnel vous-même, comme un client.",
       },
     ],
     pitfalls: [
-      "Construire une boutique entière dans Leadpages : la gestion des commandes et du stock devient vite impossible.",
-      "Envoyer une publicité vers la page d'accueil de la boutique au lieu d'une page centrée sur une seule offre.",
+      "Placer l'upsell avant la page de paiement : il doit venir juste après.",
+      "Oublier d'activer Stripe ou PayPal dans les paramètres du tunnel, même si les comptes sont connectés.",
+      "Sur le plan gratuit, oublier la limite de 3 tunnels et 15 étapes au total.",
     ],
-    tools: [
-      { slug: "leadpages", why: "Landing pages, tests A/B et optimisation." },
-      { slug: "shopify", why: "Boutique en ligne complète avec paiements intégrés." },
-      { slug: "html-pub", why: "La version simple pour publier vite." },
-    ],
-    sources: [pricing, { label: "Shopify : tarifs", url: "https://www.shopify.com/fr/tarifs" }],
-    related: ["choisir-entre-html-pub-et-leadpages", "attirer-des-clients-avec-une-landing-page", "creer-sa-boutique-shopify"],
+    tools: sio("Tunnels de vente avec modèles prêts à l'emploi."),
+    sources: [S.funnel, S.links, S.activatePayments, S.pricing],
+    related: ["creer-une-page-de-capture-systeme-io", "vendre-un-produit-numerique-avec-systeme-io", "ajouter-un-upsell-un-order-bump-et-un-code-promo-systeme-io", "connecter-stripe-et-paypal-a-systeme-io"],
   },
-
   {
-    slug: "combien-coute-leadpages",
-    question: "Combien coûte Leadpages (et HTML Pub) en 2026 ?",
-    seoDescription: "Les prix des offres HTML Pub et Leadpages, mensuels et annuels, relevés sur la page officielle, et laquelle choisir selon votre besoin.",
-    summary: "Les prix des offres HTML Pub et Leadpages, mensuels et annuels, et celle à choisir selon votre besoin.",
-    theme: "choisir",
-    publishedOn: "2026-09-28",
-    updatedOn: "2026-09-28",
-    intro:
-      "HTML Pub et Leadpages sont vendus sur la même page de tarifs, en dollars. Voici les prix relevés sur cette page le 28 septembre 2026, et comment payer le moins cher possible.",
-    steps: [
-      {
-        title: "Les offres HTML Pub, pour publier",
-        text: "Au 28 septembre 2026, en paiement annuel : Starter coûte 5,58 $ par mois (7 $ en paiement mensuel), Pro 16 $ par mois (20 $ en mensuel) et Business 26,42 $ par mois (33 $ en mensuel).\n\nHTML Pub sert à publier des landing pages, des sites et des blogs sur votre domaine, avec l'assistant IA. Il n'a pas de tests A/B.",
-      },
-      {
-        title: "Les offres Leadpages, pour convertir plus",
-        text: "Au 28 septembre 2026, en paiement annuel : Grow coûte 53,58 $ par mois (67 $ en mensuel), Optimize 108 $ par mois (135 $ en mensuel) et Scale, la plus complète, 216,83 $ par mois (271 $ en mensuel).\n\nGrow ajoute les tests A/B. Optimize ajoute Smart Traffic et les cartes de chaleur. Les prix changent parfois : lisez toujours la page des tarifs le jour même.",
-      },
-      {
-        title: "Payez à l'année pour économiser 20 %",
-        text: "Le bouton « Monthly / Annual » en haut de la page des tarifs change tous les prix. Le paiement annuel revient environ 20 % moins cher, mais vous payez l'année d'un coup. Commencez en mensuel si vous n'êtes pas sûr de garder l'outil.",
-      },
-      {
-        title: "Essayez 7 jours avant de payer",
-        text: "Chaque offre s'essaie gratuitement pendant 7 jours, avec toutes ses fonctions. Une carte est demandée, mais rien n'est prélevé avant la fin de l'essai. Notez la date de fin dans votre agenda.",
-      },
-      {
-        title: "Choisissez selon votre trafic",
-        text: "Vous démarrez, sans beaucoup de visiteurs ? HTML Pub Pro suffit. Vous faites déjà de la publicité et voulez comparer deux versions d'une page ? Leadpages Grow. Vous avez beaucoup de trafic et voulez que l'outil optimise tout seul ? Optimize.",
-      },
-    ],
-    pitfalls: [
-      "Comparer un prix annuel avec un prix mensuel : vérifiez la position du bouton « Monthly / Annual ».",
-      "Payer Optimize sans avoir assez de visiteurs pour que les tests et les cartes de chaleur servent à quelque chose.",
-      "Oublier que les prix sont en dollars : votre banque ajoute parfois des frais de change.",
-    ],
-    tools: [
-      { slug: "html-pub", why: "L'offre la moins chère, pour publier." },
-      { slug: "leadpages", why: "Tests A/B, Smart Traffic et cartes de chaleur." },
-    ],
-    sources: [pricing],
-    related: ["choisir-entre-html-pub-et-leadpages", "essayer-leadpages-gratuitement", "changer-ou-annuler-son-offre-leadpages", "creer-une-page-de-tarifs-html-pub"],
-  },
-
-  // ——— Créer une page ———
-  {
-    slug: "creer-sa-landing-page-leadpages-de-a-a-z",
-    question: "Comment créer sa première landing page Leadpages de A à Z ?",
-    seoTitle: "Créer sa première landing page Leadpages de A à Z",
-    seoDescription: "Le guide complet pour créer sa première landing page Leadpages : essai gratuit, modèle, textes, formulaire et mise en ligne, étape par étape.",
-    summary: "Le guide complet : de l'essai gratuit à une page en ligne qui récolte des contacts, étape par étape.",
-    theme: "creer",
-    format: "complet",
-    publishedOn: "2026-09-27",
-    updatedOn: "2026-09-27",
+    slug: "creer-une-page-de-capture-systeme-io",
+    question: "Comment créer une page de capture (landing page) avec systeme.io ?",
+    seoTitle: "Créer une landing page / page de capture avec systeme.io",
+    seoDescription: "Créer une page de capture systeme.io qui récolte des e-mails : tunnel « Créer une audience », modèle, formulaire, e-mail de bienvenue automatique.",
+    summary: "Une page qui récolte des e-mails, avec l'e-mail de bienvenue envoyé tout seul.",
+    theme: "tunnels",
+    publishedOn: d,
+    updatedOn: d,
     popular: true,
     intro:
-      "Ce guide suit l'ordre réel d'une première landing page : préparer l'offre, créer la page avec l'IA, la relire, la publier sur votre domaine, puis récolter et suivre les contacts. Comptez une demi-journée, pendant les 7 jours d'essai gratuit.",
+      "Une page de capture (ou landing page) a un seul but : obtenir l'adresse e-mail du visiteur en échange de quelque chose d'utile. Avec systeme.io, la page, la liste de contacts et l'e-mail de bienvenue sont dans le même outil.",
     steps: [
       {
-        title: "Préparez votre offre avant de commencer",
-        text: "Une landing page n'a qu'un seul objectif. Décidez-le avant d'ouvrir l'outil : récolter des e-mails, vendre un produit, prendre des rendez-vous.\n\nÉcrivez sur une feuille : à qui s'adresse la page, le problème que vous réglez, ce que le visiteur reçoit, et l'action unique que vous attendez de lui (par exemple « Recevoir le guide gratuit »).\n\nRassemblez aussi votre logo, 2 ou 3 photos, vos couleurs et, si vous en avez, quelques avis de clients réels. Vous gagnerez du temps et des crédits IA.\n\nPrévoyez enfin le plan de la page. Celui qui marche le mieux pour une première page tient en six blocs, dans cet ordre : un titre qui dit le résultat obtenu, une phrase qui précise pour qui c'est, trois avantages concrets, une preuve (avis, chiffre réel, logo d'un client), le formulaire ou le bouton, puis deux ou trois questions fréquentes pour lever les derniers doutes.\n\nPour le titre, partez du résultat que le visiteur veut, pas de votre produit. « Recevez 10 idées de repas prêtes en 20 minutes » parle plus que « Découvrez mon guide de cuisine ». Écrivez trois versions et gardez la plus claire : vous pourrez tester les autres plus tard.",
+        title: "Préparez votre offre gratuite",
+        text: "Avant d'ouvrir l'outil, décidez ce que le visiteur reçoit : un guide PDF, une liste, une vidéo, une réduction. Écrivez un titre qui annonce le résultat (« Recevez 10 idées de repas prêtes en 20 minutes ») plutôt que votre produit.",
       },
       {
-        title: "Choisissez l'offre et démarrez l'essai",
-        text: "Sur la page des tarifs, deux familles d'offres existent. HTML Pub sert à publier des pages, des sites et des blogs. Leadpages ajoute les outils pour améliorer les résultats : tests A/B à partir de l'offre Grow, puis Smart Traffic et cartes de chaleur à partir d'Optimize.\n\nPour une première page, HTML Pub suffit souvent. Si vous voulez tester deux versions de votre page, prenez Leadpages Grow.\n\nCliquez sur « Start 7-Day Free Trial ». Une carte bancaire est demandée, mais rien n'est prélevé avant le 7e jour. Notez la date de fin dans votre agenda. Les prix changent souvent : lisez ceux du jour sur la page officielle.",
+        title: "Créez un tunnel « Créer une audience »",
+        text: "Dans « Sites », « Tunnels de vente », cliquez sur « Créer » et choisissez « Créer une audience ». systeme.io crée une page de capture et une page de remerciement. Dans un tunnel existant, utilisez « Ajouter une étape » et le type « Page de capture ».",
       },
       {
-        title: "Ouvrez l'écran de création",
-        text: "Dans le menu de gauche, cliquez sur « Create ». L'assistant IA, Piper, vous demande « What are you making? » : choisissez « Landing page ».\n\nVous préférez partir d'une base existante ? Cliquez sur « Templates » pour choisir un modèle, puis sur « Use ». La suite du guide reste la même.",
+        title: "Choisissez un modèle et modifiez la page",
+        text: "Sélectionnez un modèle, puis cliquez sur « Modifier la page ». Remplacez le titre, le texte et l'image. Gardez peu de texte : le titre, trois bénéfices, le formulaire.",
       },
       {
-        title: "Décrivez votre page en détail",
-        text: "Dans le champ du bas, reprenez vos notes de l'étape 1 : le public, l'offre, le ton, les couleurs et les sections voulues. Par exemple : un titre, trois avantages, un avis client, une question fréquente et un formulaire avec un seul champ e-mail.\n\nPlus la description est précise, moins vous dépenserez de crédits en corrections. Cliquez sur « Send ».\n\nExemple de description complète : « Landing page en français pour un guide PDF gratuit destiné aux coachs sportifs indépendants qui veulent trouver leurs premiers clients en ligne. Ton simple et motivant. Couleurs : bleu nuit et orange. Sections : titre avec le résultat promis, trois avantages, un court texte sur l'auteur, deux questions fréquentes, un formulaire avec un seul champ e-mail et une case de consentement non cochée. Bouton : Recevoir le guide. »\n\nVous pouvez aussi coller l'adresse d'une page existante ou du code HTML : Piper s'en sert comme point de départ.",
+        title: "Réglez le formulaire",
+        text: "Demandez le moins d'informations possible : souvent l'e-mail seul suffit. Réglez le bouton sur « Enregistrer le contact » puis « Vers l'étape suivante du tunnel », pour envoyer l'inscrit vers la page de remerciement.",
       },
       {
-        title: "Choisissez les images et le style",
-        text: "Piper demande quelles images utiliser : les vôtres, des images générées par IA (qui coûtent plus de crédits) ou aucune pour l'instant. Le coût estimé est affiché en haut à droite.\n\nIl propose ensuite trois directions visuelles. Cliquez sur celle qui vous plaît, puis sur « Build it ». La page se construit en une minute environ.",
+        title: "Envoyez l'e-mail de bienvenue automatiquement",
+        text: "Dans « Automatisations », puis « Règles », cliquez sur « Créer ». Comme déclencheur, choisissez l'inscription sur la page (optin) et le titre de votre page. Comme action, « Envoyer un email », créez l'e-mail avec le lien de votre cadeau, puis « Sauvegarder la règle ».",
       },
       {
-        title: "Corrigez la page en discutant",
-        text: "Cliquez sur « Open in editor ». Dans le champ « Ask Piper to edit this page… », demandez un seul changement à la fois : « Remplace le titre par… », « Mets le bouton en vert », « Supprime la section tarifs ».\n\nPiper liste ce qu'il a modifié et les crédits utilisés. Relisez chaque texte vous-même : l'IA peut inventer des chiffres ou des avis. Remplacez-les par les vrais, ou supprimez-les.\n\nQuelques demandes utiles pour une première page : « Raccourcis tous les paragraphes à deux phrases maximum », « Ajoute le bouton aussi en haut de la page », « Mets mon logo en haut à gauche » (après l'avoir envoyé dans « Assets »), « Utilise les couleurs de mon Brand Kit ».\n\nPour un petit changement de texte, cliquer directement dans la page est souvent plus rapide que de passer par l'IA. Gardez Piper pour les changements de mise en page ou de style.",
-      },
-      {
-        title: "Vérifiez le formulaire et le consentement",
-        text: "Le formulaire est le cœur de la page. Demandez le moins d'informations possible : souvent, l'e-mail seul suffit.\n\nSi vous comptez envoyer des e-mails commerciaux, ajoutez une case à cocher non cochée d'avance et une phrase qui explique à quoi servira l'adresse et comment se désinscrire.\n\nVérifiez enfin le texte du bouton : il doit dire ce que la personne obtient (« Recevoir le guide »), pas seulement « Envoyer ».\n\nPensez à ce qui se passe après l'envoi : un message de remerciement qui dit quoi faire ensuite (« Vérifiez votre boîte mail, le guide arrive dans 2 minutes »), ou une page de remerciement dédiée. C'est le bon endroit pour proposer l'étape suivante, par exemple un lien vers votre boutique ou votre prise de rendez-vous.\n\nSi vous promettez un fichier (guide PDF, liste, modèle), préparez-le maintenant et envoyez-le dans l'e-mail de bienvenue de votre outil e-mail (étape 11).",
-      },
-      {
-        title: "Contrôlez l'affichage sur mobile",
-        text: "La plupart des visiteurs arrivent sur téléphone. En bas à droite de l'éditeur, cliquez sur l'icône mobile. Vérifiez que le titre se lit sans zoomer, que le bouton se voit sans descendre trop bas et que le formulaire est facile à remplir avec le pouce.\n\nRegardez aussi la vitesse : des images trop lourdes ralentissent la page sur un réseau mobile, et chaque seconde d'attente fait partir des visiteurs. Utilisez des photos de taille raisonnable et évitez les vidéos en lecture automatique en haut de page.\n\nEnfin, relisez tout à voix haute une dernière fois. Les fautes et les phrases trop longues se repèrent beaucoup mieux ainsi.",
-      },
-      {
-        title: "Réglez l'adresse et le référencement",
-        text: "Dans l'éditeur, le menu « … » en haut à droite affiche l'adresse de la page (le slug). Choisissez-la courte et lisible, par exemple guide-gratuit.\n\nDans « SEO & Social », indiquez le titre et la description qui s'affichent sur Google et lors d'un partage, et l'icône de l'onglet. Si la page sert seulement à une publicité, vous pouvez demander à Google de ne pas l'indexer.",
-      },
-      {
-        title: "Publiez sur votre propre domaine",
-        text: "Au moment de publier, la question « Where should this live? » s'affiche. Vous pouvez garder l'adresse gratuite fournie, ou relier votre domaine pour inspirer plus confiance.\n\nPour relier un domaine, ouvrez « Domains » dans le menu de gauche, puis « Connect Domain ». Un sous-domaine comme offre.monsite.com est le plus simple. La configuration automatique règle le domaine pour vous. Le HTTPS est offert et peut prendre jusqu'à 48 heures.\n\nSi la configuration automatique n'est pas possible chez votre hébergeur de domaine, ajoutez à la main les enregistrements affichés par Leadpages : un CNAME pour le sous-domaine et un TXT pour la sécurité. Copiez les valeurs exactes depuis votre compte.\n\nAprès chaque modification, cliquez sur « Update » pour mettre la page en ligne.",
-      },
-      {
-        title: "Envoyez les contacts vers votre outil e-mail",
-        text: "Dans le menu de gauche, ouvrez « Connectors ». Cherchez votre outil (Mailchimp, Brevo, MailerLite, HubSpot…) et cliquez sur « Connect ».\n\nDans l'onglet « Automations », cliquez sur « Create automation », choisissez le déclencheur « Form submitted », puis l'outil qui recevra les contacts. Chaque nouvel inscrit y arrivera tout seul. Préparez-y un e-mail de bienvenue.",
-      },
-      {
-        title: "Faites un test complet vous-même",
-        text: "Ouvrez la page publiée sur votre téléphone, remplissez le formulaire avec votre propre adresse, puis vérifiez trois choses.\n\nLa réponse apparaît dans « Submissions », d'où vous pouvez aussi l'exporter en CSV. Le contact arrive dans votre outil e-mail. L'e-mail de bienvenue part bien. Si un point bloque, « View execution logs » dans « Connectors » indique la raison.",
-      },
-      {
-        title: "Faites venir vos premiers visiteurs",
-        text: "Une page en ligne ne reçoit pas de visites toute seule. Commencez par les personnes qui vous connaissent déjà : envoyez le lien à vos contacts, mettez-le dans votre signature e-mail et dans la bio de vos réseaux sociaux.\n\nPubliez ensuite régulièrement là où votre public cherche des idées. Sur Pinterest, une épingle verticale avec le résultat promis et le lien de la page peut apporter des visites pendant des mois. Sur Instagram, LinkedIn ou Facebook, un court conseil utile suivi du lien fonctionne mieux qu'une simple publicité pour votre page.\n\nPour savoir quel canal marche, ajoutez un repère à la fin du lien selon l'endroit où vous le partagez, par exemple ?utm_source=pinterest ou ?utm_source=instagram. L'onglet « Acquisition » de l'étape suivante vous montrera alors d'où viennent les inscrits.\n\nSi vous passez à la publicité payante, commencez petit, avec un budget par jour que vous pouvez perdre sans regret, et n'augmentez que lorsque le taux de conversion de la page est bon.",
-      },
-      {
-        title: "Suivez les résultats",
-        text: "Ouvrez « Analytics ». Les chiffres clés sont en haut : « Sessions » (les visites), « Form submissions » (les formulaires envoyés), « Conversions » et « Conv. rate » (le taux de conversion).\n\nChoisissez la période (7, 14 ou 30 jours) et une page précise avec « All Pages ». L'onglet « Acquisition » montre d'où viennent vos visiteurs. Attendez au moins une centaine de visites avant de tirer des conclusions.\n\nSi beaucoup de personnes viennent mais peu s'inscrivent, le problème est souvent le titre ou l'offre : la promesse n'est pas assez claire ou pas assez utile. Si presque personne ne vient, c'est la diffusion qu'il faut travailler : partagez le lien dans vos e-mails, sur vos réseaux, dans votre bio Instagram ou sur une épingle Pinterest.\n\nPour suivre les publicités, « Scripts & Pixels », dans le menu « … » de l'éditeur, permet d'ajouter le pixel de Meta ou de Google Ads.",
-      },
-      {
-        title: "Améliorez la page avec un test A/B",
-        text: "Avec Leadpages Grow ou plus, dupliquez la page pour créer une version B et changez une seule chose : le titre, le bouton ou l'offre.\n\nChoisissez votre objectif (formulaire envoyé, clic, achat), répartissez le trafic à 50/50 et attendez le résultat « gagnant clair ». Gardez ensuite la meilleure version et lancez un nouveau test. Sur l'offre Optimize, Smart Traffic peut envoyer chaque visiteur vers la version qui a le plus de chances de lui plaire.\n\nPar quoi commencer ? Le titre, presque toujours : c'est ce que tout le monde lit. Ensuite, le texte du bouton, puis l'offre elle-même (un guide ou une liste, une réduction ou un cadeau). Notez chaque test et son résultat dans un simple tableau : au bout de quelques mois, vous saurez précisément ce qui fait réagir votre public.\n\nVous êtes sur HTML Pub ? Vous pouvez passer à Leadpages Grow depuis les réglages de votre compte quand vous serez prêt : vos pages et vos domaines sont conservés.",
+        title: "Testez avec votre propre adresse",
+        text: "Ouvrez la page sur votre téléphone, inscrivez-vous, vérifiez que vous arrivez sur la page de remerciement, que le contact apparaît dans vos contacts et que l'e-mail de bienvenue arrive.",
       },
     ],
     pitfalls: [
-      "Mettre plusieurs objectifs sur la même page (s'inscrire, acheter, suivre sur Instagram) : le visiteur hésite et ne fait rien.",
-      "Laisser en ligne des chiffres, avis ou témoignages inventés par l'IA.",
-      "Publier sans tester le formulaire soi-même : on découvre trop tard que les contacts n'arrivaient pas.",
-      "Oublier la fin de l'essai de 7 jours et être prélevé sans l'avoir décidé.",
+      "Demander nom, prénom, téléphone et e-mail : chaque champ en plus fait fuir des inscrits.",
+      "Promettre un cadeau et oublier de l'envoyer : testez l'e-mail de bienvenue avant de partager la page.",
     ],
-    tools: [
-      { slug: "html-pub", why: "Assistant IA, formulaires, domaine et connecteurs pour publier sa première page." },
-      { slug: "leadpages", why: "Ajoute les tests A/B (dès Grow), Smart Traffic et les cartes de chaleur (dès Optimize)." },
-    ],
-    sources: [
-      pricing,
-      { label: "HTML Pub : utiliser le créateur de pages IA", url: `${help}43967499549965--HTMLPub-Using-the-AI-Page-Builder` },
-      { label: "Connecter votre domaine (nouveau Leadpages)", url: `${help}44792783022989--New-Leadpages-Connect-your-Domain` },
-      { label: "HTML Pub : connecter des intégrations", url: `${help}43967898431757--HTMLPub-Connecting-Integrations` },
-      { label: "CNIL : la prospection commerciale par courrier électronique", url: "https://www.cnil.fr/fr/la-prospection-commerciale-par-courrier-electronique" },
-    ],
-    related: ["creer-une-landing-page-avec-l-ia", "recolter-des-e-mails-avant-un-lancement", "faire-un-test-ab-leadpages", "partir-d-un-modele-leadpages", "modifier-l-adresse-d-une-page-leadpages"],
+    tools: sio("Page, contacts et e-mail de bienvenue dans le même outil."),
+    sources: [S.funnel, S.optin, S.links, S.rules],
+    related: ["creer-un-tunnel-de-vente-systeme-io", "creer-une-sequence-d-e-mails-automatique-systeme-io", "automatiser-avec-les-regles-systeme-io", "connecter-son-nom-de-domaine-a-systeme-io"],
   },
   {
-    slug: "creer-une-landing-page-avec-l-ia",
-    question: "Comment créer une landing page avec l'IA de Leadpages ?",
-    seoDescription: "Décrivez votre page, laissez l'assistant IA de Leadpages la construire, puis améliorez-la en discutant. Le pas à pas, des crédits au choix du style.",
-    summary: "Décrire sa page, laisser l'IA la construire, puis l'améliorer en discutant.",
-    theme: "creer",
-    publishedOn: "2026-09-26",
-    updatedOn: "2026-09-26",
-    popular: true,
+    slug: "connecter-son-nom-de-domaine-a-systeme-io",
+    question: "Comment connecter son nom de domaine à systeme.io ?",
+    seoTitle: "Connecter son nom de domaine à systeme.io (CNAME, redirection)",
+    seoDescription: "Ajouter votre domaine dans systeme.io, créer les deux CNAME chez votre hébergeur, rediriger le domaine racine et choisir la page d'accueil.",
+    summary: "Les deux CNAME à créer chez votre hébergeur, la redirection, puis la page d'accueil.",
+    theme: "tunnels",
+    publishedOn: d,
+    updatedOn: d,
     intro:
-      "L'assistant de création (Piper, le « Page Agent ») construit une page à partir d'une simple description. Vous la corrigez ensuite en lui parlant, comme dans une discussion.",
+      "Avec votre propre nom de domaine, vos pages inspirent plus confiance. Le plan gratuit inclut 1 domaine personnalisé (3 sur Startup, 10 sur Webinaire, illimité sur Illimité, au 4 octobre 2026).",
     steps: [
       {
-        title: "Ouvrez l'écran de création",
-        text: "Dans le menu de gauche, cliquez sur « Create ». Piper, l'assistant, vous demande « What are you making? » : choisissez « Landing page ».",
+        title: "Ajoutez le domaine dans systeme.io",
+        text: "Cliquez sur votre photo de profil, puis « Paramètres », « Domaines personnalisés » et « Ajouter un nom de domaine ». Saisissez-le avec « www » devant (www.monsite.fr) et cliquez sur « Sauvegarder ».",
       },
       {
-        title: "Décrivez votre page précisément",
-        text: "Dans le champ du bas, indiquez à qui s'adresse la page, ce que vous proposez, le ton, les couleurs et les sections voulues (titre, avantages, avis, formulaire). Plus c'est précis, meilleur est le résultat. Cliquez sur « Send ».",
+        title: "Copiez les deux CNAME affichés",
+        text: "Une fenêtre affiche deux enregistrements CNAME : un pour « www » et un pour la validation du certificat. Les valeurs sont propres à votre compte : copiez-les exactement.",
       },
       {
-        title: "Choisissez les images",
-        text: "Piper demande quoi utiliser pour les images : les vôtres, des images générées par IA (plus de crédits) ou aucune pour l'instant. Le coût estimé en crédits est affiché en haut à droite. « Skip images for now » est le choix le plus économique.",
+        title: "Créez-les chez votre hébergeur de domaine",
+        text: "Dans la zone DNS de votre domaine (OVH, GoDaddy, Cloudflare, IONOS, Infomaniak, Namecheap…), créez deux enregistrements CNAME avec ces noms et ces valeurs. Vous pouvez vérifier leur propagation sur dnschecker.org en saisissant le nom complet.",
       },
       {
-        title: "Choisissez un style",
-        text: "Trois directions visuelles sont proposées. Cliquez sur celle qui vous plaît, réglez « How far should I push it? » si vous voulez, puis cliquez sur « Build it ».",
+        title: "Redirigez le domaine sans « www »",
+        text: "Chez la plupart des hébergeurs, créez une redirection de monsite.fr vers www.monsite.fr. Chez Hostinger, l'aide indique de créer plutôt un enregistrement ALIAS à la racine vers la même cible que le CNAME « www ».",
       },
       {
-        title: "Laissez Piper construire",
-        text: "La construction se fait en six étapes, en une minute environ : lecture de la demande, sections, textes, images, assemblage et vérification.",
-      },
-      {
-        title: "Corrigez en discutant",
-        text: "Cliquez sur « Open in editor ». Dans le champ « Ask Piper to edit this page… », demandez un changement à la fois. Piper liste ce qu'il a modifié et le nombre de crédits utilisés.",
-      },
-      {
-        title: "Vérifiez sur mobile, puis publiez",
-        text: "Les icônes en bas à droite de l'éditeur montrent la page sur ordinateur, tablette et mobile. Pour la mettre en ligne, gardez l'adresse gratuite en pubhtml.com ou reliez votre domaine (« Where should this live? »). Ensuite, « Update » publie vos changements.",
+        title: "Patientez, puis choisissez la page d'accueil",
+        text: "La propagation peut prendre 24 à 48 heures. Ensuite, définissez ce qui s'affiche à l'adresse principale : dans les paramètres d'un blog, d'un site web ou d'une page de tunnel, laissez vide le champ du chemin de l'URL.",
       },
     ],
     pitfalls: [
-      "Écrire une description trop vague (« une belle page ») : on dépense des crédits en corrections.",
-      "Oublier le formulaire ou le bouton d'action : une landing page sans objectif ne sert à rien.",
+      "Connecter un domaine qui sert déjà à un autre site : d'après l'aide, l'ancien site ne fonctionnera plus.",
+      "Oublier le point final dans les valeurs CNAME chez certains hébergeurs, ou au contraire l'ajouter chez ceux qui le refusent : suivez le guide de votre hébergeur.",
     ],
-    tools: [
-      { slug: "html-pub", why: "L'assistant IA est inclus, avec des crédits chaque mois." },
-      { slug: "leadpages", why: "Même assistant, avec plus de crédits." },
-    ],
-    sources: [{ label: "HTML Pub : utiliser le créateur de pages IA", url: `${help}43967499549965--HTMLPub-Using-the-AI-Page-Builder` }],
-    related: ["creer-sa-landing-page-leadpages-de-a-a-z", "partir-d-un-modele-leadpages", "recuperer-les-formulaires-html-pub", "publier-une-page-depuis-claude"],
+    tools: sio("1 domaine personnalisé inclus dans le plan gratuit."),
+    sources: [S.domain, S.homepage, S.pricing],
+    related: ["ameliorer-la-delivrabilite-de-ses-e-mails-systeme-io", "creer-un-blog-avec-systeme-io", "creer-son-compte-systeme-io"],
   },
   {
-    slug: "partir-d-un-modele-leadpages",
-    question: "Comment partir d'un modèle dans Leadpages ?",
-    summary: "Choisir un modèle prêt à l'emploi et l'adapter à votre activité.",
-    theme: "creer",
-    publishedOn: "2026-09-26",
-    updatedOn: "2026-09-26",
+    slug: "creer-un-blog-avec-systeme-io",
+    question: "Comment créer un blog avec systeme.io ?",
+    seoTitle: "Créer un blog avec systeme.io : modèle, articles, domaine",
+    seoDescription: "Créer un blog systeme.io, publier un article, l'attacher à votre domaine et y ajouter un formulaire d'inscription, d'après l'aide officielle.",
+    summary: "Un blog relié à vos tunnels et à votre liste d'e-mails, avec articles illimités.",
+    theme: "tunnels",
+    publishedOn: d,
+    updatedOn: d,
     intro:
-      "Un modèle vous évite de partir d'une page blanche. Vous gardez la structure qui fonctionne et vous remplacez les textes, les images et les couleurs.",
-    steps: [
-      {
-        title: "Ouvrez les modèles",
-        text: "Sur l'écran « Create », cliquez sur « Templates » au-dessus de la barre de saisie, ou sur « Browse all templates » pour tout voir.",
-      },
-      {
-        title: "Prévisualisez avant de choisir",
-        text: "Cliquez sur « Preview » pour voir le modèle en grand. Choisissez celui dont la structure ressemble à ce que vous voulez vendre, pas seulement celui dont les couleurs vous plaisent.",
-      },
-      {
-        title: "Utilisez-le",
-        text: "Cliquez sur « Use ». Une copie du modèle s'ouvre, vous pouvez la modifier sans rien casser.",
-      },
-      {
-        title: "Adaptez le contenu",
-        text: "Demandez à l'assistant de remplacer les textes par les vôtres, ou modifiez-les directement. Mettez votre logo, vos photos et vos couleurs.",
-      },
-      {
-        title: "Relisez sur mobile, puis publiez",
-        text: "La plupart des visiteurs arrivent sur téléphone. Dans l'éditeur, cliquez sur l'icône mobile en bas à droite pour vérifier, puis publiez.",
-      },
-    ],
-    pitfalls: [
-      "Laisser des textes d'exemple du modèle en ligne.",
-      "Garder toutes les sections du modèle alors que certaines ne servent pas votre offre.",
-    ],
-    tools: [{ slug: "html-pub", why: "Modèles de landing pages, portfolios et pages « lien en bio »." }],
-    sources: [{ label: "HTML Pub : créer et modifier des pages", url: `${help}43966022984461--HTMLPub-Creating-and-Editing-Pages` }],
-    related: ["creer-sa-landing-page-leadpages-de-a-a-z", "creer-une-landing-page-avec-l-ia", "creer-une-page-lien-en-bio-avec-html-pub", "creer-un-site-web-avec-html-pub"],
-  },
-  {
-    slug: "creer-une-page-lien-en-bio-avec-html-pub",
-    question: "Comment créer une page « lien en bio » avec HTML Pub ?",
-    summary: "Une seule adresse dans votre bio Instagram ou TikTok, qui mène à tous vos liens, sur une page à vous.",
-    theme: "creer",
-    publishedOn: "2026-09-28",
-    updatedOn: "2026-09-28",
-    intro:
-      "Instagram et TikTok n'acceptent qu'un lien dans la bio. Une page « lien en bio » les regroupe tous : boutique, vidéo, inscription, contact. Avec HTML Pub, elle est à votre nom, à vos couleurs, et peut recueillir des e-mails.",
-    steps: [
-      {
-        title: "Partez d'un modèle « lien en bio »",
-        text: "Sur l'écran « Create », cliquez sur « Templates », puis « Browse all templates ». Choisissez un modèle de page « lien en bio », regardez-le avec « Preview », puis cliquez sur « Use ».",
-      },
-      {
-        title: "Mettez votre photo et une phrase",
-        text: "En haut : votre photo ou votre logo, votre nom, et une phrase qui dit ce que vous proposez. Vous pouvez demander à l'assistant de le faire : « Remplace la photo par mon logo et écris : bijoux faits main à Lyon ».",
-      },
-      {
-        title: "Ajoutez 3 à 5 boutons",
-        text: "Un bouton par lien important : votre boutique, votre dernière vidéo, votre page d'inscription, votre contact. Mettez le plus important en premier, avec un texte d'action : « Voir la boutique », pas « Lien 1 ».",
-      },
-      {
-        title: "Ajoutez un formulaire d'inscription",
-        text: "Demandez à l'assistant d'ajouter un champ e-mail sous les boutons. Les réponses sont enregistrées dans HTML Pub : vos abonnés deviennent des contacts que vous pouvez retrouver.",
-      },
-      {
-        title: "Vérifiez sur téléphone et publiez",
-        text: "Presque tous les visiteurs viennent de leur téléphone. Cliquez sur l'icône mobile en bas à droite de l'éditeur, vérifiez que chaque bouton est facile à toucher, puis publiez.",
-      },
-      {
-        title: "Collez l'adresse dans votre bio",
-        text: "Choisissez une adresse courte (par exemple votre nom), copiez-la, puis collez-la dans le champ « Site web » ou « Lien » de votre profil Instagram ou TikTok. Ouvrez-la depuis l'application pour vérifier.",
-      },
-    ],
-    pitfalls: [
-      "Mettre dix boutons : le visiteur ne sait plus où cliquer. Gardez l'essentiel.",
-      "Oublier de mettre la page à jour : un bouton vers une promotion terminée fait perdre confiance.",
-      "Une adresse longue et compliquée : elle est coupée ou mal recopiée.",
-    ],
-    tools: [{ slug: "html-pub", why: "Modèles « lien en bio », formulaires et domaine personnalisé." }],
-    sources: [{ label: "HTML Pub : créer et modifier des pages", url: `${help}43966022984461--HTMLPub-Creating-and-Editing-Pages` }],
-    related: ["partir-d-un-modele-leadpages", "vendre-sur-instagram-avec-shopify", "recuperer-les-formulaires-html-pub", "modifier-l-adresse-d-une-page-leadpages", "creer-une-page-bientot-disponible-html-pub"],
-  },
-  {
-    slug: "publier-du-html-sur-html-pub",
-    question: "Comment publier une page HTML déjà prête sur HTML Pub ?",
-    summary: "Coller du code ou déposer un fichier .html, sans dépenser de crédits IA.",
-    theme: "creer",
-    publishedOn: "2026-09-26",
-    updatedOn: "2026-09-26",
-    intro:
-      "Vous avez déjà une page en HTML, faite par vous ou par une IA ? HTML Pub la met en ligne en quelques secondes. Cette méthode ne consomme pas de crédits.",
-    steps: [
-      {
-        title: "Ouvrez l'écran de création",
-        text: "Cliquez sur « Create » dans le menu de gauche, ou sur « Create Page » depuis la liste de vos pages.",
-      },
-      {
-        title: "Ajoutez votre code",
-        text: "Collez votre HTML dans le champ « Describe the page you want, or paste a URL or HTML… », ou utilisez l'icône d'envoi de fichier de la barre pour déposer un fichier .html.",
-      },
-      {
-        title: "Vérifiez l'aperçu",
-        text: "Assurez-vous que les images s'affichent. Si elles sont sur votre ordinateur, ajoutez-les d'abord dans les fichiers (« Assets ») de la page.",
-      },
-      {
-        title: "Publiez",
-        text: "Envoyez, vérifiez, puis publiez. La page est en ligne sur l'adresse gratuite de votre espace, ou sur votre domaine si vous l'avez connecté.",
-      },
-    ],
-    pitfalls: [
-      "Coller une page qui appelle des images ou des fichiers restés sur votre ordinateur.",
-      "Envoyer un formulaire vers un autre service : HTML Pub ne récupère alors pas les réponses.",
-    ],
-    tools: [{ slug: "html-pub", why: "Publication de HTML sans crédits IA." }],
-    sources: [{ label: "HTML Pub : bien démarrer", url: `${help}43965947894413--HTMLPub-Getting-Started-with-HTMLPub` }],
-    related: ["connecter-son-nom-de-domaine-leadpages", "recuperer-les-formulaires-html-pub", "creer-un-blog-avec-html-pub", "publier-une-page-depuis-claude"],
-  },
-  {
-    slug: "creer-un-site-web-avec-html-pub",
-    question: "Comment créer un site de plusieurs pages avec HTML Pub ?",
-    seoDescription: "Créer un site de plusieurs pages avec HTML Pub : une page d'accueil, puis les autres pages avec le même menu et le même style, étape par étape.",
-    summary: "Une page d'accueil, puis les autres pages qui reprennent le même menu et le même style.",
-    theme: "creer",
-    publishedOn: "2026-09-26",
-    updatedOn: "2026-09-26",
-    intro:
-      "Un site regroupe plusieurs pages sous un même domaine, avec un menu commun. L'IA crée d'abord la page d'accueil, puis chaque page quand vous le demandez.",
-    steps: [
-      {
-        title: "Choisissez « Website »",
-        text: "Dans le menu de gauche, ouvrez la flèche à côté de « Create » et choisissez « Site ». Ou, sur l'écran « Create », sélectionnez « Website ».",
-      },
-      {
-        title: "Décrivez votre site",
-        text: "Expliquez votre activité, votre public, le style voulu et les pages souhaitées, puis cliquez sur « Send ». Tapez tout sur une seule ligne : chaque retour à la ligne envoie un message séparé.",
-      },
-      {
-        title: "Validez la liste des pages",
-        text: "Piper propose les pages du menu. Renommez, retirez (« Remove ») ou ajoutez-en (« Add a page »), puis cliquez sur « These pages ».",
-      },
-      {
-        title: "Choisissez images et style, puis construisez l'accueil",
-        text: "Comme pour une landing page, choisissez les images et une direction de style, puis cliquez sur « Build it ». Seule la page d'accueil est construite à ce stade.",
-      },
-      {
-        title: "Construisez les autres pages",
-        text: "La carte « The rest of the site » liste les pages restantes avec une estimation en crédits. « Build 3 pages » les construit une par une, avec l'en-tête et le style de l'accueil. « Skip for now » permet de le faire plus tard.",
-      },
-    ],
-    pitfalls: [
-      "Construire toutes les pages d'un coup sans relire l'accueil : les erreurs de style se répètent partout.",
-      "Dépasser le nombre de pages inclus dans votre offre.",
-    ],
-    tools: [{ slug: "html-pub", why: "Sites multipages inclus dans toutes les offres payantes." }],
-    sources: [{ label: "HTML Pub : utiliser les sites", url: `${help}43969561553549--HTMLPub-Using-Sites` }],
-    related: ["publier-du-html-sur-html-pub", "creer-un-blog-avec-html-pub", "connecter-son-nom-de-domaine-leadpages", "creer-une-page-de-tarifs-html-pub"],
-  },
-  {
-    slug: "creer-un-blog-avec-html-pub",
-    question: "Comment créer un blog avec HTML Pub ?",
-    summary: "Créer le blog sur HTML Pub, écrire un premier article et le publier sur votre site, étape par étape.",
-    theme: "creer",
-    publishedOn: "2026-09-26",
-    updatedOn: "2026-09-26",
-    intro:
-      "Un blog attire des visiteurs depuis Google et les réseaux. Avec HTML Pub, il se crée en une minute et les articles sont en ligne dès que vous les publiez.",
+      "Le blog de systeme.io vit à côté de vos tunnels et de vos contacts : un article peut renvoyer vers une page de capture ou contenir un formulaire. Le plan gratuit inclut 1 blog avec un nombre d'articles illimité.",
     steps: [
       {
         title: "Créez le blog",
-        text: "Dans le menu de gauche, ouvrez « Blog » puis cliquez sur « New Blog ». Donnez un titre ; l'adresse (slug) se remplit toute seule. La description et le nom d'auteur sont facultatifs. Cliquez sur « Create Blog ».",
+        text: "Dans l'onglet « Sites », cliquez sur « Blogs », puis « Créer ». Indiquez le nom, le domaine et le chemin de l'URL, choisissez un modèle, puis « Sauvegarder ».",
       },
       {
-        title: "Découvrez le tableau du blog",
-        text: "La page du blog montre le design de la page d'accueil du blog (« Feed layout ») et des articles (« Post layout »), puis vos articles publiés, en brouillon ou programmés.",
+        title: "Adaptez la mise en page",
+        text: "Cliquez sur le titre du blog. L'onglet « Pages » donne accès au modèle du blog, à l'aperçu (« Voir le blog ») et aux réglages (nom, domaine, chemin, langue). Un flux RSS est créé automatiquement.",
       },
       {
-        title: "Écrivez un article",
-        text: "Cliquez sur « New post ». L'éditeur s'ouvre avec Penn, l'assistant d'écriture : choisissez une suggestion (« Write a how-to guide »…) ou écrivez vous-même.",
+        title: "Écrivez votre premier article",
+        text: "Dans la section « Articles », cliquez sur « Créer ». Remplissez le titre, la courte description, le chemin de l'URL, l'image et les catégories, puis « Sauvegarder ». Modifiez le contenu, puis cliquez sur « Activer » pour le publier.",
       },
       {
-        title: "Remplissez les réglages de l'article",
-        text: "L'icône de document en bas ouvre « Post Settings » : titre, contenu, auteur, image de couverture et SEO. Cliquez sur « Save changes ».",
+        title: "Transformez vos lecteurs en inscrits",
+        text: "Ajoutez dans vos articles un formulaire ou un bouton vers votre page de capture (l'aide officielle explique comment ajouter un formulaire ou une popup sur le blog). Chaque inscrit arrive dans vos contacts systeme.io.",
       },
       {
-        title: "Publiez",
-        text: "Cliquez sur « Publish » en haut à droite. L'article est en ligne immédiatement.",
-      },
-      {
-        title: "Rattachez-le à votre site",
-        text: "Si vous avez un site HTML Pub, vous pouvez afficher le blog à l'adresse /blog de votre domaine.",
+        title: "Mettez le blog sur votre domaine",
+        text: "Une fois votre domaine connecté, vous pouvez faire du blog la page d'accueil : dans les paramètres du blog, laissez vide le champ du chemin de l'URL.",
       },
     ],
     pitfalls: [
-      "Publier des articles sans image de couverture : ils sont moins cliqués sur les réseaux.",
-      "Choisir une offre sans blog : vérifiez que la vôtre en inclut au moins un.",
+      "Supprimer la page d'accueil ou la liste des articles : l'aide précise qu'elles ne peuvent pas être supprimées car elles structurent le blog.",
+      "Écrire des articles sans aucun lien vers une page de capture : le blog n'alimente pas votre liste.",
     ],
-    tools: [{ slug: "html-pub", why: "Blog inclus à partir de l'offre Pro." }],
-    sources: [{ label: "HTML Pub : utiliser les blogs", url: `${help}43969067296653--HTMLPub-Using-Blogs` }, pricing],
-    related: ["creer-un-site-web-avec-html-pub"],
+    tools: sio("1 blog et articles illimités dans le plan gratuit."),
+    sources: [S.blog, S.blogPost, S.homepage],
+    related: ["connecter-son-nom-de-domaine-a-systeme-io", "creer-une-page-de-capture-systeme-io", "c-est-quoi-systeme-io"],
   },
 
-  // ——— Publier ———
+  // ——— Vendre en ligne ———
   {
-    slug: "connecter-son-nom-de-domaine-leadpages",
-    question: "Comment connecter son nom de domaine à Leadpages ?",
-    summary: "Afficher vos pages sur votre propre adresse, avec le HTTPS offert.",
-    theme: "publier",
-    publishedOn: "2026-09-26",
-    updatedOn: "2026-09-26",
+    slug: "vendre-un-produit-numerique-avec-systeme-io",
+    question: "Comment vendre un produit numérique (ebook, PDF, accès) avec systeme.io ?",
+    seoTitle: "Vendre un ebook ou un produit numérique avec systeme.io",
+    seoDescription: "Page de paiement, produit numérique, tarif (paiement unique, abonnement, plusieurs fois) et livraison automatique du fichier avec systeme.io.",
+    summary: "La page de paiement, le tarif, puis la livraison automatique du fichier après l'achat.",
+    theme: "vendre",
+    publishedOn: d,
+    updatedOn: d,
     popular: true,
     intro:
-      "Par défaut, vos pages ont une adresse HTML Pub. Avec votre propre domaine, elles inspirent plus confiance. Le certificat de sécurité (HTTPS) est fourni gratuitement.",
+      "systeme.io encaisse le paiement et livre le produit tout seul : accès à une formation, à une communauté, ou envoi d'un fichier par e-mail. Il remplace une boutique de produits numériques, sans frais de transaction prélevés par systeme.io.",
     steps: [
       {
-        title: "Ouvrez « Domains »",
-        text: "Dans le menu de gauche, cliquez sur « Domains », puis sur « Connect Domain ». Pas encore de domaine ? Selon votre offre, « Claim Free Domain » vous en offre un.",
+        title: "Connectez un moyen de paiement",
+        text: "Avant tout, connectez Stripe ou PayPal dans « Paramètres », « Passerelles de paiement ». Sans cela, la page de paiement ne peut rien encaisser.",
       },
       {
-        title: "Tapez votre domaine",
-        text: "Soit le domaine principal (monsite.com), soit un sous-domaine (www.monsite.com, offre.monsite.com). Un sous-domaine est le plus simple.",
+        title: "Créez un tunnel « Vendre »",
+        text: "Dans « Sites », « Tunnels de vente », « Créer », choisissez « Vendre » et la devise. Vous obtenez une page de paiement et une page de remerciement. Ajoutez une page de vente avant la page de paiement si votre offre a besoin d'être expliquée.",
       },
       {
-        title: "Choisissez ce qu'il affiche",
-        text: "Dans « Homepage », choisissez « Page », « Site » ou « Blog », puis l'élément à afficher. Vous pouvez aussi choisir une page d'erreur (« Custom 404 page »). Cliquez sur « Add & Configure Domain ».",
+        title: "Déclarez un produit numérique",
+        text: "Ouvrez la page de paiement, section « Choisir le type d'offre », et sélectionnez « Produit numérique ». Cliquez sur « + » pour créer le produit, donnez-lui un nom, puis ajoutez la ressource livrée : une formation, un pack de formations, une communauté, un événement du calendrier ou un tag.",
       },
       {
-        title: "Laissez faire la configuration automatique",
-        text: "Une fenêtre (Entri) propose de régler votre domaine pour vous. Cliquez sur « Continue », vérifiez les changements, puis « Authorize ». Le message « is now configured! » confirme.",
+        title: "Fixez le prix",
+        text: "Ajoutez un tarif à l'offre. D'après l'aide officielle, trois types existent : paiement unique, abonnement (avec période d'essai possible) et paiement en plusieurs fois. Le produit ne peut pas être sauvegardé sans tarif.",
       },
       {
-        title: "Sinon, réglez les DNS à la main",
-        text: "Chez votre hébergeur de domaine, ajoutez les enregistrements indiqués par Leadpages : un CNAME pour www (ou votre sous-domaine), un TXT pour la sécurité et, pour le domaine principal, deux enregistrements A. Copiez les valeurs affichées dans votre compte.",
+        title: "Livrez un fichier (ebook, PDF)",
+        text: "Pour un fichier, ajoutez un tag comme ressource, puis créez une règle d'automatisation : déclencheur « Nouvelle vente », action « Envoyer un email », avec le fichier en pièce jointe (5 Mo maximum) ou un lien de téléchargement. Vous pouvez aussi mettre le lien de téléchargement sur la page de remerciement.",
       },
       {
-        title: "Attendez l'activation",
-        text: "Le statut passe par plusieurs étapes jusqu'à « Active ». Le HTTPS peut prendre jusqu'à 48 heures.",
+        title: "Faites un achat test",
+        text: "Passez commande vous-même et vérifiez le paiement, la page de remerciement et la réception du fichier ou de l'accès. L'aide officielle propose une méthode d'achat test.",
       },
     ],
     pitfalls: [
-      "Oublier l'enregistrement TXT : sans lui, le HTTPS ne s'active pas.",
-      "Modifier le domaine principal alors qu'un autre site l'utilise déjà : utilisez plutôt un sous-domaine.",
+      "Joindre un fichier de plus de 5 Mo : compressez-le ou envoyez un lien de téléchargement.",
+      "Oublier les champs « Email » et « Prénom » sur la page de paiement : ils sont obligatoires pour que Stripe fonctionne.",
     ],
-    tools: [
-      { slug: "html-pub", why: "Domaine personnalisé et HTTPS inclus." },
-      { slug: "leadpages", why: "Plusieurs domaines selon l'offre." },
-    ],
-    sources: [
-      { label: "Connecter votre domaine (nouveau Leadpages)", url: `${help}44792783022989--New-Leadpages-Connect-your-Domain` },
-      { label: "HTML Pub : connecter un domaine", url: `${help}43967609314829--HTMLPub-Connecting-a-Custom-Domain` },
-    ],
-    related: ["modifier-l-adresse-d-une-page-leadpages", "creer-un-site-web-avec-html-pub"],
+    tools: sio("Paiement et livraison automatique, 0 % de frais de transaction côté systeme.io."),
+    sources: [S.orderForm, S.ebook, S.stripe],
+    related: ["connecter-stripe-et-paypal-a-systeme-io", "ajouter-un-upsell-un-order-bump-et-un-code-promo-systeme-io", "creer-et-vendre-une-formation-en-ligne-systeme-io", "creer-un-tunnel-de-vente-systeme-io"],
   },
   {
-    slug: "modifier-l-adresse-d-une-page-leadpages",
-    question: "Comment modifier l'adresse ou protéger une page par mot de passe ?",
-    seoTitle: "Modifier l'adresse d'une page ou la protéger",
-    seoDescription: "Changer le titre et l'adresse (slug) d'une page Leadpages, la protéger par mot de passe et la ranger avec des étiquettes, pas à pas.",
-    summary: "Le titre, l'adresse (slug), le mot de passe et les étiquettes d'une page.",
-    theme: "publier",
-    publishedOn: "2026-09-26",
-    updatedOn: "2026-09-26",
+    slug: "connecter-stripe-et-paypal-a-systeme-io",
+    question: "Comment connecter Stripe et PayPal à systeme.io ?",
+    seoTitle: "Connecter Stripe et PayPal à systeme.io pour encaisser",
+    seoDescription: "Connecter Stripe et PayPal dans les passerelles de paiement systeme.io, régler les notifications PayPal et activer les paiements dans un tunnel.",
+    summary: "Brancher Stripe et PayPal, puis les activer dans chaque tunnel de vente.",
+    theme: "vendre",
+    publishedOn: d,
+    updatedOn: d,
     intro:
-      "Chaque page a quelques réglages simples, dans le menu « … » de sa carte, dans « Pages ». Ils servent à avoir une adresse lisible, à cacher une page en préparation ou à ranger vos pages.",
+      "systeme.io ne garde pas votre argent : il passe par votre compte Stripe, PayPal ou un autre prestataire. La page des tarifs (4 octobre 2026) liste Stripe, PayPal, Apple Pay, Razorpay, Flutterwave, Mercado Pago, Xendit et le paiement à la livraison.",
     steps: [
       {
-        title: "Ouvrez le menu de la page",
-        text: "Dans « Pages », cliquez sur « … » en bas de la carte de la page. Le menu regroupe les statistiques, les réponses, le partage et les réglages.",
+        title: "Ouvrez les passerelles de paiement",
+        text: "Cliquez sur votre photo de profil, puis « Paramètres », puis « Passerelles de paiement ».",
       },
       {
-        title: "Changez le titre et l'adresse",
-        text: "Choisissez « Settings ». Pour l'adresse (slug), utilisez des minuscules, des chiffres et des tirets, par exemple offre-coaching-septembre.",
+        title: "Connectez Stripe",
+        text: "Cliquez sur « Connecter » à côté de Stripe. Connectez-vous à votre compte Stripe ou créez-en un, indiquez le pays et le type d'entreprise, vérifiez vos informations, puis cliquez sur « Autoriser l'accès à ce compte ». Stripe permet la carte bancaire, Apple Pay et des moyens locaux comme Bancontact, iDEAL ou Multibanco.",
       },
       {
-        title: "Ou passez par l'éditeur",
-        text: "Dans l'éditeur de la page, le menu « … » en haut à droite affiche l'adresse (slug, modifiable avec le crayon), l'adresse publiée, et les options « SEO & Social » et « Scripts & Pixels ».",
+        title: "Connectez PayPal",
+        text: "Il faut un compte PayPal Business. Cliquez sur « Connecter » à côté de PayPal, connectez-vous, cliquez sur « Autoriser », puis « Retourner à systeme.io ». L'aide recommande ensuite d'activer les notifications IPN dans PayPal avec l'adresse https://systeme.io/payment/webhook/listening-paypal.",
       },
       {
-        title: "Protégez par mot de passe",
-        text: "Choisissez « Set Password ». Les visiteurs devront entrer le mot de passe pour voir la page. Pratique pour une page client ou une page pas encore prête.",
+        title: "Activez-les dans le tunnel",
+        text: "Dans « Sites », « Tunnels de vente », ouvrez le tunnel, puis « Paramètres ». Cochez « Carte de crédit ou de débit (Stripe) » et/ou « PayPal », puis « Sauvegarder ».",
       },
       {
-        title: "Rangez avec des étiquettes",
-        text: "Choisissez « Tags », ou cliquez sur « + tag » sur la carte, pour retrouver vos pages par campagne ou par client.",
-      },
-      {
-        title: "Soignez le référencement",
-        text: "« SEO & Social » règle l'icône de l'onglet (favicon), l'indexation par Google, le titre et la description qui s'affichent dans les résultats de recherche.",
+        title: "Vérifiez les champs de la page de paiement",
+        text: "Stripe a besoin des champs « Email » et « Prénom ». PayPal a besoin de l'e-mail, du prénom et du nom. Ajoutez-les s'ils manquent, puis faites un achat test.",
       },
     ],
     pitfalls: [
-      "Changer l'adresse d'une page déjà partagée ou utilisée dans une publicité : l'ancien lien ne marche plus.",
-      "Oublier de retirer le mot de passe le jour du lancement.",
+      "Connecter un compte PayPal personnel au lieu d'un compte Business.",
+      "Penser que « 0 % de frais » signifie paiement sans frais : systeme.io ne prend rien, mais Stripe ou PayPal gardent leurs propres frais.",
     ],
-    tools: [{ slug: "html-pub", why: "Réglages de page inclus dans toutes les offres." }],
-    sources: [{ label: "HTML Pub : réglages de page", url: `${help}43967365239053--HTMLPub-Understanding-Page-Settings` }],
-    related: ["connecter-son-nom-de-domaine-leadpages"],
+    tools: sio("Stripe, PayPal et d'autres passerelles, sans frais ajoutés par systeme.io."),
+    sources: [S.stripe, S.paypal, S.activatePayments, S.pricing],
+    related: ["vendre-un-produit-numerique-avec-systeme-io", "vendre-des-produits-physiques-avec-systeme-io", "creer-un-tunnel-de-vente-systeme-io"],
+  },
+  {
+    slug: "vendre-des-produits-physiques-avec-systeme-io",
+    question: "Comment vendre des produits physiques avec systeme.io ?",
+    seoTitle: "Vendre des produits physiques avec systeme.io (stock, variantes)",
+    seoDescription: "Créer un produit physique systeme.io avec stock, variantes et frais de port, le mettre en vente dans un tunnel, et ce que l'outil ne gère pas.",
+    summary: "Produit, stock, variantes et frais de port, puis la mise en vente dans un tunnel.",
+    theme: "vendre",
+    publishedOn: d,
+    updatedOn: d,
+    intro:
+      "systeme.io sait vendre des produits physiques : fiche produit, stock, variantes (taille, couleur) et frais de port. Il ne remplace pas une grosse boutique en ligne, et l'expédition des colis reste à votre charge.",
+    steps: [
+      {
+        title: "Créez la fiche produit",
+        text: "Allez dans « Ressources », puis « Produits physiques », et cliquez sur « Créer ». Remplissez le nom, la description, le code UGS, la taxe, la devise, le prix, le poids et le stock disponible. Ajoutez des photos.",
+      },
+      {
+        title: "Ajoutez les options et les variantes",
+        text: "Créez une option (par exemple « Taille ») et ses valeurs (S, M, L). systeme.io génère toutes les variantes automatiquement ; changez le prix d'une variante seulement s'il diffère. Limites au 4 octobre 2026 : 50 variantes sur le plan gratuit, 100 sur Startup, 250 sur Webinaire, illimitées sur Illimité.",
+      },
+      {
+        title: "Mettez le produit dans un tunnel « Vendre »",
+        text: "Créez un tunnel « Vendre » dans la même devise que le produit. Sur la page de paiement, choisissez « Produit physique » comme type d'offre et sélectionnez votre produit.",
+      },
+      {
+        title: "Placez le produit sur la page",
+        text: "Cliquez sur « Modifier la page », glissez l'élément produit physique depuis la section paiement, puis l'élément de prix. Cliquez sur « Sauvegarder » : l'éditeur n'enregistre pas automatiquement.",
+      },
+      {
+        title: "Préparez l'expédition",
+        text: "Les commandes apparaissent dans « Ventes », puis « Commandes ». L'aide officielle est claire : systeme.io ne gère ni l'expédition ni la préparation des commandes. Prévoyez votre transporteur et vos emballages avant d'ouvrir les ventes.",
+      },
+    ],
+    pitfalls: [
+      "Choisir une devise de tunnel différente de celle du produit : le produit n'apparaît pas dans la liste.",
+      "Quitter l'éditeur sans cliquer sur « Sauvegarder » : il n'y a pas d'enregistrement automatique.",
+    ],
+    tools: sio("Produits physiques illimités, avec stock et variantes."),
+    sources: [S.physical, S.pricing],
+    related: ["systeme-io-ou-shopify", "connecter-stripe-et-paypal-a-systeme-io", "ajouter-un-upsell-un-order-bump-et-un-code-promo-systeme-io"],
+  },
+  {
+    slug: "ajouter-un-upsell-un-order-bump-et-un-code-promo-systeme-io",
+    question: "Comment ajouter un upsell, un order bump et un code promo sur systeme.io ?",
+    seoTitle: "Upsell, order bump et code promo sur systeme.io",
+    seoDescription: "Augmenter le panier moyen avec systeme.io : order bump sur la page de paiement, upsell et downsell après l'achat, code promo à durée limitée.",
+    summary: "Les trois façons d'augmenter le panier moyen, et où les placer dans le tunnel.",
+    theme: "vendre",
+    publishedOn: d,
+    updatedOn: d,
+    intro:
+      "Un order bump est une case à cocher sur la page de paiement. Un upsell est une offre proposée juste après l'achat, et le downsell une offre plus petite si le client refuse. Un code promo baisse le prix. Le plan gratuit en inclut un de chaque.",
+    steps: [
+      {
+        title: "Ajoutez un order bump",
+        text: "Sur la page de paiement, cliquez sur « Ajouter un order bump », choisissez « Produit numérique » ou « Produit physique », ajoutez la ressource et un tarif. Ouvrez ensuite l'éditeur et glissez l'élément « Order bump » sur la page pour qu'il s'affiche.",
+      },
+      {
+        title: "Créez la page d'upsell",
+        text: "Dans le tunnel, cliquez sur « Ajouter une étape », choisissez le type « Upsell », un modèle, puis définissez le produit et son tarif dans les paramètres de la page. Ajoutez des boutons pour accepter et pour refuser l'offre.",
+      },
+      {
+        title: "Ajoutez un downsell si besoin",
+        text: "Même méthode avec le type « Downsell ». L'upsell doit être placé juste après la page de paiement, et le downsell juste après l'upsell. Si le client refuse l'upsell, il voit le downsell, puis la page de remerciement.",
+      },
+      {
+        title: "Créez un code promo",
+        text: "Allez dans « Ressources », puis « Codes promo », et cliquez sur « Créer ». Indiquez le nom, le code à saisir, le type et le montant de la réduction, la date d'expiration et le nombre maximal d'utilisations, puis ajoutez-le à votre page de paiement.",
+      },
+      {
+        title: "Suivez les acheteurs de chaque offre",
+        text: "Ajoutez un tag comme ressource de l'order bump ou de l'upsell, puis une règle d'automatisation « Tag ajouté » pour envoyer un e-mail dédié à ces clients.",
+      },
+    ],
+    pitfalls: [
+      "Proposer un upsell sans bouton « Non merci » : le client doit toujours pouvoir refuser.",
+      "Mettre un order bump sans rapport avec le produit principal : il doit compléter l'achat, pas le concurrencer.",
+    ],
+    tools: sio("Upsells, downsells, order bumps et codes promo intégrés."),
+    sources: [S.bump, S.upsell, S.coupon, S.links],
+    related: ["vendre-un-produit-numerique-avec-systeme-io", "creer-un-tunnel-de-vente-systeme-io", "automatiser-avec-les-regles-systeme-io"],
   },
 
-  // ——— Récolter des contacts ———
+  // ——— E-mails et automatisations ———
   {
-    slug: "recuperer-les-formulaires-html-pub",
-    question: "Comment récupérer les contacts de ses formulaires ?",
-    summary: "Voir les réponses, les exporter en CSV et les supprimer si besoin.",
-    theme: "contacts",
-    publishedOn: "2026-09-26",
-    updatedOn: "2026-09-26",
-    popular: true,
+    slug: "envoyer-une-newsletter-avec-systeme-io",
+    question: "Comment envoyer une newsletter avec systeme.io ?",
+    seoTitle: "Envoyer ou programmer une newsletter avec systeme.io",
+    seoDescription: "Écrire, tester, envoyer ou programmer une newsletter systeme.io à vos contacts selon leurs tags, avec les vérifications à faire avant.",
+    summary: "Écrire, tester puis envoyer ou programmer un e-mail à vos contacts, selon leurs tags.",
+    theme: "emails",
+    publishedOn: d,
+    updatedOn: d,
     intro:
-      "HTML Pub détecte tout seul les formulaires de vos pages et enregistre les réponses. Vous n'avez rien à régler.",
+      "Une newsletter est un e-mail envoyé une fois, à une date choisie. Les envois sont illimités sur tous les plans systeme.io, y compris le gratuit (page des tarifs, 4 octobre 2026). Le ciblage se fait par tags.",
     steps: [
       {
-        title: "Ajoutez un formulaire à votre page",
-        text: "Demandez à l'assistant « ajoute un formulaire avec prénom et e-mail », ou utilisez un modèle qui en contient un.",
+        title: "Préparez l'expéditeur",
+        text: "Confirmez votre adresse d'expéditeur (« Paramètres », « Emails ») et authentifiez votre nom de domaine : l'aide officielle indique que c'est obligatoire pour envoyer des e-mails. Voir le guide sur la délivrabilité.",
       },
       {
-        title: "Ouvrez « Submissions »",
-        text: "Dans le menu de gauche, cliquez sur « Submissions ». La page « Leads » regroupe toutes les réponses : nom, e-mail, page d'origine et date.",
+        title: "Créez la newsletter",
+        text: "Allez dans « Emails », puis « Newsletters », et cliquez sur « Créer ». Choisissez l'éditeur classique ou l'éditeur visuel (avec des modèles), donnez un titre interne, puis écrivez l'objet et le contenu.",
       },
       {
-        title: "Consultez les réponses",
-        text: "Pour une seule page, ouvrez son menu « … » dans « Pages » et choisissez « Submissions ». Dépliez une ligne pour voir tous les champs remplis.",
+        title: "Choisissez les destinataires",
+        text: "Dans « Paramétrages », sélectionnez les tags des contacts qui recevront l'e-mail (par exemple « clients »). Vous pouvez aussi limiter l'envoi aux contacts inscrits depuis un certain nombre de jours. Les tags doivent déjà être posés sur les contacts : ajoutez-les dès l'inscription avec une règle d'automatisation.",
       },
       {
-        title: "Exportez en CSV",
-        text: "Exportez les réponses en CSV pour les ouvrir dans Excel ou Google Sheets.",
+        title: "Envoyez-vous un test",
+        text: "Cliquez sur « Enregistrer et tester » pour recevoir l'e-mail. Vérifiez l'objet, les liens et l'affichage sur téléphone. Le test ne part que si l'adresse d'expéditeur est confirmée.",
       },
       {
-        title: "Supprimez si on vous le demande",
-        text: "L'icône de corbeille supprime une réponse définitivement. Utile si une personne demande l'effacement de ses données.",
+        title: "Envoyez ou programmez",
+        text: "Cliquez sur « Enregistrer et envoyer » pour un envoi immédiat, ou « Enregistrer et programmer » pour choisir une date. L'option « Créer un test A/B » permet de comparer deux versions.",
       },
     ],
     pitfalls: [
-      "Envoyer le formulaire vers un service extérieur : HTML Pub ne voit alors plus les réponses.",
-      "Ne jamais exporter ses contacts : gardez une copie régulière.",
+      "Envoyer à des contacts qui n'ont jamais accepté de recevoir vos e-mails : c'est interdit et cela abîme votre délivrabilité.",
+      "Sur le plan gratuit, la mention « Sent with systeme.io » en bas des e-mails ne peut pas être retirée.",
     ],
-    tools: [{ slug: "html-pub", why: "Réponses de formulaires enregistrées automatiquement." }],
-    sources: [{ label: "HTML Pub : récupérer les réponses de formulaires", url: `${help}43967816644493--HTMLPub-Collecting-Form-Submissions` }],
-    related: ["connecter-leadpages-a-son-outil-e-mail", "creer-une-landing-page-avec-l-ia", "recolter-des-e-mails-avant-un-lancement", "creer-une-page-lien-en-bio-avec-html-pub"],
+    tools: sio("Newsletters illimitées, même sur le plan gratuit."),
+    sources: [S.newsletter, S.sender, S.footerBadge, S.pricing],
+    related: ["ameliorer-la-delivrabilite-de-ses-e-mails-systeme-io", "creer-une-sequence-d-e-mails-automatique-systeme-io", "automatiser-avec-les-regles-systeme-io"],
   },
   {
-    slug: "connecter-leadpages-a-son-outil-e-mail",
-    question: "Comment envoyer ses contacts vers Mailchimp, Brevo ou son CRM ?",
-    seoTitle: "Envoyer ses contacts vers Mailchimp, Brevo ou un CRM",
-    seoDescription: "Connecter Leadpages ou HTML Pub à Mailchimp, Brevo ou votre CRM pour que chaque nouveau contact arrive au bon endroit, sans export manuel.",
-    summary: "Connecter une intégration pour que chaque nouveau contact arrive au bon endroit.",
-    theme: "contacts",
-    publishedOn: "2026-09-26",
-    updatedOn: "2026-09-26",
+    slug: "creer-une-sequence-d-e-mails-automatique-systeme-io",
+    question: "Comment créer une séquence d'e-mails automatique avec systeme.io ?",
+    seoTitle: "Créer une séquence d'e-mails automatique (campagne) systeme.io",
+    seoDescription: "Créer une campagne systeme.io : e-mails envoyés automatiquement après l'inscription, délais, jours et heures d'envoi, puis l'ajout des contacts.",
+    summary: "Une suite d'e-mails envoyés tout seuls après l'inscription, avec les délais que vous choisissez.",
+    theme: "emails",
+    publishedOn: d,
+    updatedOn: d,
+    popular: true,
     intro:
-      "Un connecteur envoie chaque réponse de formulaire vers un autre outil, sans copier-coller. HTML Pub en propose plus de 20 : Mailchimp, Brevo, MailerLite, Kit, ActiveCampaign, HubSpot, Pipedrive, Slack, Zapier, Stripe…",
+      "Dans systeme.io, une séquence automatique s'appelle une « campagne » : une suite d'e-mails envoyés dans l'ordre, avec un délai entre chacun. C'est l'outil idéal pour accueillir un nouvel inscrit, puis lui présenter votre offre. Le plan gratuit permet 1 campagne (10 sur Startup).",
     steps: [
       {
-        title: "Ouvrez « Connectors »",
-        text: "Dans le menu de gauche, cliquez sur « Connectors ». Cherchez votre outil par nom ou par catégorie (e-mail, CRM, publicité…) et cliquez sur « Connect ».",
+        title: "Créez la campagne",
+        text: "Allez dans « Emails », puis « Campagnes », et cliquez sur « Créer ». Indiquez un nom clair (par exemple « Bienvenue – guide gratuit »), l'adresse d'expéditeur, déjà confirmée, et une description, puis « Sauvegarder ».",
       },
       {
-        title: "Autorisez la connexion",
-        text: "Connectez-vous à l'outil ou collez sa clé API, selon ce qui est demandé. Le statut passe à « Connected ».",
+        title: "Écrivez les e-mails",
+        text: "Ouvrez la campagne et cliquez sur « Créer » pour chaque e-mail. Une structure simple : jour 0, le cadeau promis ; jour 2, un conseil utile ; jour 4, une histoire ou un cas client ; jour 6, votre offre.",
       },
       {
-        title: "Réglez l'automatisation",
-        text: "Dans l'onglet « Automations », cliquez sur « Create automation ». Choisissez le déclencheur (« Form submitted », « Checkout completed » ou « Visitor identified »), puis l'application connectée qui reçoit les contacts.",
+        title: "Réglez les délais",
+        text: "Pour chaque e-mail, cliquez sur « Enregistrer et publier », réglez le délai, et si besoin l'heure et les jours d'envoi. L'aide conseille de ne pas combiner plusieurs délais à la fois : un e-mail ne part que si toutes les conditions sont remplies.",
       },
       {
-        title: "Testez avec votre propre e-mail",
-        text: "Remplissez le formulaire vous-même, puis vérifiez que le contact arrive dans l'outil.",
+        title: "Publiez chaque e-mail",
+        text: "Cliquez sur « Activer » pour publier l'e-mail. Un nouvel e-mail reste grisé et hors de la séquence tant qu'il n'est pas publié. Les e-mails partent dans l'ordre d'affichage, du haut vers le bas.",
       },
       {
-        title: "Surveillez les erreurs",
-        text: "« View execution logs » montre chaque envoi : réussi, en attente ou échoué, avec la raison.",
+        title: "Inscrivez les contacts automatiquement",
+        text: "Créez une règle d'automatisation avec le déclencheur « Inscription sur la page (optin) » sur votre page de capture et une action d'inscription à la campagne. Lors d'un import de contacts (CSV), vous pouvez aussi choisir une campagne.",
       },
     ],
     pitfalls: [
-      "Ne pas tester : on découvre des semaines plus tard que les contacts n'arrivaient pas.",
-      "Dépasser le nombre d'intégrations actives de son offre.",
+      "Ajouter un e-mail au début d'une séquence déjà lancée : d'après l'aide, les contacts qui ont dépassé cette étape ne le recevront pas.",
+      "Ne jamais relire la séquence : inscrivez-vous vous-même pour recevoir chaque e-mail comme un vrai contact.",
     ],
-    tools: [
-      { slug: "html-pub", why: "Intégrations incluses selon l'offre." },
-      { slug: "leadpages", why: "Plus d'intégrations et des webhooks." },
+    tools: sio("Campagnes automatiques et règles dans le même outil."),
+    sources: [S.campaign, S.rules, S.pricing],
+    related: ["automatiser-avec-les-regles-systeme-io", "creer-une-page-de-capture-systeme-io", "envoyer-une-newsletter-avec-systeme-io"],
+  },
+  {
+    slug: "automatiser-avec-les-regles-systeme-io",
+    question: "Comment fonctionnent les règles d'automatisation de systeme.io ?",
+    seoTitle: "Règles d'automatisation systeme.io : déclencheurs et actions",
+    seoDescription: "Créer une règle d'automatisation systeme.io : déclencheur (inscription, vente, tag), action (e-mail, tag, campagne, formation), exemples utiles.",
+    summary: "Un déclencheur, une action : les automatisations à mettre en place en premier.",
+    theme: "emails",
+    publishedOn: d,
+    updatedOn: d,
+    intro:
+      "Une règle d'automatisation dit à systeme.io : « quand ceci arrive, fais cela ». Par exemple, quand quelqu'un s'inscrit, lui ajouter un tag et lui envoyer un e-mail. Le plan gratuit permet 1 règle, Startup 10, Webinaire 100 (4 octobre 2026).",
+    steps: [
+      {
+        title: "Créez une règle",
+        text: "Allez dans « Automatisations », puis « Règles », et cliquez sur « Créer ».",
+      },
+      {
+        title: "Choisissez le déclencheur",
+        text: "Cliquez sur « + » à côté du déclencheur. Les plus utiles : « Inscription sur la page (optin) » pour les prospects d'une page, d'un formulaire ou d'une popup ; « Nouvelle vente » pour les clients ; « Tag ajouté » pour les contacts qui reçoivent un tag. Précisez la page, le produit ou le tag.",
+      },
+      {
+        title: "Ajoutez une ou plusieurs actions",
+        text: "Cliquez sur « + » à côté de « Action ». La plus courante est « Envoyer un email » : le « + » à côté permet de créer l'e-mail directement. Une même règle peut lancer plusieurs actions, par exemple poser un tag et envoyer un e-mail.",
+      },
+      {
+        title: "Sauvegardez",
+        text: "Cliquez sur « Sauvegarder la règle ». Attention : pour « Tag ajouté », le tag doit être ajouté après la création de la règle. Vous pouvez aussi créer des règles directement dans un tunnel de vente.",
+      },
+      {
+        title: "Commencez par trois règles utiles",
+        text: "Inscription sur la page de capture → tag « prospect » et inscription à la campagne de bienvenue. Nouvelle vente → tag « client ». Tag « client » ajouté → retrait de la campagne de vente, pour ne plus proposer le produit à ceux qui l'ont acheté.",
+      },
     ],
-    sources: [{ label: "HTML Pub : connecter des intégrations", url: `${help}43967898431757--HTMLPub-Connecting-Integrations` }],
-    related: ["recuperer-les-formulaires-html-pub", "recolter-des-e-mails-avant-un-lancement", "creer-une-page-de-remerciement-leadpages", "ajouter-un-pop-up-d-inscription-leadpages"],
+    pitfalls: [
+      "Créer des règles qui se déclenchent en boucle : d'après l'aide, un même déclencheur ne peut agir que 20 fois par contact.",
+      "Sur le plan gratuit, une seule règle et un seul tag : choisissez la plus importante (souvent l'e-mail de bienvenue).",
+    ],
+    tools: sio("Règles et workflows d'automatisation intégrés."),
+    sources: [S.rules, S.pricing],
+    related: ["creer-une-sequence-d-e-mails-automatique-systeme-io", "creer-une-page-de-capture-systeme-io", "plan-gratuit-systeme-io"],
+  },
+  {
+    slug: "ameliorer-la-delivrabilite-de-ses-e-mails-systeme-io",
+    question: "Comment éviter que ses e-mails systeme.io arrivent en spam ?",
+    seoTitle: "Délivrabilité systeme.io : adresse d'expéditeur et domaine",
+    seoDescription: "Confirmer l'adresse d'expéditeur, authentifier votre domaine (CNAME et DMARC) et les bonnes pratiques pour que vos e-mails systeme.io arrivent.",
+    summary: "Confirmer l'expéditeur, authentifier le domaine, puis les bonnes pratiques d'envoi.",
+    theme: "emails",
+    publishedOn: d,
+    updatedOn: d,
+    intro:
+      "Pour que vos e-mails arrivent dans la boîte de réception, Gmail ou Outlook doivent pouvoir vérifier qu'ils viennent bien de vous. Dans systeme.io, cela passe par deux réglages, et l'aide officielle indique que l'authentification du domaine est obligatoire pour envoyer des e-mails.",
+    steps: [
+      {
+        title: "Utilisez une adresse sur votre propre domaine",
+        text: "Envoyez depuis une adresse du type bonjour@monsite.fr. L'aide précise qu'on ne peut pas authentifier un domaine Gmail, Yahoo ou autre messagerie gratuite.",
+      },
+      {
+        title: "Confirmez l'adresse d'expéditeur",
+        text: "Cliquez sur votre photo de profil, puis « Paramètres », « Emails ». Indiquez le nom et l'adresse d'expéditeur, sauvegardez, puis cliquez sur le lien reçu dans cette boîte. Le statut passe à « Vérifié ».",
+      },
+      {
+        title: "Lancez l'authentification du domaine",
+        text: "Toujours dans « Paramètres », « Emails », section « Domaines », ajoutez votre domaine. systeme.io affiche trois enregistrements CNAME et un enregistrement DMARC à créer.",
+      },
+      {
+        title: "Créez les enregistrements chez votre hébergeur",
+        text: "Dans la zone DNS du domaine, ajoutez ces enregistrements avec exactement les valeurs données. Le domaine doit aussi pointer vers un site qui fonctionne. Revenez ensuite dans systeme.io pour vérifier le statut.",
+      },
+      {
+        title: "Gardez de bonnes habitudes",
+        text: "N'écrivez qu'à des personnes inscrites, envoyez régulièrement, retirez les contacts qui n'ouvrent plus jamais, et évitez les objets trompeurs ou tout en majuscules.",
+      },
+    ],
+    pitfalls: [
+      "Envoyer depuis une adresse @gmail.com : elle ne peut pas être authentifiée.",
+      "Modifier un enregistrement DNS existant (par exemple un ancien DMARC) sans vérifier qu'il ne sert pas à autre chose.",
+    ],
+    tools: sio("Envoi d'e-mails illimité, avec authentification du domaine."),
+    sources: [S.sender, S.authDomain],
+    related: ["envoyer-une-newsletter-avec-systeme-io", "connecter-son-nom-de-domaine-a-systeme-io", "creer-une-sequence-d-e-mails-automatique-systeme-io"],
   },
 
+  // ——— Formations et webinaires ———
   {
-    slug: "recolter-des-e-mails-avant-un-lancement",
-    question: "Comment récolter des e-mails avant un lancement ?",
-    summary: "Une page d'attente, un formulaire e-mail, une bonne raison de s'inscrire, et vos contacts dans votre outil e-mail.",
-    theme: "contacts",
-    publishedOn: "2026-09-27",
-    updatedOn: "2026-09-27",
+    slug: "creer-et-vendre-une-formation-en-ligne-systeme-io",
+    question: "Comment créer et vendre une formation en ligne avec systeme.io ?",
+    seoTitle: "Créer et vendre une formation en ligne avec systeme.io",
+    seoDescription: "Modules, chapitres, accès total ou distillé, page de paiement et accès automatique des élèves : créer une formation systeme.io pas à pas.",
+    summary: "Modules et chapitres, type d'accès, puis la vente avec accès automatique des élèves.",
+    theme: "formations",
+    publishedOn: d,
+    updatedOn: d,
     popular: true,
     intro:
-      "Avant de lancer un produit, une page d'attente vous permet de réunir des personnes intéressées. Le jour du lancement, vous leur écrivez : ce sont vos premiers clients.",
+      "systeme.io héberge votre formation (vidéos, textes, fichiers) dans un espace membre, et donne l'accès automatiquement après le paiement. Il remplace une plateforme de cours séparée. Le plan gratuit permet 1 formation et 500 élèves ; à partir de Startup, le nombre d'élèves est illimité (4 octobre 2026).",
     steps: [
       {
-        title: "Donnez une raison de s'inscrire",
-        text: "Une réduction de lancement, un accès avant tout le monde ou un cadeau. Écrivez-la clairement dans le titre ou juste au-dessus du formulaire.",
+        title: "Créez la formation",
+        text: "Allez dans « Ressources », puis « Formations », et cliquez sur « Créer ». Indiquez le nom, le domaine, le chemin de l'URL et choisissez un thème pour l'espace membre.",
       },
       {
-        title: "Créez la page d'attente avec l'IA",
-        text: "Dans HTML Pub ou Leadpages, décrivez la page : le produit à venir, la date, ce que reçoivent les inscrits et un formulaire avec un seul champ e-mail.",
+        title: "Ajoutez les modules",
+        text: "Cliquez sur « Nouveau module », donnez-lui un nom, puis « Sauvegarder ». Un module regroupe plusieurs leçons sur un même sujet.",
       },
       {
-        title: "Ajoutez le consentement",
-        text: "Pour envoyer des e-mails commerciaux à des particuliers, il faut leur accord. Ajoutez une case à cocher non cochée d'avance et une phrase qui dit à quoi servira l'e-mail et comment se désinscrire.",
+        title: "Ajoutez les chapitres",
+        text: "Dans un module, cliquez sur « Ajouter un chapitre ». Indiquez le nom, un éventuel délai après le chapitre précédent (pour un accès progressif) et cochez « Activer les commentaires » si vous voulez des échanges, puis « Sauvegarder ». Ajoutez ensuite le contenu, puis activez les modules et chapitres.",
       },
       {
-        title: "Retrouvez les inscrits",
-        text: "Chaque inscription arrive dans « Submissions ». Vous pouvez les consulter et les exporter en CSV.",
+        title: "Mettez la formation en vente",
+        text: "Dans un tunnel « Vendre », sur la page de paiement, choisissez « Produit numérique », créez le produit avec le « + », puis ajoutez la formation comme ressource. Ajoutez un tarif : sans tarif, le produit ne peut pas être sauvegardé.",
       },
       {
-        title: "Envoyez-les vers votre outil e-mail",
-        text: "Dans « Connectors », reliez Mailchimp, Brevo ou un autre outil pour que chaque inscrit y arrive automatiquement. Préparez un e-mail de bienvenue et l'e-mail du jour du lancement.",
+        title: "Choisissez le type d'accès",
+        text: "Quatre types existent : accès total (tout, tout de suite), accès partiel (seulement certains modules), contenu distillé (les chapitres se débloquent selon les délais) et accès partiel avec contenu distillé. Vous pouvez aussi fixer une date de déblocage, et, en accès total, un délai d'expiration en jours.",
+      },
+      {
+        title: "Vérifiez l'arrivée d'un élève",
+        text: "Après l'achat, l'élève reçoit automatiquement un e-mail pour définir son mot de passe. Faites un achat test : l'aide précise que cet e-mail d'accès ne peut pas être modifié, relisez-le donc pour savoir ce que vos élèves verront.",
       },
     ],
     pitfalls: [
-      "Demander le nom, le téléphone et la ville : chaque champ en plus fait baisser les inscriptions.",
-      "Une case de consentement déjà cochée : elle n'est pas valable.",
-      "Ne rien envoyer avant le lancement : écrivez au moins un e-mail de bienvenue pour qu'on se souvienne de vous.",
+      "Oublier d'activer les modules et les chapitres : les élèves ne voient rien.",
+      "Penser que le délai d'un chapitre compte depuis le début : il compte depuis le chapitre précédent.",
     ],
-    tools: [
-      { slug: "html-pub", why: "Page d'attente, formulaire et connecteurs e-mail inclus." },
-      { slug: "leadpages", why: "Pour tester deux versions de la page et inscrire plus de monde." },
+    tools: sio("Formations, espace membre et paiement dans le même outil."),
+    sources: [S.course, S.sellCourse, S.pricing],
+    related: ["vendre-un-produit-numerique-avec-systeme-io", "creer-un-webinaire-automatique-systeme-io", "creer-une-sequence-d-e-mails-automatique-systeme-io", "creer-son-programme-d-affiliation-systeme-io"],
+  },
+  {
+    slug: "creer-un-webinaire-automatique-systeme-io",
+    question: "Comment créer un webinaire automatique avec systeme.io ?",
+    seoTitle: "Créer un webinaire automatique (evergreen) avec systeme.io",
+    seoDescription: "Le tunnel webinaire automatique de systeme.io : plans concernés, les 3 pages, la date d'inscription obligatoire et les limites (pas de direct).",
+    summary: "Le tunnel de 3 pages, le réglage obligatoire, et ce que l'outil ne fait pas.",
+    theme: "formations",
+    publishedOn: d,
+    updatedOn: d,
+    intro:
+      "Un webinaire automatique diffuse une vidéo enregistrée comme si elle était en direct, à des horaires proposés chaque jour. Dans systeme.io, il faut le plan Webinaire (47 €/mois) ou Illimité (97 €/mois) : 10 webinaires automatiques sur Webinaire, illimités sur Illimité, aucun sur Gratuit et Startup (4 octobre 2026).",
+    steps: [
+      {
+        title: "Enregistrez votre présentation",
+        text: "Préparez une vidéo de 30 à 60 minutes qui apprend quelque chose d'utile, puis présente votre offre à la fin. Mettez-la en ligne là où vous pourrez l'intégrer dans une page.",
+      },
+      {
+        title: "Créez le tunnel webinaire",
+        text: "Dans « Sites », « Tunnels de vente », cliquez sur « Créer », donnez un nom, choisissez « Créer un webinaire automatique », puis « Sauvegarder ». Le tunnel contient 3 pages par défaut : inscription, remerciement et diffusion. Choisissez un modèle pour chacune.",
+      },
+      {
+        title: "Réglez la page d'inscription",
+        text: "Cliquez sur « Modifier la page », puis « Modifier les paramètres de la popup » pour régler la fenêtre d'inscription. Configurez obligatoirement l'élément « Date d'inscription au webinaire » : c'est lui qui propose les horaires.",
+      },
+      {
+        title: "Choisissez les horaires",
+        text: "D'après l'aide officielle, on ne peut pas fixer une date précise : vous choisissez plusieurs créneaux dans la journée, et ces créneaux sont proposés chaque jour aux inscrits.",
+      },
+      {
+        title: "Ajoutez rappels et offre",
+        text: "Utilisez des règles d'automatisation pour envoyer des rappels aux inscrits, et ajoutez sur la page de diffusion un bouton vers votre page de paiement.",
+      },
     ],
-    sources: [
-      { label: "CNIL : la prospection commerciale par courrier électronique", url: "https://www.cnil.fr/fr/la-prospection-commerciale-par-courrier-electronique" },
+    pitfalls: [
+      "Vouloir faire un webinaire en direct : systeme.io ne propose que des webinaires automatiques.",
+      "Ouvrir directement l'adresse de la page de diffusion pour la tester : elle n'est accessible qu'après inscription ; prévisualisez-la depuis l'éditeur.",
     ],
-    related: ["recuperer-les-formulaires-html-pub", "connecter-leadpages-a-son-outil-e-mail", "creer-une-page-de-remerciement-leadpages", "creer-une-landing-page-avec-l-ia", "ajouter-un-pop-up-d-inscription-leadpages", "creer-une-page-bientot-disponible-html-pub"],
+    tools: sio("Webinaires automatiques sur les plans Webinaire et Illimité."),
+    sources: [S.webinar, S.pricing],
+    related: ["combien-coute-systeme-io", "creer-et-vendre-une-formation-en-ligne-systeme-io", "automatiser-avec-les-regles-systeme-io"],
   },
 
+  // ——— Affiliation ———
   {
-    slug: "creer-une-page-de-remerciement-leadpages",
-    question: "Comment créer une page de remerciement après un formulaire Leadpages ?",
-    seoTitle: "Créer une page de remerciement sur Leadpages",
-    seoDescription: "La page qui s'affiche après l'inscription sur Leadpages : dire merci, livrer le cadeau tout de suite et proposer l'étape suivante.",
-    summary: "La page qui s'affiche après l'inscription : dire merci, livrer le cadeau et proposer l'étape suivante.",
-    theme: "contacts",
-    publishedOn: "2026-09-28",
-    updatedOn: "2026-09-28",
+    slug: "creer-son-programme-d-affiliation-systeme-io",
+    question: "Comment créer son propre programme d'affiliation avec systeme.io ?",
+    seoTitle: "Créer son programme d'affiliation avec systeme.io",
+    seoDescription: "Laisser d'autres personnes vendre vos produits contre commission : réglages du programme d'affiliation systeme.io, commission par offre, paiements.",
+    summary: "Laisser d'autres vendre vos produits contre commission, avec le suivi intégré.",
+    theme: "affiliation",
+    publishedOn: d,
+    updatedOn: d,
     intro:
-      "Après avoir rempli votre formulaire, le visiteur doit voir tout de suite que son inscription a marché. Une page de remerciement le rassure, lui dit quoi faire ensuite et vous permet de compter précisément vos inscriptions.",
+      "Un programme d'affiliation permet à d'autres personnes de recommander vos produits avec un lien personnel, et de toucher une commission sur les ventes. Il est inclus sur tous les plans de systeme.io, y compris le gratuit (page des tarifs, 4 octobre 2026).",
     steps: [
       {
-        title: "Créez une nouvelle page à partir d'un modèle",
-        text: "Dans Leadpages, créez une nouvelle landing page. Dans la galerie de modèles, filtrez sur les pages de remerciement (« Thank You ») et choisissez un modèle simple. Donnez-lui un nom clair, par exemple « Merci – checklist ».",
+        title: "Ouvrez les réglages du programme",
+        text: "Cliquez sur votre photo de profil, puis « Paramètres », puis « Programme d'affiliation ».",
       },
       {
-        title: "Écrivez un message court et utile",
-        text: "Un titre qui confirme (« C'est bon, vous êtes inscrit ! »), puis ce qui va se passer : « Ouvrez l'e-mail que nous venons d'envoyer pour confirmer votre adresse. » Pensez à dire de regarder dans les indésirables.",
+        title: "Fixez les règles générales",
+        text: "Réglez la commission par défaut, le seuil minimum de paiement, une éventuelle commission de second niveau (sur les ventes des affiliés recrutés par vos affiliés), le délai avant paiement et le jour de paiement. Les valeurs par défaut (aide officielle, 4 octobre 2026) : 40 % de commission, 30 de minimum de paiement dans votre devise, 0 % au second niveau et 30 jours de délai. Modifiez-les selon vos marges.",
       },
       {
-        title: "Livrez le cadeau promis",
-        text: "Si vous avez promis un guide ou une checklist, mettez un bouton « Télécharger » qui mène au fichier. Le visiteur l'obtient tout de suite, sans attendre l'e-mail.",
+        title: "Réglez la commission de chaque offre",
+        text: "La commission se règle aussi sur chaque page de paiement. D'après l'aide, elle est à 0 % par défaut sur une offre : sans ce réglage, vos affiliés ne touchent rien sur ce produit.",
       },
       {
-        title: "Proposez l'étape suivante",
-        text: "Profitez de ce moment où le visiteur vous fait confiance : un lien vers votre boutique Shopify avec un code de bienvenue, une vidéo de présentation ou vos réseaux sociaux. Un seul bouton principal, pas cinq.",
+        title: "Donnez aux affiliés un endroit où s'inscrire",
+        text: "Partagez le lien d'inscription de votre programme. Chaque affilié obtient ses liens et suit ses ventes depuis son tableau de bord.",
       },
       {
-        title: "Publiez-la et reliez-la au formulaire",
-        text: "Publiez la page de remerciement. Puis ouvrez la page qui contient le formulaire, cliquez sur le formulaire et cherchez ce qui se passe après l'envoi (« After submitting » ou « Form actions », selon la version). Choisissez d'afficher une page Leadpages et sélectionnez votre page de remerciement. Mettez la page du formulaire à jour.",
-      },
-      {
-        title: "Testez et comptez vos inscriptions",
-        text: "Inscrivez-vous avec votre propre adresse : vous devez arriver sur la page de remerciement et le contact doit arriver dans votre outil e-mail. Chaque visite de cette page correspond à une inscription : avec Google Analytics, vous pouvez en faire un événement clé pour suivre vos conversions.",
+        title: "Payez vos affiliés",
+        text: "Les commissions dues apparaissent dans systeme.io une fois le délai écoulé. Vérifiez les ventes remboursées avant de payer.",
       },
     ],
     pitfalls: [
-      "Laisser le message par défaut « Thank you » : le visiteur ne sait pas quoi faire ensuite.",
-      "Oublier de mettre à jour la page du formulaire après avoir choisi la page de remerciement : l'ancien réglage reste en ligne.",
-      "Mettre trop de liens : un seul bouton principal convertit mieux.",
+      "Laisser la commission d'une offre à 0 % alors que le programme affiche une commission générale.",
+      "Promettre une commission trop haute sur un produit à faible marge.",
     ],
-    tools: [{ slug: "leadpages", why: "Des modèles de pages de remerciement et le choix de l'action après l'envoi du formulaire." }],
-    sources: [{ label: "Centre d'aide Leadpages", url: "https://support.leadpages.com/hc/en-us" }],
-    related: ["recolter-des-e-mails-avant-un-lancement", "connecter-leadpages-a-son-outil-e-mail", "ajouter-google-analytics-a-une-page-leadpages", "creer-une-page-webinaire-leadpages"],
+    tools: sio("Programme d'affiliation intégré sur tous les plans."),
+    sources: [S.ownAffiliate, S.pricing],
+    related: ["devenir-affilie-systeme-io", "vendre-un-produit-numerique-avec-systeme-io", "creer-et-vendre-une-formation-en-ligne-systeme-io"],
   },
   {
-    slug: "ajouter-un-pop-up-d-inscription-leadpages",
-    question: "Comment ajouter un pop-up d'inscription sur Leadpages ?",
-    summary: "Une fenêtre qui s'ouvre au bon moment pour proposer votre cadeau ou votre newsletter, sans cacher toute la page.",
-    theme: "contacts",
-    publishedOn: "2026-09-28",
-    updatedOn: "2026-09-28",
+    slug: "devenir-affilie-systeme-io",
+    question: "Comment devenir affilié systeme.io et toucher des commissions ?",
+    seoTitle: "Devenir affilié systeme.io : commission, cookie, paiements",
+    seoDescription: "Le programme d'affiliation de systeme.io : 60 % de commission récurrente, lien avec ?sa=, cookie d'un an, paiement le 10 du mois, d'après les pages officielles.",
+    summary: "Le lien, la commission, l'attribution et les paiements, d'après les pages officielles.",
+    theme: "affiliation",
+    publishedOn: d,
+    updatedOn: d,
     intro:
-      "Un pop-up est un petit formulaire qui s'ouvre par-dessus la page : au clic sur un bouton, après quelques secondes ou quand le visiteur s'apprête à partir. Dans Leadpages, il se crée à part, puis se publie sur vos pages ou sur votre site.",
+      "systeme.io a son propre programme d'affiliation : vous recommandez l'outil avec votre lien et touchez une part de ce que paient les personnes inscrites. C'est aussi ce que fait ce site : les liens vers systeme.io ici sont des liens affiliés.",
     steps: [
       {
-        title: "Créez le pop-up",
-        text: "Dans le menu, ouvrez « Conversion Tools », puis « Pop-Ups », et cliquez sur « Create New Pop-Up ». Donnez-lui un nom clair (par exemple « Checklist – guide gratuit »), puis cliquez sur « Start Building ».",
+        title: "Lisez les conditions",
+        text: "D'après la page officielle du programme (4 octobre 2026) : 60 % de commission sur les abonnements, à vie, calculée sur le montant hors taxes. Pas besoin d'être client pour rejoindre le programme.",
       },
       {
-        title: "Écrivez une offre en une phrase",
-        text: "Un titre qui dit ce que la personne reçoit (« Recevez la checklist gratuite »), une phrase de précision, un seul champ e-mail et un bouton d'action. Pas de nom, pas de téléphone : chaque champ en plus fait perdre des inscrits.",
+        title: "Trouvez votre identifiant",
+        text: "Dès l'inscription, vous recevez un identifiant d'affilié unique, qui commence par « sa ». Pour le retrouver : « Tableau de bord », puis « Tableau de bord affilié ».",
       },
       {
-        title: "Réglez où vont les inscrits",
-        text: "Cliquez sur le formulaire du pop-up : choisissez l'outil e-mail qui reçoit les contacts (Mailchimp, Brevo…) et ce qui se passe après l'envoi (message de remerciement ou page de remerciement). Ajoutez une case de consentement non cochée d'avance.",
+        title: "Construisez vos liens",
+        text: "Ajoutez « ?sa=VOTRE_IDENTIFIANT » à la fin de n'importe quelle page créée avec systeme.io (page de capture, de vente, de paiement), par exemple https://systeme.io/fr?sa=…, sans « www ».",
       },
       {
-        title: "Choisissez quand il s'ouvre",
-        text: "Cliquez sur « Publish » en haut à droite. Trois façons de l'ouvrir : au clic sur un bouton, un lien ou une image ; après un délai (« timed ») ; ou quand la souris part vers le haut de la fenêtre (« exit »). Le plus respectueux est le clic : le visiteur l'a demandé.",
+        title: "Comprenez l'attribution",
+        text: "D'après l'aide officielle, le cookie dure un an et votre identifiant est ajouté aux e-mails envoyés à la personne. Le parrainage est verrouillé dès son inscription au plan gratuit : vous restez son parrain à vie. Vous ne pouvez pas être votre propre affilié.",
       },
       {
-        title: "Reliez-le à votre landing page",
-        text: "Dans votre page Leadpages, sélectionnez le bouton voulu et, dans ses réglages de lien, choisissez d'ouvrir le pop-up. Pour un pop-up à délai ou de sortie, copiez le code donné par « Publish » et collez-le dans les réglages de la page, partie suivi / « Head Section Tracking Code ». Mettez la page à jour.",
+        title: "Recevez vos paiements",
+        text: "Les commissions sont payées le 10 de chaque mois, au moins 30 jours après le paiement du client (donc entre 30 et 60 jours), dès que le total dépasse 30 € (30 $ dans l'aide en anglais), par PayPal ou virement bancaire.",
       },
       {
-        title: "Testez sur ordinateur et sur téléphone",
-        text: "Ouvrez la page publiée, déclenchez le pop-up et inscrivez-vous avec votre propre e-mail. Vérifiez que le contact arrive dans votre outil e-mail. Sur téléphone, les pop-ups à délai et de sortie ne s'ouvrent pas : gardez toujours un bouton visible.",
+        title: "Recommandez honnêtement",
+        text: "Indiquez toujours que votre lien est un lien affilié, près du lien. Expliquez aussi les limites de l'outil : un lecteur bien informé reste client plus longtemps.",
       },
     ],
     pitfalls: [
-      "Un pop-up qui s'ouvre dès l'arrivée sur la page : le visiteur le ferme sans lire, et Google n'aime pas les fenêtres qui cachent le contenu sur mobile.",
-      "Compter uniquement sur le pop-up de sortie : il ne fonctionne pas sur téléphone, où arrivent la plupart des visiteurs.",
-      "Oublier le test : un pop-up relié au mauvais outil e-mail perd tous les inscrits.",
+      "Cacher qu'un lien est affilié : c'est trompeur, et la loi impose de le signaler.",
+      "Ajouter « www » dans le lien affilié : l'aide indique de ne pas l'utiliser.",
     ],
-    tools: [{ slug: "leadpages", why: "Pop-ups au clic, à délai et de sortie, reliés à vos outils e-mail." }],
-    sources: [
-      { label: "Leadpages : créer un pop-up", url: `${help}115000438247-Create-a-pop-up` },
-      { label: "Leadpages : publier un pop-up", url: `${help}115000463348-Publish-your-pop-up` },
-    ],
-    related: ["recolter-des-e-mails-avant-un-lancement", "connecter-leadpages-a-son-outil-e-mail", "creer-sa-landing-page-leadpages-de-a-a-z", "ajouter-un-compte-a-rebours-leadpages"],
+    tools: sio("Programme d'affiliation à 60 % de commission récurrente."),
+    sources: [S.affiliatePage, S.sioAffiliate],
+    related: ["creer-son-programme-d-affiliation-systeme-io", "c-est-quoi-systeme-io", "combien-coute-systeme-io"],
   },
 
-  // ——— Optimiser ———
+  // ——— Comparer et migrer ———
   {
-    slug: "ajouter-google-analytics-a-une-page-leadpages",
-    question: "Comment ajouter Google Analytics à une page Leadpages ?",
-    summary: "Relier votre page à Google Analytics 4 pour savoir d'où viennent vos visiteurs, avant de chercher à les convertir.",
-    theme: "optimiser",
-    publishedOn: "2026-09-28",
-    updatedOn: "2026-09-28",
-    intro:
-      "Leadpages compte déjà les visites et les inscriptions de chaque page. Google Analytics 4 vous dit en plus d'où viennent les visiteurs (Google, Instagram, publicité…) et ce qu'ils font. Il suffit de copier une balise de Google Analytics dans les réglages de votre page Leadpages.",
-    steps: [
-      {
-        title: "Créez une propriété Google Analytics 4",
-        text: "Sur analytics.google.com, connectez-vous avec votre compte Google. Si vous n'avez pas encore de compte Analytics, suivez l'assistant : un compte, puis une propriété (le nom de votre site), puis un flux de données « Web » avec l'adresse de votre page.",
-      },
-      {
-        title: "Copiez la balise Google",
-        text: "Dans « Administration », ouvrez « Flux de données » et cliquez sur votre flux Web. Cliquez sur « Afficher les instructions concernant la balise », puis sur « Installer manuellement ». Copiez tout le code affiché : il commence par <script> et contient votre ID de mesure (G-…).",
-      },
-      {
-        title: "Collez-la dans les réglages de la page",
-        text: "Dans Leadpages, ouvrez la page dans l'éditeur, puis ses réglages (« Settings ») et la partie consacrée au suivi (« Analytics » ou « Tracking Codes » selon la version). Collez la balise dans le champ du code d'en-tête, « Head Section Tracking Code ».",
-      },
-      {
-        title: "Mettez la page à jour",
-        text: "Enregistrez, puis cliquez sur « Update » (ou « Publish ») : tant que la page n'est pas republiée, la balise n'est pas en ligne. Faites de même pour chaque page à suivre, avec la même balise.",
-      },
-      {
-        title: "Vérifiez que les visites arrivent",
-        text: "Ouvrez votre page publiée dans un autre onglet. Dans Google Analytics, allez dans « Rapports », puis « Temps réel » : votre visite doit apparaître en moins d'une minute. Si rien n'arrive, vérifiez que la balise est bien dans l'en-tête et que la page a été mise à jour.",
-      },
-      {
-        title: "Ajoutez des liens avec UTM",
-        text: "Pour savoir quel post ou quelle publicité amène des contacts, ajoutez à vos liens des paramètres UTM, par exemple ?utm_source=instagram&utm_medium=social. Dans Google Analytics, le rapport « Acquisition » les regroupe par source.",
-      },
-    ],
-    pitfalls: [
-      "Oublier de republier la page : la balise reste dans l'éditeur et aucune visite n'est comptée.",
-      "Coller seulement l'ID de mesure (G-…) dans le champ du code d'en-tête : il faut tout le code de la balise.",
-      "Oublier le consentement : en Europe, les cookies de mesure demandent l'accord du visiteur (RGPD), prévoyez un bandeau de consentement.",
-    ],
-    tools: [{ slug: "leadpages", why: "Un champ de code d'en-tête dans les réglages de chaque page." }],
-    sources: [
-      { label: "Aide Google Analytics : configurer Analytics pour un site web", url: "https://support.google.com/analytics/answer/9304153?hl=fr" },
-      { label: "Centre d'aide Leadpages", url: "https://support.leadpages.com/hc/en-us" },
-    ],
-    related: ["faire-un-test-ab-leadpages", "lire-une-carte-de-chaleur-leadpages", "ameliorer-le-taux-de-conversion-de-ses-pages-de-a-a-z"],
-  },
-  {
-    slug: "faire-un-test-ab-leadpages",
-    question: "Comment faire un test A/B avec Leadpages ?",
-    seoDescription: "Faire un test A/B avec Leadpages : créer deux versions d'une page, partager le trafic, attendre assez de visites et garder la meilleure.",
-    summary: "Comparer deux versions d'une page et garder celle qui convertit le mieux.",
-    theme: "optimiser",
-    publishedOn: "2026-09-26",
-    updatedOn: "2026-09-26",
+    slug: "systeme-io-ou-leadpages",
+    question: "systeme.io ou Leadpages : lequel choisir pour ses landing pages ?",
+    seoTitle: "systeme.io ou Leadpages : comparatif prix et fonctions (2026)",
+    seoDescription: "systeme.io face à Leadpages : prix officiels relevés le 4 octobre 2026, essai gratuit, e-mails, paiements, et dans quels cas choisir l'un ou l'autre.",
+    summary: "Prix officiels, ce qui est inclus, et dans quels cas chacun est le meilleur choix.",
+    theme: "comparer",
+    publishedOn: d,
+    updatedOn: d,
     popular: true,
     intro:
-      "Un test A/B montre deux versions d'une page à vos visiteurs et mesure laquelle obtient le plus de résultats. Il est inclus à partir de l'offre Leadpages Grow.",
+      "Leadpages est un outil spécialisé dans les landing pages. systeme.io fait aussi des pages, mais ajoute les e-mails, les paiements, les formations et l'affiliation. La bonne question est donc : avez-vous besoin seulement de pages, ou de tout le reste aussi ?",
     steps: [
       {
-        title: "Créez une variante",
-        text: "Dupliquez votre page en un clic, ou laissez l'IA proposer une variante. Changez une seule chose importante : le titre, le bouton ou l'offre.",
+        title: "Comparez les prix",
+        text: "Relevé le 4 octobre 2026 sur les pages officielles (Leadpages affiché en dollars depuis notre accès) : Leadpages Grow 99 $/mois (79 $ en annuel), Optimize 199 $ (159 $), Scale 399 $ (319 $), avec un essai de 7 jours qui demande une carte bancaire. systeme.io : plan gratuit sans carte, puis Startup 17 €/mois, Webinaire 47 €, Illimité 97 €.",
       },
       {
-        title: "Choisissez votre objectif",
-        text: "Indiquez ce qui compte comme réussite : envoi du formulaire, clic sur un bouton, achat ou conversion sur un autre site.",
+        title: "Regardez ce qui est inclus",
+        text: "systeme.io inclut dans tous ses plans l'envoi d'e-mails illimité, la page de paiement sans frais de transaction côté systeme.io, et un programme d'affiliation. Avec Leadpages, vous reliez en général un outil d'e-mails et un outil de paiement à part, avec leurs propres abonnements.",
       },
       {
-        title: "Répartissez le trafic",
-        text: "50/50 est le plus simple. Vous pouvez aussi choisir 70/30 ou toute répartition entre 10 et 90 %. Puis publiez.",
+        title: "Ce que Leadpages fait bien",
+        text: "Un outil centré sur une seule tâche : bibliothèque de modèles de pages, tests A/B (à partir du plan Grow d'après sa page des tarifs) et nombreuses intégrations. Si vous avez déjà un outil d'e-mails et une boutique qui vous conviennent, il peut s'intégrer à votre installation existante.",
       },
       {
-        title: "Attendez un résultat clair",
-        text: "Les résultats s'affichent en direct avec trois niveaux : tendance, probable, gagnant clair. Attendez « gagnant clair » avant de décider.",
+        title: "Ce que systeme.io fait mieux",
+        text: "Tout est relié sans intégration : la page de capture alimente la liste, la liste reçoit la séquence d'e-mails, la page de paiement donne accès à la formation. Pour démarrer, le plan gratuit permet 3 tunnels, 2 000 contacts et 1 domaine personnalisé.",
       },
       {
-        title: "Gardez la gagnante",
-        text: "Envoyez 100 % du trafic vers la meilleure version en un clic, puis lancez un nouveau test.",
+        title: "Décidez",
+        text: "Choisissez systeme.io si vous démarrez, si vous vendez des produits numériques ou si vous voulez réduire le nombre d'abonnements. Choisissez Leadpages si vous voulez seulement des landing pages et que le reste de vos outils est déjà en place.",
       },
     ],
     pitfalls: [
-      "Changer plusieurs choses à la fois : on ne sait plus ce qui a fait la différence.",
-      "Arrêter le test après quelques visites : le résultat est souvent dû au hasard.",
+      "Comparer seulement le prix des pages : additionnez aussi l'outil d'e-mails et l'outil de paiement nécessaires à côté de Leadpages.",
+      "Oublier que les prix Leadpages sont en dollars et peuvent varier selon le pays et les taxes.",
     ],
-    tools: [{ slug: "leadpages", why: "Tests A/B dès Grow, sans limite de trafic." }],
-    sources: [{ label: "Leadpages : tests A/B", url: "https://leadpages.com/product/ab-testing" }, pricing],
-    related: ["utiliser-smart-traffic-leadpages", "lire-une-carte-de-chaleur-leadpages", "ajouter-google-analytics-a-une-page-leadpages", "ameliorer-le-taux-de-conversion-de-ses-pages-de-a-a-z", "ajouter-un-compte-a-rebours-leadpages"],
+    tools: sio("Pages, e-mails et paiements dans un seul abonnement, avec un plan gratuit."),
+    sources: [S.pricing, S.leadpagesPricing],
+    related: ["creer-une-page-de-capture-systeme-io", "migrer-vers-systeme-io", "combien-coute-systeme-io", "systeme-io-ou-shopify"],
   },
   {
-    slug: "lire-une-carte-de-chaleur-leadpages",
-    question: "Comment lire une carte de chaleur (heatmap) dans Leadpages ?",
-    seoTitle: "Lire une carte de chaleur (heatmap) dans Leadpages",
-    summary: "Voir où vos visiteurs cliquent, jusqu'où ils descendent et ce qu'ils lisent.",
-    theme: "optimiser",
-    publishedOn: "2026-09-26",
-    updatedOn: "2026-09-26",
-    intro:
-      "Une carte de chaleur colore votre page selon l'activité des visiteurs. Elle est incluse dans les offres Leadpages Optimize et Scale, sans code à installer.",
-    steps: [
-      {
-        title: "Attendez assez de visites",
-        text: "En dessous d'environ 30 visites, les données sont trop maigres pour conclure.",
-      },
-      {
-        title: "Activez le mode carte de chaleur",
-        text: "Dans l'éditeur de la page, cliquez sur l'icône en forme de flamme dans la barre d'outils.",
-      },
-      {
-        title: "Lisez les clics",
-        text: "Rouge : beaucoup de clics. Bleu : zones ignorées. Si les gens cliquent sur une image qui n'est pas un lien, faites-en un lien.",
-      },
-      {
-        title: "Lisez le défilement",
-        text: "La carte de défilement montre la part des visiteurs qui atteint 25, 50, 75 et 100 % de la page. Si peu arrivent au formulaire, remontez-le.",
-      },
-      {
-        title: "Corrigez tout de suite",
-        text: "Modifiez la page ou lancez un test A/B depuis le même écran.",
-      },
-    ],
-    pitfalls: [
-      "Conclure avec trop peu de visites.",
-      "Chercher la carte d'attention sur mobile : elle n'existe que sur ordinateur (le mobile a les clics et le défilement).",
-    ],
-    tools: [{ slug: "leadpages", why: "Cartes de chaleur dès l'offre Optimize." }],
-    sources: [{ label: "Leadpages : cartes de chaleur", url: "https://leadpages.com/product/heatmaps" }],
-    related: ["faire-un-test-ab-leadpages", "utiliser-smart-traffic-leadpages", "ameliorer-le-taux-de-conversion-de-ses-pages-de-a-a-z"],
-  },
-  {
-    slug: "utiliser-smart-traffic-leadpages",
-    question: "Comment fonctionne Smart Traffic dans Leadpages ?",
-    summary: "L'IA envoie chaque visiteur vers la version de page qui a le plus de chances de lui plaire.",
-    theme: "optimiser",
-    publishedOn: "2026-09-26",
-    updatedOn: "2026-09-26",
-    intro:
-      "Un test A/B classique partage le trafic à égalité. Smart Traffic, lui, choisit pour chaque visiteur la variante la plus susceptible de le convertir. Il est inclus à partir de Leadpages Optimize.",
-    steps: [
-      {
-        title: "Préparez au moins deux variantes",
-        text: "Créez des versions vraiment différentes : une offre, un angle ou un public différent.",
-      },
-      {
-        title: "Fixez l'objectif",
-        text: "Formulaire, clic ou achat : Smart Traffic apprend à partir de cet objectif.",
-      },
-      {
-        title: "Activez Smart Traffic",
-        text: "Cliquez sur « Let AI optimize this for me ». Au lieu d'une répartition fixe, l'IA dirige chaque visiteur et s'améliore au fil des visites.",
-      },
-      {
-        title: "Suivez les résultats",
-        text: "Comparez le taux de conversion global avant et après. Ajoutez une nouvelle variante quand une autre s'essouffle.",
-      },
-    ],
-    pitfalls: [
-      "L'utiliser avec des variantes presque identiques : l'IA n'a rien à choisir.",
-      "S'attendre à un résultat en quelques jours avec peu de trafic.",
-    ],
-    tools: [{ slug: "leadpages", why: "Smart Traffic dès Optimize, optimisation automatique complète avec Scale." }],
-    sources: [{ label: "Leadpages : tests A/B et Smart Traffic", url: "https://leadpages.com/product/ab-testing" }, pricing],
-    related: ["faire-un-test-ab-leadpages", "lire-une-carte-de-chaleur-leadpages"],
-  },
-  {
-    slug: "ameliorer-le-taux-de-conversion-de-ses-pages-de-a-a-z",
-    question: "Comment améliorer le taux de conversion de ses landing pages de A à Z ?",
-    seoTitle: "Améliorer le taux de conversion d'une landing page",
-    summary:
-      "Guide complet pour analyser, optimiser et augmenter le taux de conversion de vos landing pages Leadpages et HTML Pub, étape par étape.",
-    theme: "optimiser",
-    updatedOn: "2026-09-28",
+    slug: "systeme-io-ou-shopify",
+    question: "systeme.io ou Shopify : lequel choisir pour vendre en ligne ?",
+    seoTitle: "systeme.io ou Shopify : comparatif pour vendre en ligne (2026)",
+    seoDescription: "systeme.io face à Shopify : prix officiels relevés le 4 octobre 2026, produits numériques ou physiques, expédition, et quel outil choisir selon votre projet.",
+    summary: "Produits numériques ou catalogue physique : les prix, les forces de chacun, et comment choisir.",
+    theme: "comparer",
+    publishedOn: d,
+    updatedOn: d,
     popular: true,
+    intro:
+      "Shopify est une plateforme de boutique en ligne, pensée pour vendre beaucoup de produits physiques. systeme.io est pensé pour vendre des produits numériques, des formations et des accompagnements avec des tunnels et des e-mails, et sait aussi vendre quelques produits physiques.",
+    steps: [
+      {
+        title: "Comparez les prix",
+        text: "Relevé le 4 octobre 2026 sur shopify.com (affiché en dollars depuis notre accès) : Basic 39 $/mois (29 $ en annuel), Grow 105 $ (79 $), Advanced 399 $ (299 $), Plus à partir de 2 300 $. Essai de 3 jours puis 1 $/mois pendant 3 mois. systeme.io : gratuit, puis 17 €, 47 € ou 97 €/mois. Les prix Shopify varient selon le pays.",
+      },
+      {
+        title: "Regardez les frais sur les ventes",
+        text: "systeme.io ne prend aucun frais de transaction (0 % sur tous les plans) : seuls les frais de Stripe ou PayPal s'appliquent. Shopify indique des frais de transaction pour les prestataires de paiement tiers (2 % sur Basic) si vous n'utilisez pas Shopify Payments.",
+      },
+      {
+        title: "Ce que Shopify fait mieux",
+        text: "Le catalogue de produits physiques : thèmes de boutique, gestion avancée de l'expédition, applications, ventes sur plusieurs canaux. L'aide de systeme.io précise que systeme.io ne gère ni l'expédition ni la préparation des commandes.",
+      },
+      {
+        title: "Ce que systeme.io fait mieux",
+        text: "Vendre un produit numérique ou une formation avec un tunnel complet : page de capture, séquence d'e-mails, page de paiement, upsell, accès automatique à la formation, programme d'affiliation. Chez Shopify, cela demande en général des applications supplémentaires.",
+      },
+      {
+        title: "Décidez",
+        text: "Choisissez Shopify si votre activité est une boutique de nombreux produits physiques à expédier. Choisissez systeme.io si vous vendez surtout du numérique (formation, ebook, coaching) ou quelques produits physiques, et que vous voulez construire une liste d'e-mails.",
+      },
+    ],
+    pitfalls: [
+      "Choisir Shopify pour vendre une seule formation : vous payez une boutique complète et des applications pour une fonction incluse dans systeme.io.",
+      "Choisir systeme.io pour un catalogue de centaines de produits avec expédition complexe : ce n'est pas son point fort.",
+    ],
+    tools: sio("Vente de produits numériques et physiques, 0 % de frais de transaction côté systeme.io."),
+    sources: [S.pricing, S.shopifyPricing, S.physical],
+    related: ["vendre-un-produit-numerique-avec-systeme-io", "vendre-des-produits-physiques-avec-systeme-io", "migrer-vers-systeme-io", "systeme-io-ou-leadpages"],
+  },
+  {
+    slug: "migrer-vers-systeme-io",
+    question: "Comment migrer vers systeme.io depuis un autre outil ?",
+    seoTitle: "Migrer vers systeme.io : migration gratuite et import des contacts",
+    seoDescription: "Passer de Leadpages, Shopify, ClickFunnels, Mailchimp ou autre à systeme.io : migration gratuite (conditions), import CSV des contacts, ordre des étapes.",
+    summary: "La migration gratuite (et ses conditions), l'import des contacts, puis l'ordre pour basculer.",
+    theme: "comparer",
+    publishedOn: d,
+    updatedOn: d,
+    intro:
+      "Changer d'outil fait peur, mais systeme.io propose une migration faite par son équipe, gratuitement, sous conditions. Vous pouvez aussi migrer vous-même, en commençant par les contacts.",
+    steps: [
+      {
+        title: "Vérifiez si la migration gratuite s'applique",
+        text: "D'après l'aide officielle (4 octobre 2026), la migration complète est gratuite si vous prenez le plan Illimité mensuel ou l'un des plans annuels. Elle comprend les contacts, les pages des tunnels, les blogs, les formations, les e-mails et campagnes, et les automatisations, dans les limites de votre plan.",
+      },
+      {
+        title: "Demandez-la au support",
+        text: "Une fois abonné, contactez le support de systeme.io pour transmettre la demande à l'équipe de migration. Elle travaille dans l'ordre d'arrivée, vous demande l'accès à vos anciens comptes, et reproduit le contenu à la main. Durée moyenne indiquée : 17 jours.",
+      },
+      {
+        title: "Gardez l'ancien outil pendant la migration",
+        text: "Votre ancien compte n'est pas modifié : le contenu est seulement dupliqué. Ne changez pas les pages en cours de copie, et ne résiliez l'ancien abonnement qu'après avoir tout vérifié.",
+      },
+      {
+        title: "Ou importez vos contacts vous-même",
+        text: "Exportez votre liste en CSV depuis votre ancien outil (Mailchimp, Leadpages, Shopify…). Dans systeme.io, allez dans « CRM », puis « Contacts », et importez le fichier en ajoutant un tag, et éventuellement une campagne. N'importez que des contacts qui ont accepté de recevoir vos e-mails : systeme.io vérifie la liste avant tout envoi lors d'une migration.",
+      },
+      {
+        title: "Basculez dans le bon ordre",
+        text: "Contacts et domaine d'envoi d'abord, puis pages de capture, puis pages de vente et paiements, puis formations. Changez ensuite les liens partout (réseaux sociaux, signature) et pointez votre nom de domaine vers systeme.io en dernier.",
+      },
+    ],
+    pitfalls: [
+      "Résilier l'ancien outil avant d'avoir testé chaque page et chaque paiement sur systeme.io.",
+      "Importer une liste achetée ou sans consentement : c'est interdit et cela bloque vos envois.",
+    ],
+    tools: sio("Migration gratuite avec le plan Illimité mensuel ou un plan annuel."),
+    sources: [S.migration, S.clickfunnels, S.importContacts],
+    related: ["systeme-io-ou-leadpages", "systeme-io-ou-shopify", "connecter-son-nom-de-domaine-a-systeme-io", "ameliorer-la-delivrabilite-de-ses-e-mails-systeme-io"],
+  },
+
+  // ——— Projet complet ———
+  {
+    slug: "lancer-son-business-en-ligne-avec-systeme-io-de-a-a-z",
+    question: "Comment lancer son business en ligne avec systeme.io, de A à Z ?",
+    seoTitle: "Lancer son business en ligne avec systeme.io de A à Z",
+    seoDescription: "Le plan complet avec systeme.io : compte gratuit, domaine, page de capture, séquence d'e-mails, produit, paiement, upsell et affiliation, dans l'ordre.",
+    summary: "Le parcours complet, du compte gratuit à la première vente, dans l'ordre.",
+    theme: "decouvrir",
     format: "complet",
-    intro:
-      "Votre page est en ligne, mais le taux de conversion reste bas. Avant de créer une nouvelle page ou de changer d'outil, il y a un parcours logique : comprendre d'où vient le problème, corriger les blocages un par un et mesurer chaque amélioration. Ce guide suit ce parcours du début à la fin, avec les fonctions de Leadpages et HTML Pub.",
-    steps: [
-      {
-        title: "Comprenez ce qu'est le taux de conversion",
-        text: "Le taux de conversion, c'est le pourcentage de visiteurs qui font l'action attendue : remplir un formulaire, cliquer sur un bouton ou acheter. Si 100 personnes visitent votre page et que 3 remplissent le formulaire, le taux est de 3 %. Un bon taux dépend du secteur, mais la moyenne des landing pages tourne autour de 3 à 5 %. L'objectif est de passer au-dessus en travaillant chaque élément de la page.",
-      },
-      {
-        title: "Lisez vos statistiques actuelles",
-        text: "Avant de changer quoi que ce soit, notez le taux de conversion actuel. Dans Leadpages, ouvrez le tableau de bord de la page : vous voyez les visiteurs uniques, les conversions et le taux. C'est votre point de départ.\n\nSi vous venez de lancer la page et que le trafic est faible, attendez au moins 200 visiteurs avant de tirer des conclusions. En dessous, les chiffres ne sont pas fiables.",
-      },
-      {
-        title: "Utilisez les cartes de chaleur pour trouver les blocages",
-        text: "Les cartes de chaleur montrent où les visiteurs cliquent et jusqu'où ils défilent. Si personne ne descend jusqu'au formulaire, le problème est au-dessus. Si tout le monde clique sur un élément qui n'est pas un lien, c'est une opportunité manquée.\n\nDans Leadpages, les cartes de chaleur sont disponibles dès l'offre Optimize. Activez-les dans les réglages de la page et laissez-les tourner quelques jours avant de les lire.",
-      },
-      {
-        title: "Réécrivez le titre principal",
-        text: "Le titre est la première chose que le visiteur lit. Il doit répondre à une question simple : « Qu'est-ce que j'y gagne ? ». Un bon titre parle du résultat, pas de votre produit.\n\nMauvais : « Notre solution innovante de marketing digital ». Bon : « Doublez vos inscriptions en 30 jours sans augmenter votre budget pub ». Testez un titre centré sur le bénéfice principal de votre offre.",
-      },
-      {
-        title: "Simplifiez le formulaire",
-        text: "Chaque champ supplémentaire dans un formulaire fait baisser le taux de conversion. Si vous demandez le nom, le prénom, l'email, le téléphone et l'entreprise, réduisez à l'email seul pour commencer. Vous pourrez demander le reste plus tard, une fois le contact acquis.\n\nDans Leadpages, ouvrez le formulaire dans l'éditeur et supprimez les champs inutiles. Gardez un seul bouton d'action avec un texte clair : « Recevoir le guide », pas « Soumettre ».",
-      },
-      {
-        title: "Ajoutez de la preuve sociale",
-        text: "Les visiteurs font confiance aux autres visiteurs. Ajoutez des témoignages clients, des logos de partenaires, le nombre d'utilisateurs ou des notes. La preuve sociale rassure et lève les doutes.\n\nPlacez les témoignages près du formulaire ou du bouton d'achat, là où le visiteur hésite. Un témoignage avec un nom, une photo et un résultat chiffré vaut plus qu'une citation anonyme.",
-      },
-      {
-        title: "Alignez votre publicité et votre page",
-        text: "Si votre publicité promet un ebook gratuit et que la page parle d'un webinaire, le visiteur part. Le message de la publicité, le titre de la page et l'offre doivent raconter la même histoire.\n\nVérifiez chaque source de trafic : le texte de la pub Facebook, le titre de l'email, le lien dans la bio Instagram. Chacun doit correspondre exactement à ce que la page propose.",
-      },
-      {
-        title: "Optimisez l'affichage mobile",
-        text: "Plus de la moitié du trafic vient du téléphone. Si votre page est difficile à lire ou que le bouton est trop petit sur mobile, vous perdez des conversions.\n\nDans Leadpages, utilisez l'aperçu mobile de l'éditeur. Vérifiez que le titre est lisible sans zoomer, que le formulaire est facile à remplir au pouce et que le bouton est assez grand pour être tapé facilement.",
-      },
-      {
-        title: "Créez une page de remerciement efficace",
-        text: "La page de remerciement est la page la plus sous-estimée. Le visiteur vient de convertir : il est engagé. Profitez-en pour proposer une action suivante : partager sur les réseaux, s'inscrire à un webinaire, découvrir un produit.\n\nDans Leadpages, configurez la page de remerciement dans les réglages du formulaire. Créez une vraie page avec une offre suivante plutôt qu'un simple message « Merci ».",
-      },
-      {
-        title: "Ajoutez un sentiment d'urgence réel",
-        text: "L'urgence fonctionne quand elle est vraie. Un compte à rebours pour une offre qui ne se termine jamais détruit la confiance. Utilisez de vraies limites : un nombre de places, une date de fin de promotion, un stock limité.\n\nSi vous n'avez pas de limite naturelle, créez-en une : « Les 50 premiers inscrits reçoivent un bonus ». L'important est que ce soit vérifiable et honnête.",
-      },
-      {
-        title: "Lancez un test A/B",
-        text: "Ne changez pas tout d'un coup. Créez une variante avec un seul changement : un titre différent, un bouton d'une autre couleur, un formulaire plus court. Laissez le test tourner jusqu'à avoir au moins 100 conversions par variante pour un résultat fiable.\n\nDans Leadpages, dupliquez votre page, modifiez un élément et lancez le test depuis l'onglet Optimize. Leadpages répartit le trafic automatiquement.",
-      },
-      {
-        title: "Activez Smart Traffic pour automatiser",
-        text: "Une fois que vous avez plusieurs variantes qui fonctionnent, Smart Traffic prend le relais. Au lieu de répartir le trafic à parts égales, l'IA envoie chaque visiteur vers la variante la plus susceptible de le convertir, en fonction de son appareil, sa localisation et son comportement.\n\nSmart Traffic est disponible dès Leadpages Optimize. Activez-le dans l'onglet Optimize de votre page après avoir créé au moins deux variantes.",
-      },
-      {
-        title: "Optimisez le référencement de la page",
-        text: "Une page bien référencée reçoit du trafic gratuit et qualifié. Remplissez le titre SEO, la méta-description et l'URL avec vos mots-clés principaux. Ajoutez un texte alt à chaque image.\n\nDans Leadpages, ouvrez les réglages SEO de la page. Le titre doit contenir votre mot-clé principal et faire moins de 60 caractères. La description doit donner envie de cliquer en moins de 155 caractères.",
-      },
-      {
-        title: "Mettez en place un suivi hebdomadaire",
-        text: "L'optimisation du taux de conversion n'est pas un projet ponctuel, c'est un processus continu. Chaque semaine, notez le taux de conversion, le nombre de visiteurs et les résultats des tests en cours.\n\nCréez un tableau simple avec la date, le taux, le changement testé et le résultat. Après quelques semaines, vous verrez quels types de changements ont le plus d'impact sur vos pages.",
-      },
-    ],
-    pitfalls: [
-      "Changer plusieurs éléments à la fois : impossible de savoir lequel a eu un effet.",
-      "Tirer des conclusions avec moins de 200 visiteurs par variante.",
-      "Copier la page d'un concurrent sans comprendre pourquoi elle fonctionne pour son audience.",
-      "Ignorer le mobile : plus de la moitié du trafic y passe.",
-      "Ajouter un compte à rebours factice qui recommence à chaque visite.",
-    ],
-    tools: [
-      { slug: "leadpages", why: "Tests A/B, cartes de chaleur et Smart Traffic dès l'offre Optimize." },
-      { slug: "html-pub", why: "Création rapide de pages optimisées avec l'IA, idéal pour tester des variantes." },
-    ],
-    sources: [
-      { label: "Leadpages : tests A/B et Smart Traffic", url: "https://leadpages.com/product/ab-testing" },
-      { label: "Leadpages : conversion analytics", url: "https://leadpages.com/product/conversion-tools" },
-      pricing,
-    ],
-    related: ["ajouter-google-analytics-a-une-page-leadpages", "faire-un-test-ab-leadpages", "utiliser-smart-traffic-leadpages", "creer-sa-landing-page-leadpages-de-a-a-z"],
-  },
-
-  // ——— IA et vidéo ———
-  {
-    slug: "publier-une-page-depuis-claude",
-    question: "Comment publier une page HTML Pub directement depuis Claude ?",
-    seoTitle: "Publier une page HTML Pub depuis Claude",
-    summary: "Connecter HTML Pub à Claude pour créer et modifier vos pages en discutant.",
-    theme: "ia",
-    publishedOn: "2026-09-27",
-    updatedOn: "2026-09-27",
-    intro:
-      "HTML Pub a un connecteur pour Claude (MCP). Une fois connecté, vous demandez une page à Claude et il la publie dans votre compte.",
-    steps: [
-      {
-        title: "Vérifiez votre offre",
-        text: "Le connecteur MCP est inclus dans toutes les offres HTML Pub et Leadpages, dès Starter.",
-      },
-      {
-        title: "Ajoutez le connecteur dans Claude",
-        text: "Sur claude.ai, ouvrez Réglages puis Connecteurs, choisissez « Ajouter un connecteur personnalisé » et collez l'adresse https://mcp.htmlpub.com/mcp.",
-      },
-      {
-        title: "Autorisez l'accès",
-        text: "Connectez-vous à votre compte HTML Pub quand Claude le demande. Aucune clé API n'est nécessaire. Claude apparaît ensuite dans « Connected Apps », dans le menu de votre espace.",
-      },
-      {
-        title: "Demandez votre page",
-        text: "Par exemple : « Crée et publie sur HTML Pub une landing page pour mon atelier photo, avec un formulaire d'inscription. » Claude vous donne l'adresse de la page.",
-      },
-      {
-        title: "Modifiez en discutant",
-        text: "Demandez des corrections à Claude : il modifie la page existante sans tout refaire.",
-      },
-    ],
-    pitfalls: [
-      "Ajouter une mauvaise adresse de connecteur : copiez-la depuis l'aide officielle.",
-      "Publier sans relire : vérifiez toujours la page en ligne.",
-    ],
-    tools: [{ slug: "html-pub", why: "Connecteur Claude inclus dans toutes les offres." }],
-    sources: [{ label: "HTML Pub : connecteur MCP pour Claude", url: `${help}43969915496845--HTMLPub-Using-the-Claude-MCP-Connector` }, pricing],
-    related: ["publier-du-html-sur-html-pub", "creer-une-landing-page-avec-l-ia", "creer-une-pub-video-avec-ad-studio"],
-  },
-  {
-    slug: "creer-une-pub-video-avec-ad-studio",
-    question: "Comment créer une publicité vidéo avec Ad Studio ?",
-    summary: "Une image de départ, un storyboard, puis la vidéo finale, en validant chaque étape.",
-    theme: "ia",
-    publishedOn: "2026-09-26",
-    updatedOn: "2026-09-26",
-    intro:
-      "Ad Studio transforme une courte description en publicité. Il propose des pubs centrées sur le produit ou au style UGC, avec un créateur généré par IA. Il est réservé aux offres Leadpages Optimize et Scale.",
-    steps: [
-      {
-        title: "Ouvrez « Ads »",
-        text: "Dans le menu de gauche, cliquez sur « Ads ». Décrivez votre produit, votre public et le style voulu : pub produit ou vidéo façon UGC.",
-      },
-      {
-        title: "Validez l'image de départ",
-        text: "Ad Studio crée une image qui fixe le décor, le produit et le créateur. Demandez des retouches : cette étape ne consomme pas de crédits vidéo.",
-      },
-      {
-        title: "Validez le storyboard",
-        text: "Relisez les plans, les légendes et les mouvements de caméra qui racontent l'histoire.",
-      },
-      {
-        title: "Lancez le tournage",
-        text: "Avant le rendu, un devis indique le nombre de crédits selon le nombre de plans et la résolution. Validez pour obtenir la vidéo finale.",
-      },
-    ],
-    pitfalls: [
-      "Lancer le rendu sans avoir bien relu le storyboard : c'est cette étape qui coûte des crédits.",
-      "S'étonner d'une vidéo sans musique : si la musique n'est pas libre de droits, elle est retirée.",
-      "Chercher Ad Studio avec une offre HTML Pub : il faut passer à Leadpages Optimize.",
-    ],
-    tools: [{ slug: "leadpages", why: "Ad Studio est inclus dès l'offre Optimize." }],
-    sources: [{ label: "HTML Pub : créer des pubs vidéo dans Ad Studio", url: `${help}48970038606349--HTMLPub-Generating-Video-Ads-in-Ad-Studio` }, pricing],
-    related: ["publier-une-page-depuis-claude", "creer-une-landing-page-avec-l-ia"],
-  },
-
-  // ——— Vendre avec Shopify ———
-  {
-    slug: "essayer-shopify-gratuitement",
-    question: "Comment essayer Shopify gratuitement ?",
-    summary: "L'essai de 3 jours, puis 1 € par mois pendant 3 mois : comment en profiter.",
-    theme: "boutique",
-    publishedOn: "2026-09-27",
-    updatedOn: "2026-09-27",
+    publishedOn: d,
+    updatedOn: d,
     popular: true,
     intro:
-      "Shopify s'essaie gratuitement pendant 3 jours. Ensuite, l'offre de lancement permet de continuer pour 1 € par mois pendant 3 mois, de quoi construire sa boutique sans gros frais.",
+      "Ce guide assemble les autres dans l'ordre : construire une liste d'e-mails, puis vendre un premier produit numérique avec un tunnel complet. Tout peut commencer sur le plan gratuit ; chaque étape renvoie au guide détaillé.",
     steps: [
       {
-        title: "Ouvrez la page des tarifs",
-        text: "Sur shopify.com, la page Tarification affiche l'offre du moment : 3 jours gratuits, puis 1 € par mois pendant 3 mois. L'offre peut changer : lisez-la le jour même.",
+        title: "Choisissez une offre simple",
+        text: "Un seul produit pour commencer : une formation courte, un ebook, une séance d'accompagnement. Décrivez en une phrase le résultat pour le client, et fixez un prix.",
       },
       {
-        title: "Cliquez sur « Démarrer gratuitement »",
-        text: "Entrez votre adresse e-mail et créez votre compte. Shopify pose quelques questions sur votre projet pour préparer la boutique.",
+        title: "Créez le compte gratuit",
+        text: "Inscrivez-vous sur systeme.io avec le plan gratuit, sans carte bancaire. Le guide « Créer son compte systeme.io » détaille les premiers réglages.",
       },
       {
-        title: "Préparez l'essentiel pendant les 3 jours",
-        text: "Ajoutez un ou deux produits, choisissez un thème et regardez les réglages de paiement. Vous saurez vite si l'outil vous convient.",
+        title: "Connectez votre domaine et préparez les e-mails",
+        text: "Connectez votre nom de domaine (2 CNAME chez votre hébergeur), puis confirmez votre adresse d'expéditeur et authentifiez le domaine d'envoi : c'est obligatoire pour envoyer des e-mails.",
       },
       {
-        title: "Choisissez un forfait pour continuer",
-        text: "Pour garder la boutique après l'essai, choisissez un forfait. L'offre à 1 € s'applique alors pendant 3 mois, puis le prix normal du forfait.",
+        title: "Construisez la page de capture",
+        text: "Créez un tunnel « Créer une audience » avec un cadeau gratuit lié à votre offre (une liste, un mini-guide). Gardez la page courte : titre, trois bénéfices, champ e-mail.",
       },
       {
-        title: "Notez la date de fin",
-        text: "Mettez un rappel avant la fin des 3 mois à 1 € : c'est là que le prix normal commence.",
-      },
-    ],
-    pitfalls: ["Oublier qu'après 3 mois à 1 €, le forfait passe au prix normal.", "Passer l'essai à tout configurer sans ajouter un seul produit : on ne voit pas le vrai fonctionnement."],
-    tools: [{ slug: "shopify", why: "3 jours gratuits, puis 1 €/mois pendant 3 mois." }],
-    sources: [{ label: "Shopify : tarifs", url: "https://www.shopify.com/fr/tarifs" }],
-    related: ["combien-coute-shopify", "choisir-entre-leadpages-et-shopify", "choisir-son-forfait-shopify", "creer-sa-boutique-shopify"],
-  },
-  {
-    slug: "choisir-son-forfait-shopify",
-    question: "Comment choisir son forfait Shopify ?",
-    summary: "Basic, Grow, Advanced ou Plus : lequel prendre selon votre activité.",
-    theme: "boutique",
-    publishedOn: "2026-09-27",
-    updatedOn: "2026-09-27",
-    intro:
-      "Shopify propose quatre forfaits. Pour démarrer seul, Basic suffit presque toujours. Les forfaits plus chers servent surtout aux équipes et aux gros volumes.",
-    steps: [
-      {
-        title: "Comparez les quatre forfaits",
-        text: "Basic pour les entrepreneurs seuls, Grow pour les petites équipes (jusqu'à 5 comptes d'employés), Advanced pour vendre à l'international avec plus d'outils (jusqu'à 15 comptes), Plus pour les grandes entreprises.",
+        title: "Écrivez la séquence de bienvenue",
+        text: "Créez une campagne de 4 à 5 e-mails : le cadeau, deux conseils utiles, une histoire, puis l'offre. Une règle « Inscription sur la page (optin) » y inscrit chaque nouveau contact.",
       },
       {
-        title: "Choisissez le paiement annuel ou mensuel",
-        text: "Le paiement annuel coûte moins cher chaque mois. Le paiement mensuel laisse plus de liberté pour arrêter. Vérifiez les deux prix affichés.",
+        title: "Créez le produit",
+        text: "Pour une formation : « Ressources », « Formations », puis modules et chapitres. Pour un fichier : un tag et une règle « Nouvelle vente » qui envoie le lien.",
       },
       {
-        title: "Regardez les frais par vente",
-        text: "Avec Shopify Payments, les frais de carte baissent quand le forfait monte. Si vous utilisez un autre prestataire de paiement, Shopify ajoute des frais de transaction, plus élevés sur Basic.",
+        title: "Branchez le paiement",
+        text: "Connectez Stripe et/ou PayPal dans « Paramètres », « Passerelles de paiement ». Créez un tunnel « Vendre » avec page de vente et page de paiement, ajoutez le produit numérique et son tarif, puis cochez les moyens de paiement dans les paramètres du tunnel.",
       },
       {
-        title: "Commencez petit",
-        text: "Démarrez sur Basic. Vous pourrez changer de forfait plus tard, quand vos ventes le justifient.",
-      },
-    ],
-    pitfalls: ["Prendre Advanced dès le départ sans en avoir besoin.", "Oublier le coût des applications payantes, qui s'ajoute au forfait."],
-    tools: [{ slug: "shopify", why: "Quatre forfaits, de l'indépendant à la grande entreprise." }],
-    sources: [{ label: "Shopify : tarifs", url: "https://www.shopify.com/fr/tarifs" }],
-    related: ["combien-coute-shopify", "essayer-shopify-gratuitement", "accepter-les-paiements-shopify"],
-  },
-  {
-    slug: "combien-coute-shopify",
-    question: "Combien coûte Shopify en 2026 : forfaits et frais ?",
-    seoDescription: "Le prix des forfaits Shopify, l'offre de lancement, les frais sur chaque vente et les coûts qu'on oublie (domaine, applications), avec la date du relevé.",
-    summary: "Le prix des forfaits Shopify, l'offre à 1 €, les frais par vente et les coûts qu'on oublie.",
-    theme: "boutique",
-    publishedOn: "2026-09-28",
-    updatedOn: "2026-09-28",
-    intro:
-      "Le prix de Shopify, c'est le forfait, plus des frais sur chaque vente, plus les applications que vous ajoutez. Voici les chiffres relevés sur la page des tarifs le 28 septembre 2026 (mêmes prix affichés en Belgique et au Portugal).",
-    steps: [
-      {
-        title: "L'offre de départ : 3 jours gratuits, puis 1 € par mois",
-        text: "Au 28 septembre 2026, Shopify affiche 3 jours d'essai gratuit, puis 1 € par mois pendant 3 mois. Après ces 3 mois, le prix normal du forfait choisi commence.",
+        title: "Augmentez le panier",
+        text: "Ajoutez un order bump sur la page de paiement, ou un upsell juste après. Le plan gratuit en permet un de chaque.",
       },
       {
-        title: "Le prix des quatre forfaits",
-        text: "En paiement annuel : Basic 19 € par mois, Grow 56 € par mois, Advanced 289 € par mois, et Plus à partir de 2 100 € par mois. En paiement mensuel, Basic coûte 27 € par mois.\n\nPour une personne seule qui démarre, Basic suffit presque toujours.",
+        title: "Testez tout le parcours",
+        text: "Inscrivez-vous avec une autre adresse, lisez les e-mails, achetez, vérifiez l'accès au produit. Corrigez avant d'envoyer du trafic.",
       },
       {
-        title: "Les frais sur chaque vente",
-        text: "Avec Shopify Payments, chaque paiement par carte coûte des frais : sur Basic, à partir de 1,8 % + 0,30 € par vente (tarif affiché en Belgique le 27 septembre 2026). Ces frais baissent quand le forfait monte.\n\nSi vous utilisez un autre prestataire de paiement à la place de Shopify Payments, Shopify ajoute des frais de transaction, jusqu'à 2 % sur Basic.",
+        title: "Faites venir des visiteurs",
+        text: "Partagez la page de capture partout où vous publiez (réseaux sociaux, blog systeme.io, signature d'e-mail). Plus tard, ouvrez votre propre programme d'affiliation pour que d'autres vendent pour vous.",
       },
       {
-        title: "Les coûts qu'on oublie",
-        text: "Les applications payantes s'ajoutent au forfait, souvent par mois. Un nom de domaine se paie à part, chaque année. Un thème payant se paie une fois. Faites la somme avant de choisir.",
-      },
-      {
-        title: "Mensuel ou annuel ?",
-        text: "Le paiement annuel revient moins cher chaque mois, mais vous engage pour un an. Commencez en mensuel pendant l'offre à 1 €, puis passez à l'annuel quand la boutique vend.",
+        title: "Passez à un plan payant quand c'est utile",
+        text: "Quand vous atteignez une limite du plan gratuit (1 campagne, 1 règle, 3 tunnels, 2 000 contacts), comparez les plans. Startup coûte 17 €/mois ou 170 €/an (4 octobre 2026).",
       },
     ],
     pitfalls: [
-      "Oublier la date de fin des 3 mois à 1 € : le prix normal commence sans prévenir.",
-      "Désactiver Shopify Payments sans savoir que Shopify ajoute alors des frais de transaction.",
-      "Compter seulement le forfait et oublier les applications payantes.",
-    ],
-    tools: [{ slug: "shopify", why: "Quatre forfaits, de l'indépendant à la grande entreprise." }],
-    sources: [
-      { label: "Shopify : tarifs", url: "https://www.shopify.com/fr/tarifs" },
-      { label: "Shopify Payments (aide)", url: "https://help.shopify.com/fr/manual/payments/shopify-payments" },
-    ],
-    related: ["choisir-son-forfait-shopify", "essayer-shopify-gratuitement", "accepter-les-paiements-shopify"],
-  },
-  {
-    slug: "creer-sa-boutique-shopify-de-a-a-z",
-    question: "Comment créer sa boutique Shopify de A à Z ?",
-    seoDescription: "Le guide complet pour créer sa boutique Shopify : inscription, thème, produits, livraison, paiements, politiques, domaine, jusqu'à la première vente.",
-    summary: "Le guide complet : de l'inscription à la première vente, étape par étape.",
-    theme: "boutique",
-    format: "complet",
-    publishedOn: "2026-09-27",
-    updatedOn: "2026-09-27",
-    popular: true,
-    intro:
-      "Ce guide suit l'ordre réel d'une première boutique : préparer, s'inscrire, remplir la boutique, régler la vente, tester, puis ouvrir au public. Comptez une journée de travail, étalée sur les 3 jours d'essai gratuit.",
-    steps: [
-      {
-        title: "Préparez tout avant de vous inscrire",
-        text: "L'essai gratuit ne dure que 3 jours : préparez le contenu avant de créer le compte, pour passer ce temps à construire et non à chercher.\n\nRassemblez : le nom de la boutique, un logo (même simple), 3 à 5 produits avec leurs photos, un prix et une description pour chacun, le poids et la taille des colis si vous envoyez des objets, et votre numéro d'entreprise si vous en avez un.\n\nPréparez aussi le compte bancaire qui recevra les ventes : Shopify vous le demandera pour activer les paiements. Enfin, notez ce que vous voulez écrire dans vos conditions de retour : 14 jours, remboursement, frais de retour à la charge de qui.",
-      },
-      {
-        title: "Démarrez l'essai gratuit",
-        text: "Sur shopify.com, ouvrez la page Tarification. Au 27 septembre 2026, l'offre affichée en Belgique est : 3 jours d'essai gratuit, puis 1 € par mois pendant 3 mois. Les offres changent souvent : lisez celle du jour avant de commencer.\n\nCliquez sur « Démarrer gratuitement », entrez votre adresse e-mail et répondez aux questions sur votre projet. Ces réponses servent seulement à préparer l'administration : vous pourrez tout modifier ensuite.\n\nNotez tout de suite deux dates dans votre agenda : la fin des 3 jours d'essai, et la fin des 3 mois à 1 €, quand le prix normal du forfait commence.",
-      },
-      {
-        title: "Prenez vos repères dans l'administration",
-        text: "Tout se passe dans l'administration Shopify. Le menu de gauche regroupe les rubriques que vous utiliserez chaque jour : « Commandes », « Produits », « Clients », « Réductions », « Contenu » et « Boutique en ligne ». Les réglages de la boutique sont tous dans « Paramètres », en bas à gauche.\n\nAu centre de l'accueil, une barre permet de poser une question à Sidekick, l'assistant IA de Shopify. Il connaît votre boutique : demandez-lui par exemple « Comment proposer la livraison gratuite dès 50 € ? ». Vérifiez tout de même ses réponses dans l'aide officielle avant de changer un réglage important.",
-      },
-      {
-        title: "Ajoutez votre premier produit",
-        text: "Cliquez sur « Produits », puis sur « Ajouter un produit ». Écrivez un titre clair, comme le client le chercherait sur Google : « Affiche Bauhaus A3 » plutôt que « Modèle 12 ».\n\nLa description répond aux questions que l'acheteur se pose : ce que c'est, la matière, la taille, l'usage, le délai d'envoi. Des phrases courtes et une liste de points se lisent mieux sur téléphone.\n\nDans « Supports multimédias », cliquez sur « Importer » et ajoutez plusieurs photos : le produit seul sur fond clair, puis en situation. Gardez le même format pour toutes les photos de la boutique : c'est ce qui donne un aspect professionnel.",
-      },
-      {
-        title: "Fixez le prix, le stock, le poids et les variantes",
-        text: "Dans « Prix », indiquez le prix de vente. Le champ « Prix avant réduction » affiche un prix barré : ne l'utilisez que pour une vraie promotion.\n\nDans « Stock », entrez la quantité disponible pour que Shopify arrête la vente quand il n'y a plus rien. Pour un objet à envoyer, indiquez le poids avec l'emballage : c'est lui qui calcule les frais de livraison. Pour un fichier à télécharger, désactivez « Produit physique ».\n\nSi le produit existe en plusieurs tailles ou couleurs, ajoutez des variantes : chacune peut avoir son prix, son stock et sa photo. Réglez enfin le statut sur « Actif » et cliquez sur « Enregistrer ». Répétez l'opération pour vos autres produits.",
-      },
-      {
-        title: "Choisissez et personnalisez votre thème",
-        text: "Le thème décide de l'apparence de toute la boutique. Dans « Boutique en ligne », puis « Thèmes », ou sur themes.shopify.com, filtrez sur les thèmes gratuits : ils sont conçus et mis à jour par Shopify et suffisent largement pour commencer.\n\nChoisissez un thème pour la façon dont il présente les produits, pas pour ses photos de démonstration. Cliquez sur « Ajouter » : le thème arrive dans votre bibliothèque sans remplacer celui qui est en ligne.\n\nCliquez sur « Personnaliser » pour ajouter votre logo, vos couleurs, vos polices et organiser la page d'accueil : une grande image, vos produits phares, une phrase qui dit ce que vous vendez. Regardez toujours l'aperçu sur mobile, puis cliquez sur « Publier ».",
-      },
-      {
-        title: "Organisez les menus de la boutique",
-        text: "Les menus relient les pages entre elles. Ouvrez « Contenu », puis « Menus ». Deux menus existent déjà : le menu principal, en haut de la boutique, et le menu du pied de page.\n\nDans le menu principal, gardez peu d'entrées : l'accueil, le catalogue ou vos collections, et une page de contact. Dans le pied de page, mettez les pages pratiques : livraison, retours, conditions de vente, mentions légales.\n\nCliquez sur un menu pour ajouter, renommer ou déplacer un élément par glisser-déposer, puis enregistrez.",
-      },
-      {
-        title: "Réglez l'expédition et la livraison",
-        text: "Cliquez sur « Paramètres », puis sur « Expédition et livraison ». Le « Profil général » s'applique à tous vos produits : ouvrez-le pour voir les zones de livraison (par exemple la Belgique, puis le reste de l'Union européenne) et les tarifs de chaque zone.\n\nPour chaque zone, créez des tarifs simples : un prix fixe, ou un prix selon le poids de la commande. Un tarif « Livraison gratuite » à partir d'un certain montant pousse souvent les clients à ajouter un article.\n\nDans « Emballages », indiquez les dimensions de votre colis habituel : Shopify s'en sert pour estimer les frais. Si vous ne vendez que des produits numériques, vous n'avez pas besoin de tarif d'expédition.",
-      },
-      {
-        title: "Vérifiez les taxes et la TVA",
-        text: "Dans « Paramètres », ouvrez « Taxes et droits de douane ». Le service fiscal de Shopify calcule automatiquement la TVA selon le pays du client, dans les « Régions fiscales » où vous livrez, comme l'Union européenne.\n\nVérifiez que vos régions de livraison apparaissent bien dans la liste. Vos obligations dépendent de votre statut : un indépendant en franchise de TVA ne facture pas la TVA comme une société assujettie.\n\nShopify le dit lui-même sur cet écran : en cas de doute sur vos obligations fiscales, consultez un comptable ou un fiscaliste avant d'ouvrir la boutique.",
-      },
-      {
-        title: "Activez les paiements",
-        text: "Dans « Paramètres », puis « Paiements », activez Shopify Payments. Shopify demande des informations sur votre activité et le compte bancaire qui recevra les versements. L'authentification en deux étapes est obligatoire.\n\nAvec Shopify Payments, vous acceptez les cartes et les moyens de paiement locaux sans prestataire externe. Sur le forfait Basic, les frais de carte commencent à 1,8 % + 0,30 € par vente (tarifs affichés en Belgique le 27 septembre 2026). Si vous utilisez un autre prestataire à la place, Shopify ajoute des frais de transaction.\n\nPayPal peut s'ajouter dans « Fournisseurs de services de paiement supplémentaires ».",
-      },
-      {
-        title: "Choisissez les moyens de paiement de vos clients",
-        text: "Toujours dans « Paiements », cliquez sur « Moyens de paiement ». Activez ceux que vos clients utilisent vraiment : cartes Visa et Mastercard, Apple Pay, Shop Pay, et Bancontact si vous vendez en Belgique.\n\nLe bouton « Voir les tarifs de paiement » affiche les frais de chaque moyen : certains coûtent plus cher que d'autres. Inutile de tout activer ; trop de logos peut même embrouiller l'acheteur au moment de payer.",
-      },
-      {
-        title: "Rédigez vos politiques et vos mentions légales",
-        text: "Dans « Paramètres », ouvrez « Politiques ». Les politiques écrites s'affichent dans le pied de page du paiement : le client les voit avant d'acheter.\n\nRemplissez au minimum la politique de retour et de remboursement, les conditions de service, la politique d'expédition et la mention légale. Les « Coordonnées » sont marquées « Obligatoire » : ce sont les informations qui permettent au client de vous contacter.\n\nSi Shopify vous propose un modèle de texte, partez de là, mais adaptez-le à votre vraie façon de travailler. En Europe, le client a en général 14 jours pour se rétracter après un achat en ligne. Ajoutez ensuite ces pages au menu du pied de page.",
-      },
-      {
-        title: "Créez un code de bienvenue",
-        text: "Une petite réduction aide à déclencher la première commande. Cliquez sur « Réductions », puis « Créer une réduction » et choisissez « Montant sur la commande ».\n\nTapez un code facile à retenir, comme BIENVENUE10, puis la valeur : 10 % par exemple. Dans « Utilisations maximales », cochez la limite d'une utilisation par client, sinon le code sert à chaque commande. Enregistrez : le code fonctionne tout de suite au paiement.\n\nCe code servira aussi sur vos pages de promotion et sur vos réseaux sociaux.",
-      },
-      {
-        title: "Passez une commande test",
-        text: "Avant d'ouvrir, achetez vous-même dans votre boutique, comme un vrai client : sur téléphone, en passant par la page d'accueil, un produit, le panier et le paiement, avec votre code de réduction.\n\nVérifiez à chaque étape : les frais de livraison sont-ils justes ? La TVA s'affiche-t-elle correctement ? L'e-mail de confirmation arrive-t-il, et donne-t-il envie de revenir ? Vous pouvez passer une vraie commande avec votre carte, puis l'annuler et la rembourser depuis « Commandes ».\n\nCorrigez tout ce qui vous a fait hésiter : si vous avez hésité, vos clients aussi.",
-      },
-      {
-        title: "Choisissez un forfait",
-        text: "Pour garder la boutique après l'essai, choisissez un forfait dans « Paramètres », puis « Forfait ». Pour une personne seule, Basic suffit presque toujours : au 27 septembre 2026, il coûte 27 € par mois en paiement mensuel, ou l'équivalent de 19 € par mois en paiement annuel.\n\nL'offre de lancement à 1 € par mois s'applique alors pendant 3 mois, puis le prix normal commence. Grow et Advanced servent surtout aux équipes et aux gros volumes : vous pourrez changer de forfait plus tard, quand vos ventes le justifient.\n\nN'oubliez pas que les applications payantes s'ajoutent au prix du forfait.",
-      },
-      {
-        title: "Connectez votre nom de domaine",
-        text: "Votre boutique a déjà une adresse gratuite en .myshopify.com, mais votre propre domaine inspire plus confiance. Dans « Paramètres », puis « Domaines », choisissez « Connecter un domaine existant », « Transférer un domaine » ou « Acheter un nouveau domaine ».\n\nPour beaucoup d'hébergeurs de domaine, Shopify fait la connexion automatiquement. Sinon, il vous indique les enregistrements DNS à modifier chez votre hébergeur. La connexion prend souvent moins de deux heures, parfois jusqu'à deux jours. Le certificat HTTPS est gratuit.\n\nSi plusieurs domaines sont reliés, choisissez celui que les clients verront comme « Principal ».",
-      },
-      {
-        title: "Ouvrez la boutique au public",
-        text: "Tant que la boutique est en préparation, elle est protégée par un mot de passe. Pour l'ouvrir, allez dans « Boutique en ligne », puis « Préférences ». Dans « Accès à la boutique », désactivez « Mode privé » : la boutique devient visible pour tout le monde.\n\nSur la même page, remplissez le titre et la méta-description de la page d'accueil : c'est ce que Google et les réseaux sociaux affichent quand quelqu'un partage votre boutique.\n\nL'accueil de l'administration affiche alors « La boutique est en ligne », avec le nombre de visites et de visiteurs en direct.",
-      },
-      {
-        title: "Attirez vos premiers clients",
-        text: "Une boutique en ligne ne reçoit pas de visites toute seule. Choisissez un produit phare et une offre (votre code de bienvenue), puis créez une landing page qui ne parle que de cette offre, avec HTML Pub ou Leadpages.\n\nPartagez l'adresse de cette page sur vos réseaux, dans votre bio, sur Pinterest ou dans vos publicités. Le bouton de la page mène directement à la fiche produit Shopify, pas à l'accueil de la boutique.\n\nRegardez chaque semaine combien de visiteurs arrivent et combien achètent, et améliorez la page qui convertit le moins. Le guide express « attirer des clients avec une landing page » détaille cette étape.",
-      },
-    ],
-    pitfalls: [
-      "Passer les 3 jours d'essai à régler des détails sans avoir ajouté un seul produit.",
-      "Ouvrir la boutique sans commande test : c'est le client qui découvre les frais de livraison faux.",
-      "Laisser les politiques vides : retours, conditions de vente et coordonnées rassurent l'acheteur au moment de payer.",
-      "Oublier que le prix normal du forfait commence après les 3 mois à 1 €.",
-      "Remplir le menu principal de dizaines de liens : le visiteur ne sait plus où cliquer.",
-    ],
-    tools: [
-      { slug: "shopify", why: "La boutique, les paiements et les commandes au même endroit." },
-      { slug: "html-pub", why: "Des pages de promotion créées avec l'IA, qui envoient vers vos produits Shopify." },
-      { slug: "leadpages", why: "Des landing pages avec formulaires et tests A/B pour attirer les premiers clients." },
-    ],
-    sources: [
-      { label: "Shopify : tarifs", url: "https://www.shopify.com/fr/tarifs" },
-      { label: "Aide Shopify : ajouter des produits", url: "https://help.shopify.com/fr/manual/products/add-update-products" },
-      { label: "Aide Shopify : Shopify Payments", url: "https://help.shopify.com/fr/manual/payments/shopify-payments" },
-      { label: "Aide Shopify : connecter un domaine", url: "https://help.shopify.com/fr/manual/domains/add-a-domain/connecting-domains" },
-      { label: "Aide Shopify (accueil)", url: "https://help.shopify.com/fr" },
-    ],
-    related: [
-      "creer-sa-boutique-shopify",
-      "essayer-shopify-gratuitement",
-      "ajouter-un-produit-shopify",
-      "ajouter-des-variantes-shopify",
-      "accepter-les-paiements-shopify",
-      "attirer-des-clients-avec-une-landing-page",
-    ],
-  },
-  {
-    slug: "creer-sa-boutique-shopify",
-    question: "Comment créer sa boutique Shopify ?",
-    seoDescription: "Créer sa boutique Shopify dans le bon ordre : compte, thème, premiers produits et paiements, puis ouverture au public. Le guide pour débutants.",
-    summary: "De l'inscription à la boutique en ligne : compte, thème, produits et paiements, dans l'ordre.",
-    theme: "boutique",
-    publishedOn: "2026-09-27",
-    updatedOn: "2026-09-27",
-    popular: true,
-    intro:
-      "Créer une boutique Shopify prend une heure pour une première version. L'administration vous guide, et l'assistant IA Sidekick répond à vos questions.",
-    steps: [
-      {
-        title: "Créez votre compte",
-        text: "Sur shopify.com, cliquez sur « Démarrer gratuitement », entrez votre e-mail et répondez aux questions sur votre projet.",
-      },
-      {
-        title: "Découvrez l'administration",
-        text: "Le menu de gauche regroupe tout : Commandes, Produits, Clients, Réductions, Boutique en ligne et Paramètres. L'accueil affiche l'état de la boutique et une barre pour demander de l'aide à Sidekick.",
-      },
-      {
-        title: "Ajoutez vos premiers produits",
-        text: "Dans « Produits », ajoutez au moins un produit avec photo, description et prix.",
-      },
-      {
-        title: "Choisissez un thème",
-        text: "Dans « Boutique en ligne », choisissez un thème et personnalisez les couleurs, le logo et la page d'accueil.",
-      },
-      {
-        title: "Réglez paiements et livraison",
-        text: "Dans « Paramètres », configurez les paiements, l'expédition et les taxes pour votre pays.",
-      },
-      {
-        title: "Mettez la boutique en ligne",
-        text: "Choisissez un forfait, reliez votre nom de domaine, puis retirez le mot de passe de la boutique pour l'ouvrir au public.",
-      },
-    ],
-    pitfalls: ["Ouvrir la boutique sans avoir testé une commande de bout en bout.", "Oublier les pages légales (conditions de vente, remboursement, confidentialité)."],
-    tools: [{ slug: "shopify", why: "Boutique en ligne complète, avec assistant IA intégré." }],
-    sources: [{ label: "Centre d'aide Shopify", url: "https://help.shopify.com/fr" }, { label: "Shopify : tarifs", url: "https://www.shopify.com/fr/tarifs" }],
-    related: ["creer-sa-boutique-shopify-de-a-a-z", "ajouter-un-produit-shopify", "creer-un-tunnel-de-vente-avec-leadpages-et-shopify-de-a-a-z", "connecter-son-domaine-shopify", "choisir-un-theme-shopify"],
-  },
-  {
-    slug: "ajouter-un-produit-shopify",
-    question: "Comment ajouter un produit sur Shopify ?",
-    summary: "Titre, photos, prix, stock et expédition : la fiche produit remplie correctement.",
-    theme: "boutique",
-    publishedOn: "2026-09-27",
-    updatedOn: "2026-09-27",
-    intro:
-      "Une bonne fiche produit fait vendre. Shopify vous guide champ par champ ; les changements enregistrés s'affichent tout de suite dans la boutique.",
-    steps: [
-      {
-        title: "Ouvrez « Ajouter un produit »",
-        text: "Dans le menu de gauche, cliquez sur « Produits », puis sur « Ajouter un produit ».",
-      },
-      {
-        title: "Écrivez le titre et la description",
-        text: "Un titre clair, puis une description qui répond aux questions de l'acheteur : matière, taille, usage, délai.",
-      },
-      {
-        title: "Ajoutez les photos",
-        text: "Dans « Supports multimédias », cliquez sur « Importer ». Les images, vidéos et modèles 3D sont acceptés.",
-      },
-      {
-        title: "Fixez le prix et le stock",
-        text: "Indiquez le prix, et si vous voulez un « Prix avant réduction ». Dans « Stock », entrez la quantité disponible.",
-      },
-      {
-        title: "Réglez l'expédition et les variantes",
-        text: "Pour un produit physique, indiquez le poids. Ajoutez des variantes (taille, couleur) si besoin. Pour un fichier numérique, désactivez « Produit physique ».",
-      },
-      {
-        title: "Choisissez le statut et enregistrez",
-        text: "Le statut « Actif » rend le produit visible. Cliquez sur « Enregistrer ».",
-      },
-    ],
-    pitfalls: ["Laisser le poids à 0 : les frais de livraison seront faux.", "Des photos de tailles différentes : la boutique paraît moins professionnelle."],
-    tools: [{ slug: "shopify", why: "Produits illimités sur tous les forfaits." }],
-    sources: [{ label: "Shopify : ajouter et mettre à jour des produits", url: "https://help.shopify.com/fr/manual/products/add-update-products" }],
-    related: ["creer-une-page-de-vente-pour-un-produit-shopify", "creer-sa-boutique-shopify", "creer-un-code-de-reduction-shopify", "regler-l-expedition-shopify", "ajouter-des-variantes-shopify", "vendre-sur-instagram-avec-shopify", "ajouter-des-avis-clients-shopify", "creer-une-collection-shopify"],
-  },
-  {
-    slug: "vendre-sur-instagram-avec-shopify",
-    question: "Comment vendre sur Instagram avec Shopify ?",
-    summary: "Relier votre boutique à Instagram, identifier vos produits dans les publications et garder un lien en bio qui vend.",
-    theme: "boutique",
-    publishedOn: "2026-09-28",
-    updatedOn: "2026-09-28",
-    intro:
-      "Instagram est souvent la première source de visiteurs d'une boutique qui démarre. Avec l'application officielle de Meta pour Shopify, vos produits apparaissent dans un catalogue que vous pouvez identifier dans vos publications. En attendant, un bon lien en bio suffit déjà à vendre.",
-    steps: [
-      {
-        title: "Passez votre compte Instagram en compte professionnel",
-        text: "Dans l'application Instagram, ouvrez les paramètres du compte et passez à un compte professionnel (« Entreprise » ou « Créateur »). Reliez-le à une page Facebook : Meta en a besoin pour le catalogue de produits.",
-      },
-      {
-        title: "Installez l'application Facebook & Instagram",
-        text: "Dans l'administration Shopify, ouvrez l'App Store de Shopify et cherchez « Facebook & Instagram », publiée par Meta. Installez-la : elle s'ajoute comme canal de vente, gratuitement.",
-      },
-      {
-        title: "Connectez vos comptes Meta",
-        text: "Dans le canal Facebook & Instagram, suivez l'assistant : votre compte Facebook, votre compte Meta Business (Business Manager), votre page Facebook et votre compte Instagram professionnel. Acceptez les conditions, puis lancez la synchronisation du catalogue.",
-      },
-      {
-        title: "Vérifiez vos fiches produit",
-        text: "Seuls les produits actifs, avec une photo, un prix et une description, passent correctement dans le catalogue. Choisissez dans l'application quels produits partager : commencez par vos meilleures ventes plutôt que tout le catalogue.",
-      },
-      {
-        title: "Identifiez vos produits dans vos publications",
-        text: "Quand Meta a validé votre compte (cela peut prendre quelques jours), vous pouvez identifier vos produits dans les publications et les stories, comme on identifie une personne. Un clic sur l'étiquette montre le prix et mène à la fiche produit. Selon le pays, certaines fonctions d'achat ne sont pas disponibles : l'application affiche ce qui l'est pour vous.",
-      },
-      {
-        title: "Gardez un lien en bio qui vend",
-        text: "En attendant la validation, ou en plus : mettez dans votre bio un seul lien vers une page qui regroupe votre boutique, votre offre du moment et votre inscription e-mail. Ajoutez des paramètres UTM à ce lien pour voir dans Google Analytics ce qu'Instagram vous rapporte.",
-      },
-    ],
-    pitfalls: [
-      "Partager tout le catalogue d'un coup avec des fiches incomplètes : les produits sans photo ou sans prix sont refusés.",
-      "Compter uniquement sur les étiquettes produit : elles dépendent de la validation de Meta et du pays. Le lien en bio marche tout de suite.",
-      "Envoyer les visiteurs d'Instagram vers la page d'accueil : un lien direct vers le produit ou une page dédiée convertit mieux.",
-    ],
-    tools: [{ slug: "shopify", why: "L'application Facebook & Instagram de Meta est gratuite et s'ajoute comme canal de vente." }],
-    sources: [
-      { label: "Aide Shopify : Facebook & Instagram by Meta", url: "https://help.shopify.com/fr/manual/online-sales-channels/facebook-instagram-by-meta" },
-    ],
-    related: ["creer-une-page-lien-en-bio-avec-html-pub", "ajouter-un-produit-shopify", "creer-un-code-de-reduction-shopify"],
-  },
-  {
-    slug: "relancer-les-paniers-abandonnes-shopify",
-    question: "Comment envoyer un e-mail aux clients qui abandonnent leur panier sur Shopify ?",
-    seoTitle: "Relancer les paniers abandonnés sur Shopify",
-    summary: "Activer l'e-mail automatique de Shopify, choisir le bon délai et relancer à la main les paniers les plus importants.",
-    theme: "boutique",
-    publishedOn: "2026-10-02",
-    updatedOn: "2026-10-02",
-    intro:
-      "Beaucoup de visiteurs remplissent leur panier, commencent le paiement, puis partent. Shopify garde ces paiements abandonnés et peut envoyer tout seul un e-mail avec un lien qui ramène le client à son panier, sans application payante.",
-    steps: [
-      {
-        title: "Ouvrez la liste des paiements abandonnés",
-        text: "Dans l'administration Shopify, cliquez sur « Commandes », puis sur « Paiements abandonnés ». Vous voyez chaque client qui a laissé son adresse e-mail au paiement sans terminer sa commande, avec le contenu de son panier.\n\nLa colonne de l'état de l'e-mail indique si une relance est déjà partie, et l'état de récupération si le client a finalement acheté.",
-      },
-      {
-        title: "Activez l'e-mail automatique",
-        text: "Allez dans « Applications » > « Messaging », puis « Automatisations ». Sur l'automatisation des paiements abandonnés de Shopify, cliquez sur « Afficher les actions » > « Modifier les paramètres » et cochez l'envoi automatique des e-mails de paiement abandonné.",
-      },
-      {
-        title: "Choisissez à qui et quand l'e-mail part",
-        text: "Dans « Envoyer à », choisissez qui reçoit l'e-mail : seulement les clients abonnés à vos e-mails marketing, ou tous ceux qui ont abandonné leur paiement. Dans « Envoyer après », choisissez le délai (par exemple 1 heure, 6 heures, 10 heures ou 24 heures).\n\nUn délai court (quelques heures) touche le client pendant qu'il pense encore à son achat. Enregistrez.",
-      },
-      {
-        title: "Personnalisez le message",
-        text: "Ouvrez le modèle de l'e-mail pour ajouter votre logo, vos couleurs et un texte qui vous ressemble. Gardez un seul bouton bien visible vers le panier : c'est lui qui ramène le client.\n\nPour donner un coup de pouce, vous pouvez ajouter un code de réduction dans le texte, mais pas à chaque fois : sinon les clients apprennent à abandonner exprès.",
-      },
-      {
-        title: "Relancez à la main les gros paniers",
-        text: "Pour un panier important, ouvrez-le dans « Paiements abandonnés » et envoyez vous-même l'e-mail de récupération depuis la page du paiement. Vous pouvez y ajouter un mot personnel ou répondre à une question sur la livraison.",
-      },
-      {
-        title: "Mesurez ce que les relances rapportent",
-        text: "Revenez dans « Paiements abandonnés » chaque semaine : l'état de récupération montre les paniers qui ont fini en commande. Si peu de clients reviennent, essayez un autre délai ou un objet d'e-mail plus clair avant d'ajouter une réduction.",
-      },
-    ],
-    pitfalls: [
-      "Envoyer l'e-mail à tout le monde sans vérifier les règles de votre pays : en Europe, une relance commerciale à un client qui n'a pas accepté vos e-mails peut poser problème. Dans le doute, gardez « abonnés au marketing ».",
-      "Mettre une réduction dans chaque relance : vos clients finissent par attendre l'e-mail avant d'acheter.",
-      "Ne pas tester : passez vous-même une commande jusqu'au paiement avec votre e-mail, quittez, et vérifiez que l'e-mail arrive et que le lien rouvre bien le panier.",
-    ],
-    tools: [{ slug: "shopify", why: "E-mail de paiement abandonné inclus dans Shopify Messaging, sans application payante." }],
-    sources: [
-      { label: "Aide Shopify : récupérer les paiements abandonnés", url: "https://help.shopify.com/fr/manual/promoting-marketing/create-marketing/abandoned-checkouts" },
-      { label: "Aide Shopify : automatisations de marketing (Shopify Messaging)", url: "https://help.shopify.com/fr/manual/promoting-marketing/create-marketing/shopify-messaging/marketing-automations" },
-      { label: "CNIL : la prospection commerciale par courrier électronique", url: "https://www.cnil.fr/fr/la-prospection-commerciale-par-courrier-electronique" },
-    ],
-    related: ["creer-un-code-de-reduction-shopify", "suivre-ses-commandes-et-expedier-shopify", "vendre-sur-instagram-avec-shopify"],
-  },
-  {
-    slug: "ajouter-un-compte-a-rebours-leadpages",
-    question: "Comment ajouter un compte à rebours sur une page Leadpages ?",
-    seoTitle: "Ajouter un compte à rebours sur Leadpages",
-    summary: "Un minuteur qui montre la fin d'une promotion ou l'heure d'un webinaire, réglé à une date fixe ou pour chaque visiteur.",
-    theme: "optimiser",
-    publishedOn: "2026-10-02",
-    updatedOn: "2026-10-02",
-    intro:
-      "Un compte à rebours rappelle au visiteur qu'une offre a une fin : une promotion, des inscriptions qui ferment, un webinaire qui commence. Leadpages a un élément « Countdown » prêt à l'emploi, sans code.",
-    steps: [
-      {
-        title: "Ouvrez la page dans l'éditeur",
-        text: "Dans Leadpages, ouvrez la landing page voulue et cliquez sur « Edit ». Repérez l'endroit où le minuteur sera le plus utile : près du titre de l'offre ou juste au-dessus du bouton d'action.",
-      },
-      {
-        title: "Ajoutez l'élément « Countdown »",
-        text: "Dans la liste des éléments (widgets) de l'éditeur, faites glisser « Countdown » à l'endroit choisi. Un minuteur avec jours, heures, minutes et secondes apparaît sur la page.",
-      },
-      {
-        title: "Choisissez le type de minuteur",
-        text: "Cliquez sur le minuteur pour ouvrir ses réglages. « Standard » compte jusqu'à une date et une heure fixes, les mêmes pour tout le monde : idéal pour un webinaire ou une fin de promotion. « Evergreen » démarre à la première visite de chaque personne (par exemple 2 jours) : utile pour une offre de bienvenue.",
-      },
-      {
-        title: "Réglez la date, l'heure et le fuseau",
-        text: "Pour un minuteur « Standard », entrez la date et l'heure de fin, et vérifiez le fuseau horaire : une erreur d'une heure suffit à fâcher les visiteurs. Pour « Evergreen », entrez la durée en jours, heures et minutes.",
-      },
-      {
-        title: "Décidez de ce qui se passe à zéro",
-        text: "Quand le minuteur arrive à zéro, il s'arrête. Prévoyez la suite : mettez à jour la page ou redirigez-la vers une page « offre terminée », et retirez le bouton de l'offre si elle n'est plus valable.",
-      },
-      {
-        title: "Adaptez le style et testez sur téléphone",
-        text: "Changez les couleurs pour que le minuteur se voie sans écraser le titre. Passez en aperçu mobile : sur un petit écran, le minuteur doit tenir sur une ligne ou se replier proprement. Mettez la page à jour.",
-      },
-    ],
-    pitfalls: [
-      "Un faux compte à rebours qui recommence à chaque visite alors que l'offre ne finit jamais : c'est trompeur, et c'est interdit pour les pratiques commerciales en Europe.",
-      "Oublier le fuseau horaire : la promotion « finit » une heure trop tôt ou trop tard pour une partie des visiteurs.",
-      "Laisser la page en ligne après la fin avec un minuteur à zéro et un bouton qui marche encore.",
-    ],
-    tools: [{ slug: "leadpages", why: "Élément « Countdown » inclus, à date fixe ou « evergreen »." }],
-    sources: [
-      { label: "Leadpages : le compte à rebours (Classic Builder)", url: `${help}216961598--Classic-Builder-The-countdown-widget` },
-      { label: "Leadpages : l'élément compte à rebours (Page Studio)", url: `${help}42901399616781--Page-Studio-The-countdown-element` },
-    ],
-    related: ["ameliorer-le-taux-de-conversion-de-ses-pages-de-a-a-z", "ajouter-un-pop-up-d-inscription-leadpages", "faire-un-test-ab-leadpages", "creer-une-page-webinaire-leadpages"],
-  },
-  {
-    slug: "creer-une-page-bientot-disponible-html-pub",
-    question: "Comment créer une page « bientôt disponible » avec HTML Pub ?",
-    seoTitle: "Créer une page « bientôt disponible » avec HTML Pub",
-    summary: "Une page simple qui annonce votre projet et récolte des e-mails avant le lancement, créée avec l'IA en quelques minutes.",
-    theme: "creer",
-    publishedOn: "2026-10-02",
-    updatedOn: "2026-10-02",
-    intro:
-      "Avant d'ouvrir une boutique ou de lancer une offre, une page « bientôt disponible » (coming soon) annonce ce qui arrive et récolte les e-mails des curieux. Avec l'assistant IA de HTML Pub, elle se crée en une description.",
-    steps: [
-      {
-        title: "Ouvrez l'écran de création",
-        text: "Dans HTML Pub, cliquez sur « Create » dans le menu de gauche. Quand l'assistant demande ce que vous faites, choisissez « Landing page ».",
-      },
-      {
-        title: "Décrivez la page en quelques lignes",
-        text: "Indiquez le nom du projet, ce qu'il apporte, la date de lancement si vous la connaissez, vos couleurs et ce que vous voulez : « Page bientôt disponible pour ma boutique de bougies, un titre, une phrase, un champ e-mail, une date de lancement en novembre. » Envoyez.",
-      },
-      {
-        title: "Gardez un seul objectif : l'inscription",
-        text: "Une page « bientôt disponible » n'a pas besoin de menu ni de dix sections. Demandez à l'assistant de garder un titre, une phrase qui donne envie, un champ e-mail et un bouton. Ajoutez une raison de s'inscrire : être prévenu en premier, ou une réduction de lancement.",
-      },
-      {
-        title: "Vérifiez le formulaire",
-        text: "Les réponses du formulaire sont enregistrées dans HTML Pub. Envoyez-vous une inscription de test et vérifiez qu'elle arrive bien. Si vous utilisez un outil e-mail, connectez-le pour que chaque inscrit y arrive tout seul.",
-      },
-      {
-        title: "Publiez sur une adresse simple",
-        text: "Vérifiez la page sur téléphone, puis publiez-la. Si vous avez un nom de domaine, utilisez-le : la page « bientôt disponible » occupe l'adresse en attendant la boutique ou le site.",
-      },
-      {
-        title: "Préparez le jour du lancement",
-        text: "Le jour J, remplacez la page par la vraie page de vente (ou redirigez vers la boutique), puis écrivez à tous les inscrits. Ce sont vos premiers clients : ils attendaient votre message.",
-      },
-    ],
-    pitfalls: [
-      "Une page sans raison de s'inscrire : « restez informé » ne suffit pas. Promettez quelque chose de concret.",
-      "Annoncer une date de lancement qu'on ne tient pas : mieux vaut « en novembre » qu'un jour précis manqué.",
-      "Récolter des e-mails et ne jamais écrire : au lancement, les inscrits ont oublié qui vous êtes. Un message tous les 15 jours suffit.",
-    ],
-    tools: [{ slug: "html-pub", why: "Assistant IA, formulaires et domaine personnalisé." }],
-    sources: [
-      { label: "HTML Pub : utiliser le créateur de pages IA", url: `${help}43967499549965--HTMLPub-Using-the-AI-Page-Builder` },
-      { label: "HTML Pub : créer et modifier des pages", url: `${help}43966022984461--HTMLPub-Creating-and-Editing-Pages` },
-    ],
-    related: ["recolter-des-e-mails-avant-un-lancement", "creer-une-landing-page-avec-l-ia", "recuperer-les-formulaires-html-pub"],
-  },
-  {
-    slug: "ajouter-des-avis-clients-shopify",
-    question: "Comment ajouter des avis clients sur Shopify ?",
-    summary: "Installer une application d'avis, afficher les étoiles sur les fiches produit et demander un avis après chaque commande.",
-    theme: "boutique",
-    publishedOn: "2026-10-02",
-    updatedOn: "2026-10-02",
-    intro:
-      "Les avis rassurent les visiteurs qui ne vous connaissent pas encore. Shopify n'a plus d'application d'avis officielle depuis 2024 : on passe par une application du Shopify App Store, dont plusieurs ont une formule gratuite.",
-    steps: [
-      {
-        title: "Choisissez une application d'avis",
-        text: "Dans l'administration Shopify, ouvrez le Shopify App Store et cherchez « avis produits » (product reviews). Regardez la formule gratuite, les avis des autres marchands et la mention « Built for Shopify ». Judge.me, par exemple, a une formule gratuite avec avis illimités.",
-      },
-      {
-        title: "Installez-la et réglez la langue",
-        text: "Cliquez sur « Installer » et acceptez les autorisations. Dans les réglages de l'application, choisissez le français pour les textes vus par vos clients (formulaire, e-mails, étoiles).",
-      },
-      {
-        title: "Affichez les avis sur la fiche produit",
-        text: "Allez dans « Boutique en ligne » > « Thèmes » et cliquez sur « Personnaliser ». Ouvrez un modèle de produit, cliquez sur « Ajouter un bloc » et, dans la partie « Applications », choisissez le bloc d'avis de l'application. Placez-le sous la description, ajoutez aussi le bloc d'étoiles sous le titre, puis enregistrez.",
-      },
-      {
-        title: "Demandez un avis après chaque commande",
-        text: "Activez dans l'application l'e-mail de demande d'avis, envoyé quelques jours après la livraison. Laissez au client le temps de recevoir et d'utiliser le produit : 7 à 14 jours selon ce que vous vendez.",
-      },
-      {
-        title: "Modérez et répondez",
-        text: "Choisissez si les avis sont publiés tout de suite ou après votre validation. Répondez aux avis négatifs avec calme et une solution : les visiteurs lisent surtout la réponse.",
-      },
-    ],
-    pitfalls: [
-      "Inventer des avis ou n'afficher que les bons : c'est interdit (pratique commerciale trompeuse) et les clients le sentent.",
-      "Offrir une réduction seulement en échange d'un avis positif : la contrepartie doit être la même quel que soit l'avis, et le signaler.",
-      "Installer plusieurs applications d'avis à la fois : elles ralentissent la boutique et affichent des étoiles en double.",
-    ],
-    tools: [{ slug: "shopify", why: "Blocs d'application dans l'éditeur de thème, sans code." }],
-    sources: [
-      { label: "Aide Shopify : applications dans les thèmes", url: "https://help.shopify.com/fr/manual/online-store/themes/customizing-themes/apps" },
-      { label: "Shopify App Store : avis produits", url: "https://apps.shopify.com/search?q=product%20reviews" },
-    ],
-    related: ["ajouter-un-produit-shopify", "creer-une-page-de-vente-pour-un-produit-shopify", "relancer-les-paniers-abandonnes-shopify"],
-  },
-  {
-    slug: "creer-une-collection-shopify",
-    question: "Comment créer une collection de produits sur Shopify ?",
-    summary: "Regrouper vos produits par catégorie, à la main ou automatiquement, et les montrer dans le menu de la boutique.",
-    theme: "boutique",
-    publishedOn: "2026-10-02",
-    updatedOn: "2026-10-02",
-    intro:
-      "Une collection, c'est un rayon de votre boutique : « Bougies », « Nouveautés », « Soldes ». Elle aide le client à trouver ce qu'il cherche et vous permet de mettre en avant des produits dans le menu ou sur la page d'accueil.",
-    steps: [
-      {
-        title: "Ouvrez les collections",
-        text: "Dans l'administration Shopify, cliquez sur « Produits », puis sur « Collections », et enfin sur « Créer une collection ».",
-      },
-      {
-        title: "Donnez un titre et une description",
-        text: "Le titre s'affiche sur la boutique : faites court et clair (« Bougies parfumées »). Ajoutez une phrase de description et une image : elles apparaissent en haut de la page de la collection et aident Google à la comprendre.",
-      },
-      {
-        title: "Choisissez manuelle ou automatisée",
-        text: "« Manuelle » : vous ajoutez chaque produit vous-même, idéal pour une petite sélection (« Coups de cœur »). « Automatisée » : vous fixez des conditions (par exemple le type de produit est « Bougie », ou l'étiquette contient « soldes ») et Shopify ajoute tout seul les produits qui correspondent, y compris les nouveaux.",
-      },
-      {
-        title: "Ajoutez les produits et réglez l'ordre",
-        text: "Pour une collection manuelle, cherchez et ajoutez les produits. Pour une automatisée, vérifiez la liste obtenue. Choisissez ensuite l'ordre d'affichage : meilleures ventes, prix, plus récents, ou ordre manuel.",
-      },
-      {
-        title: "Vérifiez la disponibilité et enregistrez",
-        text: "Dans la partie « Canaux de vente » (ou « Disponibilité »), vérifiez que la collection est disponible sur la boutique en ligne. Cliquez sur « Enregistrer ».",
-      },
-      {
-        title: "Ajoutez-la au menu",
-        text: "Allez dans « Boutique en ligne » > « Menus », ouvrez le menu principal et ajoutez un lien vers la collection. Elle apparaît maintenant dans la navigation de votre boutique.",
-      },
-    ],
-    pitfalls: [
-      "Créer une collection par produit : trop de rayons presque vides perdent le client. Mieux vaut 3 à 6 collections bien remplies.",
-      "Une collection automatisée avec des conditions trop larges : des produits sans rapport y entrent. Vérifiez la liste après chaque ajout de produit.",
-      "Oublier de l'ajouter au menu : personne ne la trouve.",
-    ],
-    tools: [{ slug: "shopify", why: "Collections manuelles et automatisées sur tous les forfaits." }],
-    sources: [{ label: "Aide Shopify : créer des collections", url: "https://help.shopify.com/fr/manual/products/collections" }],
-    related: ["ajouter-un-produit-shopify", "creer-un-menu-shopify", "ajouter-des-variantes-shopify", "creer-une-carte-cadeau-shopify"],
-  },
-  {
-    slug: "creer-une-page-webinaire-leadpages",
-    question: "Comment créer une page d'inscription à un webinaire avec Leadpages ?",
-    seoTitle: "Créer une page d'inscription à un webinaire Leadpages",
-    summary: "Partir d'un modèle webinaire, présenter le sujet en trois points, ajouter un formulaire et un compte à rebours, puis confirmer l'inscription.",
-    theme: "contacts",
-    publishedOn: "2026-10-02",
-    updatedOn: "2026-10-02",
-    intro:
-      "Un webinaire est une excellente façon de récolter des contacts qualifiés : les inscrits donnent leur e-mail pour apprendre quelque chose de précis. Leadpages a des modèles prévus pour ça, avec formulaire et compte à rebours.",
-    steps: [
-      {
-        title: "Partez d'un modèle webinaire",
-        text: "Dans Leadpages, créez une nouvelle landing page et filtrez les modèles sur la catégorie webinaire. Regardez l'aperçu sur téléphone, puis choisissez un modèle simple : titre, promesse, date, formulaire.",
-      },
-      {
-        title: "Écrivez un titre qui promet un résultat",
-        text: "Le titre dit ce que l'inscrit saura faire après : « Ouvrir sa boutique Shopify en un week-end », pas « Webinaire Shopify ». Juste en dessous : la date, l'heure avec le fuseau horaire, et la durée.",
-      },
-      {
-        title: "Résumez le contenu en trois points",
-        text: "Trois puces suffisent : ce que l'on va voir, pour qui c'est, et ce que l'on repart avec. Ajoutez une ligne sur vous (sans photo si vous préférez rester discret) pour dire pourquoi vous écouter.",
-      },
-      {
-        title: "Réglez le formulaire d'inscription",
-        text: "Gardez le prénom et l'e-mail, pas plus. Reliez le formulaire à votre outil e-mail ou à votre outil de webinaire pour que les inscrits reçoivent le lien. Ajoutez une case de consentement non cochée si vous comptez leur envoyer d'autres e-mails.",
-      },
-      {
-        title: "Ajoutez un compte à rebours",
-        text: "Un élément « Countdown » réglé sur la date et l'heure du webinaire rappelle que les places ou l'événement ont une fin. Placez-le près du bouton d'inscription.",
-      },
-      {
-        title: "Préparez la page de confirmation et publiez",
-        text: "Après l'inscription, envoyez vers une page de remerciement : « C'est noté ! Ajoutez la date à votre agenda » et le rappel de l'heure. Publiez, inscrivez-vous vous-même et vérifiez que l'e-mail de confirmation arrive.",
-      },
-    ],
-    pitfalls: [
-      "Un formulaire trop long (téléphone, entreprise, fonction) : chaque champ en plus fait perdre des inscrits.",
-      "Oublier le fuseau horaire : une partie des inscrits se connecte une heure trop tard.",
-      "Ne pas envoyer de rappel la veille et une heure avant : beaucoup d'inscrits oublient de venir.",
-    ],
-    tools: [{ slug: "leadpages", why: "Modèles webinaire, formulaires, compte à rebours et page de remerciement." }],
-    sources: [
-      { label: "Leadpages : modèles de pages webinaire", url: "https://leadpages.com/templates/category/webinar" },
-      { label: "Leadpages : le compte à rebours (Classic Builder)", url: `${help}216961598--Classic-Builder-The-countdown-widget` },
-    ],
-    related: ["ajouter-un-compte-a-rebours-leadpages", "creer-une-page-de-remerciement-leadpages", "connecter-leadpages-a-son-outil-e-mail"],
-  },
-  {
-    slug: "creer-une-carte-cadeau-shopify",
-    question: "Comment vendre des cartes-cadeaux sur Shopify ?",
-    summary: "Créer un produit carte-cadeau avec plusieurs montants, le mettre en avant pour les fêtes et suivre les cartes utilisées.",
-    theme: "boutique",
-    publishedOn: "2026-10-02",
-    updatedOn: "2026-10-02",
-    intro:
-      "La carte-cadeau est le cadeau de dernière minute parfait, et elle amène souvent un nouveau client dans votre boutique. Sur Shopify, c'est un produit à part : le client choisit un montant, paie, et reçoit un code par e-mail.",
-    steps: [
-      {
-        title: "Ouvrez les cartes-cadeaux",
-        text: "Dans l'administration Shopify, cliquez sur « Produits », puis sur « Cartes-cadeaux », et enfin sur « Ajouter un produit carte-cadeau ».",
-      },
-      {
-        title: "Donnez un titre, une description et une image",
-        text: "Par exemple « Carte-cadeau Bougies Lumière ». Dans la description, dites comment elle s'utilise (en ligne, valable sur toute la boutique). Ajoutez une image claire de la carte : c'est elle que le client voit dans la boutique.",
-      },
-      {
-        title: "Réglez les montants",
-        text: "Shopify propose des montants par défaut (les « valeurs »). Remplacez-les par les vôtres, par exemple 20, 50 et 100, ajoutez-en avec « Ajouter une valeur » ou supprimez-en avec la corbeille. Le client ne peut pas saisir un montant libre : il choisit parmi ces valeurs.",
-      },
-      {
-        title: "Enregistrez et vérifiez la disponibilité",
-        text: "Cliquez sur « Enregistrer ». Vérifiez que la carte-cadeau est disponible sur la boutique en ligne, puis ajoutez-la à une collection ou au menu (par exemple « Idées cadeaux »).",
-      },
-      {
-        title: "Testez l'achat et l'e-mail",
-        text: "Passez une commande de test : le client reçoit un e-mail avec le code de la carte, qu'il pourra saisir au paiement. Relisez ce message dans les réglages des notifications et adaptez le texte si besoin.",
-      },
-      {
-        title: "Suivez les cartes utilisées",
-        text: "Dans « Produits » > « Cartes-cadeaux », vous voyez chaque carte vendue, son solde et sa date d'expiration éventuelle. Vous pouvez aussi créer une carte à la main pour dédommager un client.",
-      },
-    ],
-    pitfalls: [
-      "Fixer une date d'expiration sans vérifier les règles de votre pays : la durée de validité des cartes-cadeaux est encadrée dans plusieurs pays.",
-      "Oublier de la mettre en avant : rangée au fond du catalogue, elle ne se vend pas. Montrez-la en décembre et avant les fêtes.",
-      "Ne pas tester l'e-mail : un code mal présenté fait croire au client que la carte n'est pas arrivée.",
-    ],
-    tools: [{ slug: "shopify", why: "Produits cartes-cadeaux intégrés, avec suivi des soldes." }],
-    sources: [
-      { label: "Aide Shopify : ajouter des produits cartes-cadeaux", url: "https://help.shopify.com/fr/manual/products/gift-card-products/add-update-gift-card-products" },
-      { label: "Aide Shopify : créer une carte-cadeau à la main", url: "https://help.shopify.com/fr/manual/products/gift-card-products/issue-gift-card" },
-    ],
-    related: ["creer-un-code-de-reduction-shopify", "ajouter-un-produit-shopify", "creer-une-collection-shopify"],
-  },
-  {
-    slug: "creer-une-page-de-tarifs-html-pub",
-    question: "Comment créer une page de tarifs avec HTML Pub ?",
-    seoDescription: "Créer une page de tarifs claire avec l'IA de HTML Pub : deux ou trois offres côte à côte, ce qui est inclus, un bouton par offre et une FAQ.",
-    summary: "Présenter vos offres côte à côte, avec ce qui est inclus et un bouton par offre, sans écrire de code.",
-    theme: "creer",
-    publishedOn: "2026-10-02",
-    updatedOn: "2026-10-02",
-    intro:
-      "Une page de tarifs claire répond à la question que tout le monde se pose avant d'acheter : combien, et pour quoi ? Avec l'assistant IA de HTML Pub, vous la décrivez et il la construit, puis vous l'ajustez en discutant.",
-    steps: [
-      {
-        title: "Préparez vos offres sur papier",
-        text: "Deux ou trois offres, pas plus. Pour chacune : un nom, un prix, une phrase « pour qui », et trois à cinq choses incluses. Choisissez l'offre que vous voulez vendre le plus : elle sera mise en avant.",
-      },
-      {
-        title: "Ouvrez l'écran de création",
-        text: "Dans HTML Pub, cliquez sur « Create » dans le menu de gauche, puis choisissez « Landing page ». Si vous avez déjà un site HTML Pub, ajoutez plutôt une page à ce site pour garder le même menu.",
-      },
-      {
-        title: "Décrivez la page à l'assistant",
-        text: "Collez vos offres et demandez : « Une page de tarifs avec trois colonnes, l'offre du milieu mise en avant avec le badge Le plus choisi, un bouton par offre, et une courte FAQ en dessous. » Envoyez.",
-      },
-      {
-        title: "Reliez chaque bouton",
-        text: "Chaque bouton doit mener au bon endroit : la fiche produit Shopify, la page de paiement ou un formulaire de contact. Demandez à l'assistant de mettre vos liens, puis cliquez sur chacun dans l'aperçu pour vérifier.",
-      },
-      {
-        title: "Ajoutez une FAQ courte",
-        text: "Quatre ou cinq questions qui bloquent l'achat : « Puis-je changer d'offre ? », « Comment se passe le paiement ? », « Y a-t-il un engagement ? ». Une réponse courte et honnête à chacune.",
-      },
-      {
-        title: "Vérifiez sur téléphone et publiez",
-        text: "Sur téléphone, les colonnes passent l'une sous l'autre : l'offre mise en avant doit rester bien visible. Vérifiez, publiez, puis ajoutez la page au menu de votre site.",
-      },
-    ],
-    pitfalls: [
-      "Trop d'offres : au-delà de trois, le visiteur hésite et repart sans choisir.",
-      "Des prix sans ce qui est inclus : le visiteur ne peut pas comparer.",
-      "Cacher les frais (livraison, taxes, engagement) : c'est la première cause d'abandon au moment de payer.",
-    ],
-    tools: [{ slug: "html-pub", why: "Assistant IA pour construire la page, sites et domaine personnalisé." }],
-    sources: [
-      { label: "HTML Pub : utiliser le créateur de pages IA", url: `${help}43967499549965--HTMLPub-Using-the-AI-Page-Builder` },
-      { label: "HTML Pub : utiliser les sites", url: `${help}43969561553549--HTMLPub-Using-Sites` },
-    ],
-    related: ["creer-un-site-web-avec-html-pub", "creer-une-page-de-vente-pour-un-produit-shopify", "creer-une-landing-page-avec-l-ia"],
-  },
-  {
-    slug: "ajouter-des-variantes-shopify",
-    question: "Comment ajouter des variantes (taille, couleur) à un produit Shopify ?",
-    seoTitle: "Ajouter des variantes (taille, couleur) sur Shopify",
-    seoDescription: "Un seul produit Shopify, plusieurs tailles ou couleurs : créer les options, régler le prix, le stock et la photo de chaque variante.",
-    summary: "Un seul produit, plusieurs tailles ou couleurs, chacune avec son prix, son stock et sa photo.",
-    theme: "boutique",
-    publishedOn: "2026-09-28",
-    updatedOn: "2026-09-28",
-    intro:
-      "Un t-shirt en trois tailles et deux couleurs, c'est un seul produit avec six variantes. Le client choisit sur la fiche produit, et vous suivez le stock de chaque variante.",
-    steps: [
-      {
-        title: "Ouvrez le produit",
-        text: "Dans le menu de gauche, cliquez sur « Produits », puis sur le produit à modifier, ou sur « Ajouter un produit » pour en créer un. Remplissez d'abord le titre, la description et les photos.",
-      },
-      {
-        title: "Ajoutez une option",
-        text: "Descendez jusqu'à la section « Variantes » et cliquez sur « Ajouter des options comme la taille ou la couleur ». Dans « Nom de l'option », tapez par exemple « Taille ».",
-      },
-      {
-        title: "Entrez les valeurs",
-        text: "Dans « Valeurs de l'option », tapez une valeur par ligne : S, puis M, puis L. Cliquez sur « Terminé ». Ajoutez une deuxième option, comme « Couleur », de la même façon : Shopify crée toutes les combinaisons.\n\nUn produit peut avoir jusqu'à 3 options (par exemple taille, couleur et matière).",
-      },
-      {
-        title: "Réglez le prix et le stock de chaque variante",
-        text: "Shopify affiche la liste des variantes. Cliquez sur une variante pour changer son prix (un XL peut coûter plus cher), sa référence (SKU) et sa quantité en stock. Utilisez « Grouper par » pour modifier toutes les variantes d'une couleur d'un coup.",
-      },
-      {
-        title: "Associez une photo à chaque couleur",
-        text: "Dans la liste des variantes, cliquez sur le carré d'image d'une variante et choisissez la photo qui correspond. Quand le client choisit « Bleu », la photo bleue s'affiche.",
-      },
-      {
-        title: "Enregistrez et vérifiez dans la boutique",
-        text: "Cliquez sur « Enregistrer », puis ouvrez le produit dans votre boutique : les sélecteurs de taille et de couleur apparaissent sur la fiche. Testez une variante en rupture de stock pour voir ce que voit le client.",
-      },
-    ],
-    pitfalls: [
-      "Créer un produit séparé pour chaque taille : le client ne voit plus les autres tailles et vos statistiques sont éparpillées.",
-      "Oublier le stock d'une variante : elle s'affiche disponible alors qu'elle ne l'est pas, ou reste bloquée à 0.",
-      "Laisser la même photo pour toutes les couleurs : le client ne voit pas ce qu'il achète.",
-    ],
-    tools: [{ slug: "shopify", why: "Jusqu'à 3 options par produit, sur tous les forfaits." }],
-    sources: [
-      { label: "Shopify : variantes de produit (aide)", url: "https://help.shopify.com/fr/manual/products/variants" },
-      { label: "Shopify : ajouter et mettre à jour des produits", url: "https://help.shopify.com/fr/manual/products/add-update-products" },
-    ],
-    related: ["ajouter-un-produit-shopify", "regler-l-expedition-shopify", "creer-un-code-de-reduction-shopify"],
-  },
-  {
-    slug: "ajouter-un-formulaire-de-contact-shopify",
-    question: "Comment ajouter un formulaire de contact sur Shopify ?",
-    seoDescription: "Ajouter une page « Contact » avec formulaire sur Shopify, la relier au menu et vérifier que les messages arrivent bien dans votre boîte.",
-    summary: "Une page « Contact » avec formulaire, reliée au menu, et des messages qui arrivent bien dans votre boîte.",
-    theme: "boutique",
-    publishedOn: "2026-09-28",
-    updatedOn: "2026-09-28",
-    intro:
-      "Avant d'acheter, beaucoup de clients veulent savoir qu'ils peuvent vous écrire. Shopify a un modèle de page « contact » tout prêt : il suffit de créer la page, de choisir ce modèle et de l'ajouter au menu. Aucun code, aucune application.",
-    steps: [
-      {
-        title: "Créez une page",
-        text: "Dans l'administration, cliquez sur « Boutique en ligne », puis sur « Pages » (selon la version, « Pages » peut se trouver dans « Contenu »). Cliquez sur « Ajouter une page » et donnez-lui le titre « Contact ».",
-      },
-      {
-        title: "Écrivez un court texte",
-        text: "Dans le contenu, dites en deux phrases quand vous répondez (par exemple « sous 24 heures, du lundi au vendredi ») et pour quoi écrire : commande, retour, question sur un produit.",
-      },
-      {
-        title: "Choisissez le modèle « contact »",
-        text: "À droite, dans « Modèle de thème », choisissez « contact ». C'est ce modèle qui ajoute le formulaire (nom, e-mail, téléphone, message) sous votre texte. Vérifiez que la visibilité est sur « Visible », puis cliquez sur « Enregistrer ».",
-      },
-      {
-        title: "Ajoutez la page au menu",
-        text: "Dans « Contenu », puis « Menus », ouvrez le menu principal ou celui du pied de page. Cliquez sur « Ajouter un élément de menu », écrivez « Contact » et choisissez la page « Contact » comme destination. Enregistrez.",
-      },
-      {
-        title: "Vérifiez où arrivent les messages",
-        text: "Les messages du formulaire partent vers l'adresse e-mail de la boutique, indiquée dans « Paramètres ». Vérifiez qu'elle est juste, puis envoyez-vous un message de test depuis la page : il doit arriver dans votre boîte (regardez aussi les indésirables).",
-      },
-      {
-        title: "Gardez la protection contre le spam",
-        text: "Dans « Boutique en ligne », puis « Préférences », la section « Protection contre le spam » active hCaptcha sur le formulaire de contact. Laissez-la activée : elle bloque les messages automatiques sans gêner les vrais clients.",
-      },
-    ],
-    pitfalls: [
-      "Créer la page sans choisir le modèle « contact » : la page s'affiche, mais sans formulaire.",
-      "Ne jamais tester le formulaire : si l'adresse e-mail de la boutique est fausse, les messages des clients se perdent.",
-      "Cacher la page : sans lien dans le menu ou le pied de page, personne ne la trouve.",
-    ],
-    tools: [{ slug: "shopify", why: "Page de contact avec formulaire incluse dans tous les thèmes gratuits." }],
-    sources: [
-      { label: "Aide Shopify : ajouter une page de contact", url: "https://help.shopify.com/fr/manual/online-store/themes/customizing-themes/add-contact-page" },
-      { label: "Aide Shopify : modifier les menus", url: "https://help.shopify.com/fr/manual/online-store/menus-and-links/editing-menus" },
-    ],
-    related: ["creer-un-menu-shopify", "rediger-les-politiques-shopify", "ouvrir-sa-boutique-shopify-au-public"],
-  },
-  {
-    slug: "connecter-son-domaine-shopify",
-    question: "Comment connecter son nom de domaine à Shopify ?",
-    summary: "Utiliser votre propre adresse au lieu de l'adresse en myshopify.com.",
-    theme: "boutique",
-    publishedOn: "2026-09-27",
-    updatedOn: "2026-09-27",
-    intro:
-      "Chaque boutique a une adresse gratuite en .myshopify.com. Avec votre propre domaine, elle inspire plus confiance. Le certificat SSL (HTTPS) est gratuit.",
-    steps: [
-      {
-        title: "Ouvrez « Domaines »",
-        text: "Cliquez sur « Paramètres » en bas à gauche, puis sur « Domaines ». Trois choix : « Connecter un domaine existant », « Transférer un domaine » ou « Acheter un nouveau domaine ».",
-      },
-      {
-        title: "Connectez un domaine existant",
-        text: "Cliquez sur « Connecter un domaine existant » et entrez votre domaine. Pour de nombreux hébergeurs de domaine, Shopify propose une connexion automatique.",
-      },
-      {
-        title: "Sinon, modifiez les DNS à la main",
-        text: "Chez votre hébergeur de domaine, mettez à jour les enregistrements indiqués par Shopify (enregistrement A et CNAME pour www).",
-      },
-      {
-        title: "Attendez la vérification",
-        text: "La connexion fonctionne souvent en moins de deux heures, mais peut prendre jusqu'à deux jours. Le statut passe à « Connecté ».",
-      },
-      {
-        title: "Choisissez le domaine principal",
-        text: "Si plusieurs domaines sont reliés, marquez celui que les clients verront comme « Principal ».",
-      },
-    ],
-    pitfalls: ["Supprimer d'anciens enregistrements DNS utilisés par vos e-mails.", "Oublier que le renouvellement du domaine se fait chez votre hébergeur, pas chez Shopify."],
-    tools: [{ slug: "shopify", why: "Domaine personnalisé et SSL gratuit inclus." }],
-    sources: [{ label: "Shopify : connecter un domaine tiers", url: "https://help.shopify.com/fr/manual/domains/add-a-domain/connecting-domains" }],
-    related: ["ouvrir-sa-boutique-shopify-au-public", "creer-sa-boutique-shopify", "connecter-son-nom-de-domaine-leadpages"],
-  },
-  {
-    slug: "accepter-les-paiements-shopify",
-    question: "Comment accepter les paiements sur Shopify ?",
-    seoDescription: "Activer Shopify Payments, Bancontact et PayPal sur votre boutique : les réglages à faire, les vérifications demandées et les frais à connaître.",
-    summary: "Shopify Payments, Bancontact, PayPal : les réglages et les frais à connaître.",
-    theme: "boutique",
-    publishedOn: "2026-09-27",
-    updatedOn: "2026-09-27",
-    intro:
-      "Shopify Payments permet d'accepter les cartes, Bancontact, Apple Pay et d'autres moyens de paiement sans prestataire externe. C'est aussi ce qui évite les frais de transaction supplémentaires.",
-    steps: [
-      {
-        title: "Ouvrez « Paiements »",
-        text: "Cliquez sur « Paramètres », puis sur « Paiements ». Vous y voyez l'état de Shopify Payments, vos moyens de paiement, vos versements et les prestataires supplémentaires comme PayPal.",
-      },
-      {
-        title: "Activez Shopify Payments",
-        text: "Suivez la configuration : informations sur votre activité et compte bancaire pour recevoir les versements. L'authentification en deux étapes est demandée.",
-      },
-      {
-        title: "Choisissez les moyens de paiement",
-        text: "Cliquez sur « Moyens de paiement » et activez ceux que vos clients utilisent : cartes, Shop Pay, Apple Pay, Bancontact en Belgique, Klarna, etc. Le bouton « Voir les tarifs de paiement » affiche les frais de chaque moyen.",
-      },
-      {
-        title: "Ajoutez PayPal si besoin",
-        text: "Dans « Fournisseurs de services de paiement supplémentaires », vous pouvez ajouter PayPal ou d'autres prestataires.",
-      },
-      {
-        title: "Passez une commande test",
-        text: "Avant d'ouvrir la boutique, faites un achat test pour vérifier que tout fonctionne.",
-      },
-    ],
-    pitfalls: ["Utiliser un autre prestataire à la place de Shopify Payments sans savoir que Shopify ajoute des frais de transaction (jusqu'à 2 % sur Basic).", "Ne pas activer Bancontact alors que vos clients sont en Belgique."],
-    tools: [{ slug: "shopify", why: "Shopify Payments inclus, frais dégressifs selon le forfait." }],
-    sources: [{ label: "Shopify Payments (aide)", url: "https://help.shopify.com/fr/manual/payments/shopify-payments" }, { label: "Shopify : tarifs", url: "https://www.shopify.com/fr/tarifs" }],
-    related: ["ouvrir-sa-boutique-shopify-au-public", "choisir-son-forfait-shopify", "ajouter-un-produit-shopify"],
-  },  {
-    slug: "choisir-un-theme-shopify",
-    question: "Comment choisir et installer un thème gratuit sur Shopify ?",
-    seoTitle: "Choisir et installer un thème gratuit Shopify",
-    summary: "Trouver un thème gratuit dans la Theme Store, l'essayer, puis le publier.",
-    theme: "boutique",
-    publishedOn: "2026-09-27",
-    updatedOn: "2026-09-27",
-    intro:
-      "Le thème décide de l'apparence de votre boutique. Shopify propose des thèmes gratuits, conçus et maintenus par Shopify : c'est le meilleur point de départ.",
-    steps: [
-      {
-        title: "Ouvrez la Theme Store",
-        text: "Allez sur themes.shopify.com ou, dans l'administration, sur « Boutique en ligne » puis « Thèmes ». Dans le filtre « Price », cochez « Free » pour ne voir que les thèmes gratuits.",
-      },
-      {
-        title: "Filtrez selon votre activité",
-        text: "Utilisez le filtre « Industry » (vêtements, beauté, maison, alimentation…) et regardez surtout comment le thème présente les produits, pas les photos de démonstration.",
-      },
-      {
-        title: "Ajoutez le thème à votre boutique",
-        text: "Ouvrez la fiche du thème et cliquez sur « Ajouter ». Il arrive dans votre bibliothèque de thèmes, sans remplacer celui qui est en ligne.",
-      },
-      {
-        title: "Prévisualisez et personnalisez",
-        text: "Cliquez sur « Personnaliser » : ajoutez votre logo, vos couleurs, vos polices et les sections de la page d'accueil. Vérifiez aussi l'aperçu sur mobile.",
-      },
-      {
-        title: "Publiez-le",
-        text: "Quand tout vous convient, cliquez sur « Publier ». Un seul thème est en ligne à la fois ; l'ancien reste dans la bibliothèque et vous pouvez revenir en arrière.",
-      },
-    ],
-    pitfalls: [
-      "Acheter un thème payant dès le départ : les thèmes gratuits suffisent pour une première boutique.",
-      "Publier sans avoir vérifié l'affichage sur téléphone, alors que la majorité des visites viennent du mobile.",
-    ],
-    tools: [{ slug: "shopify", why: "Thèmes gratuits conçus et mis à jour par Shopify." }],
-    sources: [
-      { label: "Shopify : ajouter et prévisualiser des thèmes", url: "https://help.shopify.com/fr/manual/online-store/themes/adding-themes" },
-      { label: "Shopify : publier un thème", url: "https://help.shopify.com/fr/manual/online-store/themes/managing-themes/publishing-themes" },
-      { label: "Shopify Theme Store", url: "https://themes.shopify.com/themes?price%5B%5D=free" },
-    ],
-    related: ["creer-sa-boutique-shopify", "ajouter-un-produit-shopify", "creer-un-menu-shopify"],
-  },
-  {
-    slug: "creer-un-code-de-reduction-shopify",
-    question: "Comment créer un code de réduction sur Shopify ?",
-    summary: "Un code promo en pourcentage ou en montant fixe, avec ses conditions et ses limites.",
-    theme: "boutique",
-    publishedOn: "2026-09-27",
-    updatedOn: "2026-09-27",
-    intro:
-      "Un code de réduction aide à déclencher une première commande. Sur Shopify, il se crée en quelques minutes et s'applique au moment du paiement.",
-    steps: [
-      {
-        title: "Ouvrez « Réductions »",
-        text: "Dans le menu de gauche, cliquez sur « Réductions », puis sur « Créer une réduction ».",
-      },
-      {
-        title: "Choisissez le type de réduction",
-        text: "Quatre choix : « Montant sur les produits », « Achetez X, obtenez Y », « Montant sur la commande » ou « Expédition gratuite ». Pour un code de bienvenue, prenez « Montant sur la commande ».",
-      },
-      {
-        title: "Écrivez le code et sa valeur",
-        text: "Gardez la méthode « Code de réduction », tapez un code facile à retenir (par exemple BIENVENUE10), puis choisissez « Pourcentage » ou « Montant fixe » et la valeur. Le résumé à droite se met à jour tout de suite.",
-      },
-      {
-        title: "Fixez les conditions",
-        text: "« Admissibilité » : tous les clients ou certains seulement. « Exigences minimales d'achat » : un montant ou un nombre d'articles minimum. « Utilisations maximales » : limitez le nombre total d'utilisations ou une seule utilisation par client.",
-      },
-      {
-        title: "Choisissez les dates et enregistrez",
-        text: "Indiquez une date de début et, si vous voulez, une date de fin. Cliquez sur « Enregistrer » : le code apparaît dans la liste des réductions.",
-      },
-    ],
-    pitfalls: [
-      "Oublier « Limiter à une utilisation par client » pour un code de bienvenue : il peut alors être utilisé à chaque commande.",
-      "Diffuser le code sans l'avoir testé dans une commande test.",
-    ],
-    tools: [{ slug: "shopify", why: "Codes de réduction et réductions automatiques inclus dans tous les forfaits." }],
-    sources: [
-      { label: "Shopify : réductions en pourcentage ou montant fixe", url: "https://help.shopify.com/fr/manual/discounts/discount-types/percentage-fixed-amount" },
-    ],
-    related: ["attirer-des-clients-avec-une-landing-page", "accepter-les-paiements-shopify", "relancer-les-paniers-abandonnes-shopify", "creer-une-carte-cadeau-shopify"],
-  },
-  {
-    slug: "connecter-html-pub-a-shopify",
-    question: "Comment relier HTML Pub ou Leadpages à Shopify ?",
-    seoDescription: "Relier vos pages HTML Pub ou Leadpages à votre boutique Shopify : le connecteur Shopify de HTML Pub et les boutons qui mènent au produit.",
-    summary: "Le connecteur Shopify de HTML Pub, et les boutons qui envoient vers votre boutique.",
-    theme: "boutique",
-    publishedOn: "2026-09-27",
-    updatedOn: "2026-09-27",
-    intro:
-      "Vos pages HTML Pub ou Leadpages attirent les visiteurs, Shopify encaisse les ventes. Deux liens sont possibles : le connecteur Shopify, et des boutons qui mènent au paiement Shopify.",
-    steps: [
-      {
-        title: "Ouvrez « Connectors »",
-        text: "Dans le menu de votre espace HTML Pub, cliquez sur « Connectors » et tapez « Shopify » dans la recherche. La carte Shopify sert à envoyer les données clients de votre checkout HTML Pub vers Shopify.",
-      },
-      {
-        title: "Indiquez l'adresse de votre boutique",
-        text: "Cliquez sur « Connect », entrez l'adresse en .myshopify.com de votre boutique, puis sur « Connect Shopify ». Validez ensuite l'autorisation dans Shopify.",
-      },
-      {
-        title: "Ajoutez un bouton vers Shopify",
-        text: "Pour vendre un produit depuis une page, ajoutez un bouton et, dans son action de clic, choisissez un lien externe : collez l'adresse du produit ou un lien de paiement Shopify.",
-      },
-      {
-        title: "Ou collez un Buy Button Shopify",
-        text: "Dans Shopify, ajoutez le canal de vente « Buy Button », créez un bouton pour un produit, copiez son code HTML et collez-le dans un bloc HTML de votre page.",
-      },
-      {
-        title: "Testez le parcours complet",
-        text: "Publiez la page, cliquez sur le bouton et allez jusqu'au paiement pour vérifier que le bon produit s'ouvre.",
-      },
-    ],
-    pitfalls: [
-      "Croire que Leadpages compte les ventes Shopify : ses statistiques s'arrêtent au clic sur le bouton.",
-      "Entrer votre propre nom de domaine au lieu de l'adresse en .myshopify.com dans le connecteur.",
-    ],
-    tools: [
-      { slug: "html-pub", why: "Connecteur Shopify dans « Connectors »." },
-      { slug: "shopify", why: "Encaisse les commandes venues de vos pages." },
-    ],
-    sources: [
-      { label: "Leadpages : accepter des achats Shopify", url: `${help}4407720741517-Accept-Shopify-purchases-with-Leadpages` },
-      { label: "Leadpages : intégration Shopify", url: "https://leadpages.com/integrations/shopify" },
-    ],
-    related: ["creer-une-page-de-vente-pour-un-produit-shopify", "attirer-des-clients-avec-une-landing-page", "connecter-leadpages-a-son-outil-e-mail", "creer-un-tunnel-de-vente-avec-leadpages-et-shopify-de-a-a-z"],
-  },
-  {
-    slug: "attirer-des-clients-avec-une-landing-page",
-    question: "Comment attirer des clients vers sa boutique Shopify avec une landing page ?",
-    seoTitle: "Attirer des clients Shopify avec une landing page",
-    summary: "Une page simple, une offre claire, un formulaire, puis un lien vers votre boutique.",
-    theme: "boutique",
-    publishedOn: "2026-09-27",
-    updatedOn: "2026-09-27",
-    popular: true,
-    intro:
-      "Une landing page présente une seule offre à un seul public. Elle transforme les visiteurs venus des réseaux ou d'une publicité en contacts, puis en clients de votre boutique.",
-    steps: [
-      {
-        title: "Choisissez une seule offre",
-        text: "Un produit phare ou une réduction de bienvenue. Créez d'abord le code dans Shopify, par exemple 10 % sur la première commande : c'est la raison de laisser son e-mail.",
-      },
-      {
-        title: "Créez la page avec l'IA",
-        text: "Dans HTML Pub ou Leadpages, cliquez sur « Create » et décrivez la page : le produit, le public, l'offre et le bouton attendu. Gardez un titre court, trois avantages et une photo du produit.",
-      },
-      {
-        title: "Ajoutez un formulaire et un bouton",
-        text: "Un formulaire pour récolter l'e-mail en échange du code, et un bouton qui mène au produit ou à la boutique Shopify.",
-      },
-      {
-        title: "Reliez la page à vos outils",
-        text: "Dans « Connectors », envoyez les contacts vers votre outil e-mail et reliez Shopify pour retrouver vos clients au même endroit.",
-      },
-      {
-        title: "Envoyez du trafic et mesurez",
-        text: "Partagez l'adresse de la page dans vos publications, votre bio et vos publicités. Regardez le taux de conversion de la page ; avec Leadpages, testez deux titres avec un test A/B.",
-      },
-    ],
-    pitfalls: [
-      "Mettre toute la boutique sur la page : une landing page = une offre, un bouton.",
-      "Envoyer le trafic vers la page d'accueil de la boutique au lieu de la page du produit mis en avant.",
-      "Promettre un code de réduction qui n'existe pas encore dans Shopify.",
-    ],
-    tools: [
-      { slug: "html-pub", why: "Pour créer et publier la landing page rapidement." },
-      { slug: "leadpages", why: "Pour tester vos titres et améliorer la conversion." },
-      { slug: "shopify", why: "Pour encaisser les commandes." },
-    ],
-    sources: [
-      { label: "Leadpages : accepter des achats Shopify", url: `${help}4407720741517-Accept-Shopify-purchases-with-Leadpages` },
-      { label: "Shopify : codes de réduction", url: "https://help.shopify.com/fr/manual/discounts/discount-types/percentage-fixed-amount" },
-    ],
-    related: ["creer-un-code-de-reduction-shopify", "connecter-html-pub-a-shopify", "creer-une-landing-page-avec-l-ia", "creer-une-pub-video-avec-ad-studio", "creer-un-tunnel-de-vente-avec-leadpages-et-shopify-de-a-a-z"],
-  },
-  {
-    slug: "creer-une-page-de-vente-pour-un-produit-shopify",
-    question: "Comment créer une page de vente pour un produit Shopify ?",
-    seoTitle: "Créer une page de vente pour un produit Shopify",
-    seoDescription: "Une page d'une seule offre, créée avec l'IA de HTML Pub, qui présente votre produit et envoie vers sa fiche Shopify pour payer.",
-    summary: "Une page d'une seule offre, créée avec l'IA de HTML Pub, qui envoie vers votre produit Shopify.",
-    theme: "boutique",
-    publishedOn: "2026-09-27",
-    updatedOn: "2026-09-27",
-    intro:
-      "Une fiche produit Shopify montre le produit ; une page de vente le raconte. Elle sert surtout quand vous faites de la publicité ou des vidéos pour un produit précis.",
-    steps: [
-      {
-        title: "Préparez le produit dans Shopify",
-        text: "Le produit doit être actif, avec ses photos, son prix et son stock. Ouvrez-le dans votre boutique en ligne et copiez l'adresse de la page : c'est là que mènera le bouton.",
-      },
-      {
-        title: "Décrivez la page à l'IA",
-        text: "Dans HTML Pub ou Leadpages, créez une page avec l'IA et décrivez-la précisément : le produit, pour qui il est fait, 3 avantages, des avis clients, des questions fréquentes et un bouton « Acheter maintenant ».",
-      },
-      {
-        title: "Reliez le bouton au produit",
-        text: "Dans l'éditeur, choisissez l'action du bouton « lien externe » et collez l'adresse du produit Shopify. Vous pouvez aussi coller un Buy Button Shopify dans un bloc HTML.",
-      },
-      {
-        title: "Ajoutez une raison d'acheter maintenant",
-        text: "Un code de réduction limité dans le temps, la livraison offerte ou un bonus. Créez-le d'abord dans Shopify pour qu'il fonctionne au paiement.",
-      },
-      {
-        title: "Publiez et testez sur téléphone",
-        text: "Publiez la page, ouvrez-la sur votre téléphone, cliquez sur le bouton et allez jusqu'au paiement. Partagez ensuite l'adresse de la page dans vos publicités et vos vidéos.",
-      },
-    ],
-    pitfalls: [
-      "Plusieurs produits et plusieurs boutons sur la même page : le visiteur hésite et ne clique pas.",
-      "Un bouton qui mène à la page d'accueil de la boutique au lieu du produit.",
-      "Des avis clients inventés : n'utilisez que de vrais avis.",
-    ],
-    tools: [
-      { slug: "html-pub", why: "Créer la page de vente avec l'IA en quelques minutes." },
-      { slug: "shopify", why: "Encaisser la commande et gérer la livraison." },
-    ],
-    sources: [
-      { label: "Leadpages : accepter des achats Shopify", url: `${help}4407720741517-Accept-Shopify-purchases-with-Leadpages` },
-      { label: "Shopify : ajouter des produits", url: "https://help.shopify.com/fr/manual/products/add-update-products" },
-    ],
-    related: ["connecter-html-pub-a-shopify", "attirer-des-clients-avec-une-landing-page", "creer-un-code-de-reduction-shopify", "ajouter-des-avis-clients-shopify"],
-  },
-  {
-    slug: "regler-l-expedition-shopify",
-    question: "Comment régler les frais de livraison sur Shopify ?",
-    seoDescription: "Régler la livraison sur Shopify : zones, tarifs fixes ou selon le poids, livraison gratuite dès un montant, et le test avant d'ouvrir.",
-    summary: "Zones de livraison, tarifs fixes ou selon le poids, et livraison gratuite dès un montant.",
-    theme: "boutique",
-    publishedOn: "2026-09-27",
-    updatedOn: "2026-09-27",
-    intro:
-      "Les frais de livraison se règlent une seule fois, par zone de livraison. Des tarifs simples et justes évitent les paniers abandonnés au moment de payer.",
-    steps: [
-      {
-        title: "Ouvrez « Expédition et livraison »",
-        text: "Dans l'administration, cliquez sur « Paramètres », en bas à gauche, puis sur « Expédition et livraison ». Le « Profil général » s'applique à tous vos produits : c'est lui que vous allez régler.",
-      },
-      {
-        title: "Créez vos zones de livraison",
-        text: "Une zone regroupe les pays qui ont les mêmes tarifs. Commencez simple : une zone pour votre pays, puis une zone pour le reste de l'Union européenne si vous livrez à l'étranger. Un client d'un pays sans zone ne pourra pas commander.",
-      },
-      {
-        title: "Ajoutez un tarif à chaque zone",
-        text: "Dans une zone, cliquez sur « Ajouter un tarif ». Donnez-lui un nom clair que le client verra au paiement, comme « Livraison à domicile (3 à 5 jours) », puis un prix. Un tarif fixe est le plus facile à comprendre.",
-      },
-      {
-        title: "Ajoutez des conditions si besoin",
-        text: "Cliquez sur « Ajouter des conditions » pour qu'un tarif dépende du poids des articles ou du prix de la commande. Exemple : un tarif « Livraison gratuite » à 0 €, seulement pour les commandes à partir de 50 €. C'est souvent ce qui pousse à ajouter un article au panier.",
-      },
-      {
-        title: "Indiquez votre emballage habituel",
-        text: "Dans « Emballages », entrez les dimensions et le poids de votre colis le plus courant. Avec le poids de chaque produit, Shopify calcule ainsi le poids réel des commandes.",
-      },
-      {
-        title: "Testez au paiement",
-        text: "Passez une commande test avec une adresse de chaque zone et regardez les frais proposés. Vérifiez aussi le seuil de livraison gratuite, juste en dessous puis juste au-dessus du montant.",
-      },
-    ],
-    pitfalls: [
-      "Laisser le poids des produits à 0 : les tarifs basés sur le poids deviennent faux.",
-      "Oublier un pays où vous voulez vendre : ses clients sont bloqués au paiement.",
-      "Proposer trop de tarifs différents : le client hésite au lieu de payer.",
-    ],
-    tools: [{ slug: "shopify", why: "Zones, tarifs et conditions de livraison inclus dans tous les forfaits." }],
-    sources: [
-      { label: "Aide Shopify : zones et tarifs d'expédition", url: "https://help.shopify.com/fr/manual/fulfillment/setup/shipping-rates/setting-up-shipping-rates" },
-      { label: "Aide Shopify : tarifs d'expédition", url: "https://help.shopify.com/fr/manual/fulfillment/setup/shipping-rates" },
-    ],
-    related: ["ajouter-un-produit-shopify", "suivre-ses-commandes-et-expedier-shopify", "creer-sa-boutique-shopify-de-a-a-z", "rediger-les-politiques-shopify"],
-  },
-  {
-    slug: "suivre-ses-commandes-et-expedier-shopify",
-    question: "Comment suivre ses commandes et expédier sur Shopify ?",
-    summary: "De la nouvelle commande au colis livré : vérifier, préparer, expédier avec un numéro de suivi et prévenir le client.",
-    theme: "boutique",
-    publishedOn: "2026-09-28",
-    updatedOn: "2026-09-28",
-    intro:
-      "Votre première vente est arrivée : bravo ! Il reste à expédier le colis et à dire au client où il en est. Dans Shopify, tout se passe dans « Commandes » : chaque commande passe de « Non traitée » à « Traitée » quand vous l'expédiez, et le client reçoit son numéro de suivi par e-mail.",
-    steps: [
-      {
-        title: "Ouvrez la liste des commandes",
-        text: "Dans l'administration, cliquez sur « Commandes ». Chaque ligne montre le client, le total, l'état du paiement (par exemple « Payée ») et l'état du traitement (« Non traitée » tant que rien n'est expédié). Utilisez l'onglet ou le filtre « Non traitées » pour voir seulement les commandes à préparer.",
-      },
-      {
-        title: "Vérifiez la commande avant de préparer",
-        text: "Cliquez sur la commande. Vérifiez les articles et leurs variantes (taille, couleur), le mode de livraison choisi par le client et son adresse. Si l'adresse semble incomplète, écrivez au client avant d'expédier : un colis renvoyé coûte deux fois la livraison.",
-      },
-      {
-        title: "Préparez et envoyez le colis",
-        text: "Emballez les articles et déposez le colis chez votre transporteur (La Poste, Colissimo, Mondial Relay…). Gardez le numéro de suivi qu'il vous donne. Selon votre pays et votre forfait, Shopify permet aussi d'acheter l'étiquette directement dans la commande.",
-      },
-      {
-        title: "Marquez la commande comme traitée",
-        text: "Dans la commande, cliquez sur « Traiter les articles ». Collez le numéro de suivi : Shopify reconnaît souvent le transporteur tout seul, sinon choisissez-le dans la liste. Laissez cochée la case qui envoie la notification d'expédition au client, puis validez. La commande passe à « Traitée ».",
-      },
-      {
-        title: "Laissez le client suivre son colis",
-        text: "Le client reçoit un e-mail de confirmation d'expédition avec le lien de suivi. Le numéro reste visible dans la commande : en cas de question, ouvrez la commande et regardez le suivi avant de répondre. Les modèles de ces e-mails se trouvent dans « Paramètres », puis « Notifications ».",
-      },
-      {
-        title: "Gérez un retour ou un remboursement",
-        text: "Si le client renvoie un article, ouvrez la commande et utilisez « Retour » ou « Rembourser » selon le cas. Remboursez sur le même moyen de paiement que l'achat, et suivez les règles écrites dans votre politique de retour.",
-      },
-    ],
-    pitfalls: [
-      "Expédier sans marquer la commande comme traitée : le client ne reçoit ni e-mail ni numéro de suivi, et vous perdez le fil de ce qui est parti.",
-      "Oublier de vérifier l'adresse : un colis renvoyé coûte deux fois la livraison.",
-      "Promettre un délai de livraison qu'on ne tient pas : écrivez des délais réalistes dans vos réglages d'expédition et vos politiques.",
-    ],
-    tools: [{ slug: "shopify", why: "Commandes, numéros de suivi et e-mails d'expédition inclus dans tous les forfaits." }],
-    sources: [
-      { label: "Aide Shopify : traiter les commandes", url: "https://help.shopify.com/fr/manual/fulfillment/fulfilling-orders" },
-      { label: "Aide Shopify : commandes", url: "https://help.shopify.com/fr/manual/orders" },
-    ],
-    related: ["regler-l-expedition-shopify", "rediger-les-politiques-shopify", "ouvrir-sa-boutique-shopify-au-public", "relancer-les-paniers-abandonnes-shopify"],
-  },
-  {
-    slug: "rediger-les-politiques-shopify",
-    question: "Comment ajouter ses conditions de vente et politiques sur Shopify ?",
-    seoTitle: "Ajouter ses conditions de vente sur Shopify",
-    seoDescription: "Ajouter retours, conditions de service, expédition, coordonnées et mentions légales sur Shopify, affichés au paiement et dans le pied de page.",
-    summary: "Retours, conditions de service, expédition, coordonnées et mentions légales, affichées au paiement.",
-    theme: "boutique",
-    publishedOn: "2026-09-27",
-    updatedOn: "2026-09-27",
-    intro:
-      "Les politiques rassurent l'acheteur et sont exigées par la loi pour vendre en ligne. Shopify les affiche au paiement ; il reste à les écrire et à les mettre dans le menu.",
-    steps: [
-      {
-        title: "Ouvrez « Politiques »",
-        text: "Dans l'administration, cliquez sur « Paramètres », puis sur « Politiques ». Vous y trouvez les règles de retour et la liste des politiques écrites.",
-      },
-      {
-        title: "Réglez vos règles de retour",
-        text: "Indiquez le délai de retour, qui paie le renvoi et comment vous remboursez. En Europe, le client a en général 14 jours pour se rétracter après un achat en ligne : ne proposez pas moins.",
-      },
-      {
-        title: "Remplissez les coordonnées",
-        text: "Les « Coordonnées » sont marquées « Obligatoire ». Entrez le nom de l'entreprise, l'adresse, l'e-mail et le numéro d'entreprise : c'est ce qui permet au client de vous joindre.",
-      },
-      {
-        title: "Écrivez les autres politiques",
-        text: "Ouvrez chaque politique : retour et remboursement, confidentialité, conditions de service, expédition et mention légale. Si Shopify propose un modèle, partez de là, puis adaptez chaque phrase à votre vraie façon de travailler. Enregistrez.",
-      },
-      {
-        title: "Ajoutez-les au pied de page",
-        text: "Les politiques apparaissent au paiement, mais pas forcément dans la boutique. Dans « Contenu », puis « Menus », ouvrez le menu du pied de page et ajoutez un lien vers chacune.",
-      },
-    ],
-    pitfalls: [
-      "Garder le modèle tel quel : il peut promettre des choses que vous ne faites pas.",
-      "Des politiques qui ne correspondent pas aux réglages réels (délai de retour, frais de livraison).",
-      "Oublier le lien dans le pied de page : le client ne trouve pas vos conditions avant d'acheter.",
-    ],
-    tools: [{ slug: "shopify", why: "Modèles de politiques et affichage automatique au paiement." }],
-    sources: [
-      { label: "Aide Shopify : ajouter les politiques de la boutique", url: "https://help.shopify.com/fr/manual/checkout-settings/refund-privacy-tos" },
-      { label: "Commission européenne : droit de rétractation", url: "https://europa.eu/youreurope/citizens/consumers/shopping/guarantees-returns/index_fr.htm" },
-    ],
-    related: ["creer-un-menu-shopify", "ajouter-un-formulaire-de-contact-shopify", "regler-l-expedition-shopify", "creer-sa-boutique-shopify-de-a-a-z"],
-  },
-  {
-    slug: "creer-un-menu-shopify",
-    question: "Comment modifier le menu de sa boutique Shopify ?",
-    summary: "Ajouter, renommer, déplacer des liens et créer un menu déroulant.",
-    theme: "boutique",
-    publishedOn: "2026-09-27",
-    updatedOn: "2026-09-27",
-    intro:
-      "Le menu aide le visiteur à trouver vos produits en un clic. Shopify en crée deux au départ : le menu principal, en haut, et le menu du pied de page.",
-    steps: [
-      {
-        title: "Ouvrez « Menus »",
-        text: "Dans l'administration, cliquez sur « Contenu », puis sur « Menus ». Cliquez sur le menu à modifier, par exemple le menu principal.",
-      },
-      {
-        title: "Ajoutez un lien",
-        text: "Cliquez sur « Ajouter un élément de menu ». Écrivez le nom affiché, puis choisissez la destination : une collection, un produit, une page ou une politique. Cliquez sur « Enregistrer ».",
-      },
-      {
-        title: "Déplacez ou créez un menu déroulant",
-        text: "Faites glisser un élément pour changer l'ordre. Pour un menu déroulant, glissez un élément sous un autre et légèrement vers la droite : il devient un sous-menu.",
-      },
-      {
-        title: "Renommez ou supprimez",
-        text: "Cliquez sur un élément pour changer son nom ou sa destination. L'icône de corbeille le retire du menu, sans supprimer la page elle-même.",
-      },
-      {
-        title: "Vérifiez sur téléphone",
-        text: "Enregistrez, puis ouvrez la boutique sur votre téléphone. Le menu principal s'y affiche souvent derrière une icône : gardez des noms courts et peu d'entrées.",
-      },
-    ],
-    pitfalls: [
-      "Un menu principal de dix liens ou plus : le visiteur ne sait plus où cliquer.",
-      "Des pages pratiques (livraison, retours) dans le menu du haut au lieu du pied de page.",
-    ],
-    tools: [{ slug: "shopify", why: "Menus et sous-menus modifiables sans code." }],
-    sources: [{ label: "Aide Shopify : modifier les menus", url: "https://help.shopify.com/fr/manual/online-store/menus-and-links/editing-menus" }],
-    related: ["choisir-un-theme-shopify", "rediger-les-politiques-shopify", "ajouter-un-formulaire-de-contact-shopify", "creer-sa-boutique-shopify", "creer-une-collection-shopify"],
-  },
-  {
-    slug: "ouvrir-sa-boutique-shopify-au-public",
-    question: "Comment retirer le mot de passe de sa boutique Shopify ?",
-    seoDescription: "Retirer le mot de passe de sa boutique Shopify pour l'ouvrir au public, et la liste de ce qu'il faut vérifier avant le grand jour.",
-    summary: "Ouvrir la boutique au public en désactivant le mode privé, et ce qu'il faut vérifier avant.",
-    theme: "boutique",
-    publishedOn: "2026-09-27",
-    updatedOn: "2026-09-27",
-    intro:
-      "Une nouvelle boutique Shopify est protégée par un mot de passe : personne ne peut acheter. Pour l'ouvrir, il faut d'abord choisir un forfait, puis désactiver le mode privé.",
-    steps: [
-      {
-        title: "Choisissez un forfait",
-        text: "Le mot de passe ne peut être retiré qu'après le choix d'un forfait. Dans « Paramètres », puis « Forfait », choisissez-en un. Pendant l'essai gratuit, l'abonnement ne commence qu'à la fin de l'essai.",
-      },
-      {
-        title: "Ouvrez les préférences de la boutique",
-        text: "Dans le menu de gauche, cliquez sur « Boutique en ligne », puis sur « Préférences ». Descendez jusqu'à la section « Accès à la boutique ».",
-      },
-      {
-        title: "Désactivez le mode privé",
-        text: "Désactivez « Mode privé », puis enregistrez. La boutique est visible pour tout le monde, sans mot de passe.",
-      },
-      {
-        title: "Remplissez le titre et la description pour Google",
-        text: "Sur la même page, écrivez le titre et la méta-description de la page d'accueil. C'est ce que Google et les réseaux sociaux affichent quand on partage la boutique.",
-      },
-      {
-        title: "Vérifiez depuis un autre appareil",
-        text: "Ouvrez l'adresse de la boutique sur un téléphone où vous n'êtes pas connecté : la page d'accueil doit s'afficher directement, sans demande de mot de passe.",
-      },
-    ],
-    pitfalls: [
-      "Ouvrir la boutique sans commande test : c'est le premier client qui découvre les erreurs.",
-      "Ouvrir avec des politiques vides ou des produits de démonstration encore actifs.",
-    ],
-    tools: [{ slug: "shopify", why: "La boutique s'ouvre en un clic une fois le forfait choisi." }],
-    sources: [
-      { label: "Aide Shopify : protection par mot de passe", url: "https://help.shopify.com/fr/manual/online-store/themes/os/customize/password-page" },
-      { label: "Aide Shopify : préférences de la boutique en ligne", url: "https://help.shopify.com/fr/manual/online-store/setting-up/preferences" },
-    ],
-    related: ["choisir-son-forfait-shopify", "connecter-son-domaine-shopify", "suivre-ses-commandes-et-expedier-shopify", "creer-sa-boutique-shopify-de-a-a-z"],
-  },
-  {
-    slug: "creer-un-tunnel-de-vente-avec-leadpages-et-shopify-de-a-a-z",
-    question: "Comment créer un tunnel de vente avec Leadpages et Shopify de A à Z ?",
-    seoTitle: "Tunnel de vente Leadpages + Shopify de A à Z",
-    summary:
-      "Guide complet pour construire un tunnel de vente qui capture des contacts avec Leadpages et les transforme en clients sur Shopify, étape par étape.",
-    theme: "boutique",
-    updatedOn: "2026-09-28",
-    popular: true,
-    format: "complet",
-    intro:
-      "Un tunnel de vente, c'est le chemin que suit un visiteur entre la découverte de votre offre et l'achat. Au lieu d'envoyer tout le monde directement sur votre boutique Shopify, vous commencez par capturer leur email avec une landing page Leadpages, vous les convainquez par email, puis vous les envoyez vers Shopify pour acheter. Ce guide monte le tunnel complet, de la première page au premier paiement.",
-    steps: [
-      {
-        title: "Comprenez la structure d'un tunnel de vente",
-        text: "Un tunnel de vente suit quatre étapes : attirer l'attention, capturer le contact, nourrir la relation par email, puis proposer l'achat. Chaque étape a un outil adapté.\n\nLeadpages gère les deux premières étapes : la landing page qui attire et le formulaire qui capture l'email. Votre service d'emailing gère la troisième. Shopify gère la dernière : le paiement et la livraison. L'ensemble forme un système automatisé qui vend pendant que vous dormez.",
-      },
-      {
-        title: "Préparez votre offre dans Shopify",
-        text: "Avant de construire le tunnel, votre produit doit être prêt dans Shopify. Créez le produit avec ses photos, son prix, sa description et ses variantes. Vérifiez que le paiement fonctionne en passant une commande test.\n\nCopiez le lien direct vers le produit ou la collection : vous en aurez besoin pour le bouton d'achat dans vos emails et sur votre page de vente.",
-      },
-      {
-        title: "Créez un lead magnet irrésistible",
-        text: "Le lead magnet, c'est ce que vous offrez en échange de l'email. Un guide PDF, une checklist, un code de réduction, un accès anticipé. Il doit résoudre un problème concret de votre client idéal et être directement lié à votre produit payant.\n\nExemple : vous vendez des accessoires de cuisine sur Shopify. Votre lead magnet peut être « 10 recettes rapides pour la semaine » en PDF. Le visiteur donne son email, reçoit les recettes, puis vos emails lui présentent vos accessoires.",
-      },
-      {
-        title: "Construisez la landing page de capture",
-        text: "Dans Leadpages, créez une nouvelle page à partir d'un modèle ou avec l'IA. La page a un seul objectif : convaincre le visiteur de laisser son email en échange du lead magnet.\n\nLe titre doit annoncer le bénéfice du lead magnet. Le formulaire ne demande que l'email. Le bouton dit exactement ce que le visiteur reçoit : « Recevoir les 10 recettes » plutôt que « S'inscrire ». Supprimez tout ce qui distrait : pas de menu, pas de liens vers d'autres pages.",
-      },
-      {
-        title: "Connectez votre service d'emailing",
-        text: "Dans Leadpages, ouvrez les intégrations de votre page et connectez votre service d'emailing : Mailchimp, ConvertKit, ActiveCampaign ou un autre. Chaque nouvel inscrit est automatiquement ajouté à une liste ou un tag spécifique.\n\nCréez une liste ou un tag dédié à ce tunnel pour que vos emails de vente n'arrivent qu'aux personnes qui ont demandé ce lead magnet précis.",
-      },
-      {
-        title: "Écrivez la séquence d'emails",
-        text: "Préparez 4 à 6 emails automatiques envoyés sur 7 à 10 jours. Le premier email livre le lead magnet. Les suivants apportent de la valeur et présentent progressivement votre produit Shopify.\n\nEmail 1 : livraison du lead magnet + présentation rapide de vous. Email 2 : un conseil lié au sujet du lead magnet. Email 3 : l'histoire d'un client qui a résolu son problème avec votre produit. Email 4 : présentation du produit avec le lien vers Shopify. Email 5 : rappel avec un code de réduction à durée limitée.",
-      },
-      {
-        title: "Créez un code de réduction dans Shopify",
-        text: "Dans Shopify, allez dans Réductions et créez un code promotionnel réservé aux abonnés de votre tunnel. Un code comme BIENVENUE15 pour 15 % de réduction sur la première commande donne une raison d'acheter maintenant plutôt que plus tard.\n\nLimitez le code à une utilisation par client et fixez une date d'expiration pour créer un sentiment d'urgence réel.",
-      },
-      {
-        title: "Construisez la page de vente",
-        text: "Créez une deuxième page dans Leadpages : la page de vente. C'est la page vers laquelle vos emails envoient les contacts prêts à acheter. Elle présente votre produit en détail avec un bouton qui renvoie vers Shopify.\n\nCette page est plus longue que la page de capture : témoignages, détails du produit, garantie, FAQ. Le bouton d'achat utilise le lien direct vers votre produit Shopify.",
-      },
-      {
-        title: "Configurez la page de remerciement",
-        text: "Après l'inscription sur la page de capture, le visiteur arrive sur une page de remerciement. Utilisez-la pour renforcer l'engagement : rappelez de vérifier les spams, proposez de suivre vos réseaux sociaux, ou montrez un aperçu de votre produit Shopify.\n\nDans Leadpages, configurez la redirection post-formulaire vers votre page de remerciement. Vous pouvez aussi y placer directement votre offre avec le code de réduction pour les plus pressés.",
-      },
-      {
-        title: "Testez le tunnel complet",
-        text: "Avant d'envoyer du trafic, parcourez vous-même chaque étape. Inscrivez-vous avec une adresse test, vérifiez que l'email de bienvenue arrive, cliquez sur chaque lien de la séquence, et passez une commande test sur Shopify avec le code de réduction.\n\nVérifiez sur mobile aussi : la majorité du trafic viendra de là. Si un email ne s'affiche pas bien ou qu'un bouton est trop petit, corrigez avant de lancer.",
-      },
-      {
-        title: "Envoyez du trafic vers la page de capture",
-        text: "Le tunnel est prêt : il faut maintenant y envoyer des visiteurs. Les sources les plus courantes : une publicité Facebook ou Instagram qui cible votre audience, un post sur les réseaux sociaux avec le lien vers la page, un article de blog qui renvoie vers le lead magnet, ou un partenariat avec un créateur de contenu dans votre niche.\n\nCommencez avec un petit budget publicitaire pour valider que le tunnel convertit avant d'augmenter les dépenses.",
-      },
-      {
-        title: "Suivez les résultats à chaque étape",
-        text: "Un tunnel de vente se mesure étape par étape. Notez le taux de conversion de la landing page, le taux d'ouverture des emails, le taux de clic vers Shopify et le taux d'achat final.\n\nDans Leadpages, le tableau de bord donne le taux de conversion de la page. Dans votre service d'emailing, vous voyez les ouvertures et les clics. Dans Shopify, les ventes avec le code de réduction vous montrent combien de ventes viennent du tunnel.",
-      },
-      {
-        title: "Optimisez avec les tests A/B",
-        text: "Une fois que le tunnel tourne et génère des données, améliorez chaque étape. Testez deux titres différents sur la page de capture. Testez deux objets d'email. Testez deux prix ou deux offres sur la page de vente.\n\nDans Leadpages, utilisez les tests A/B pour la page de capture et la page de vente. Changez un seul élément à la fois et attendez au moins 100 conversions par variante avant de choisir un gagnant.",
-      },
-    ],
-    pitfalls: [
-      "Envoyer le trafic directement sur Shopify sans capturer l'email d'abord : les visiteurs qui partent sont perdus pour toujours.",
-      "Écrire une séquence d'emails 100 % promotionnelle : les contacts se désabonnent avant d'acheter.",
-      "Ne pas tester le tunnel sur mobile avant de lancer la publicité.",
-      "Utiliser un code de réduction sans date d'expiration : il n'y a aucune urgence à acheter.",
-      "Lancer de la publicité payante avant d'avoir vérifié que chaque étape du tunnel fonctionne.",
-    ],
-    tools: [
-      { slug: "leadpages", why: "Landing pages de capture et de vente avec intégrations emailing et tests A/B." },
-      { slug: "html-pub", why: "Alternative rapide pour créer des pages de capture et de vente avec l'IA." },
-      { slug: "shopify", why: "Boutique en ligne pour gérer les produits, les paiements et les livraisons." },
-    ],
-    sources: [
-      { label: "Leadpages : intégrations", url: "https://leadpages.com/integrations" },
-      { label: "Aide Shopify : codes de réduction", url: "https://help.shopify.com/fr/manual/discounts" },
-      pricing,
-    ],
-    related: ["creer-sa-boutique-shopify-de-a-a-z", "creer-sa-landing-page-leadpages-de-a-a-z", "ameliorer-le-taux-de-conversion-de-ses-pages-de-a-a-z"],
+      "Construire le produit pendant des mois avant d'avoir une liste : commencez par la page de capture.",
+      "Envoyer du trafic avant d'avoir testé un achat de bout en bout.",
+      "Multiplier les offres au début : une seule, bien testée, suffit.",
+    ],
+    tools: sio("Toutes les étapes dans un seul outil, à partir du plan gratuit."),
+    sources: [S.pricing, S.funnel, S.campaign, S.orderForm, S.course, S.domain],
+    related: ["creer-son-compte-systeme-io", "creer-une-page-de-capture-systeme-io", "creer-une-sequence-d-e-mails-automatique-systeme-io", "vendre-un-produit-numerique-avec-systeme-io", "creer-et-vendre-une-formation-en-ligne-systeme-io"],
   },
 ];
 
 export const tools: Tool[] = [
   {
-    slug: "html-pub",
-    name: "HTML Pub",
-    summary: "Publier des landing pages, des sites et des blogs avec l'IA, par Leadpages.",
-    website: "https://htmlpub.com",
-    affiliateUrl: affiliateLink,
-    freePlan: false,
-    themes: ["creer", "publier", "contacts", "ia"],
+    slug: "systeme-io",
+    name: "systeme.io",
+    summary:
+      "Outil tout-en-un pour vendre en ligne : tunnels de vente, e-mails, automatisations, formations, blog, produits physiques et affiliation, avec un plan gratuit sans carte bancaire.",
+    website: affiliateLinks.fr,
+    affiliateUrl: affiliateLinks.fr,
+    freePlan: true,
+    themes: ["decouvrir", "tunnels", "vendre", "emails", "formations", "affiliation", "comparer"],
     goodFor:
-      "Les créateurs seuls et les petites équipes qui veulent mettre en ligne vite une page, un site ou un blog sur leur domaine, avec un assistant IA. Trois offres : Starter, Pro et Business, avec 7 jours d'essai.",
+      "Indépendants, coachs, formateurs et créateurs qui vendent des produits numériques et veulent construire une liste d'e-mails sans assembler plusieurs outils.",
     watchOut:
-      "Pas de tests A/B, de cartes de chaleur ni de Smart Traffic : il faut passer à Leadpages pour ça. Les crédits IA sont limités chaque mois.",
-    logo: { src: "https://htmlpub.com/apple-icon.png", fit: "cover", direct: true },
-  },
-  {
-    slug: "leadpages",
-    name: "Leadpages",
-    summary: "Landing pages avec tests A/B, cartes de chaleur et optimisation par IA.",
-    website: "https://leadpages.com",
-    affiliateUrl: affiliateLink,
-    freePlan: false,
-    themes: ["optimiser", "choisir", "contacts"],
-    goodFor:
-      "Ceux qui envoient déjà du trafic (publicité, réseaux) et veulent convertir plus. Tout HTML Pub, plus les tests A/B (Grow), Smart Traffic et les cartes de chaleur (Optimize), l'optimisation automatique (Scale). Trafic illimité, 7 jours d'essai.",
-    watchOut:
-      "Plus cher que HTML Pub : inutile tant que vous avez peu de visiteurs. Une carte bancaire est demandée pour l'essai.",
-    logo: { src: "https://leadpages.com/apple-icon.png", fit: "cover", direct: true },
-  },
-  {
-    slug: "shopify",
-    name: "Shopify",
-    summary: "Créer sa boutique en ligne et vendre partout, avec paiements intégrés.",
-    website: "https://www.shopify.com/fr",
-    affiliateUrl: shopifyLink,
-    freePlan: false,
-    themes: ["boutique"],
-    goodFor:
-      "Ceux qui veulent vendre des produits physiques ou numériques en ligne, seuls ou en petite équipe. Quatre forfaits (Basic, Grow, Advanced, Plus), 3 jours d'essai puis une offre de lancement à 1 €/mois pendant 3 mois.",
-    watchOut:
-      "Les applications payantes s'ajoutent au forfait. Sans Shopify Payments, des frais de transaction supplémentaires s'appliquent.",
-    logo: { src: "https://cdn.shopify.com/b/shopify-brochure2-assets/c97c60ca19c64a8b5378d9f9e971f7bd.png", fit: "cover", direct: true },
+      "Plan gratuit limité (1 campagne, 1 règle, 3 tunnels, 2 000 contacts), pas de webinaire en direct, et pas de gestion de l'expédition pour les produits physiques.",
   },
 ];
 
@@ -2844,7 +1305,7 @@ export function toolLink(tool: Tool) {
 
 // Guides à lire ensuite : d'abord la liste `related`, puis d'autres guides du même thème
 // (populaires d'abord, puis les plus récents).
-export function getRelatedGuides(guide: Guide, limit = 4): Guide[] {
+export function getRelatedGuides(guide: Guide, limit = 5): Guide[] {
   const result: Guide[] = [];
   const seen = new Set<string>([guide.slug]);
   for (const slug of guide.related) {

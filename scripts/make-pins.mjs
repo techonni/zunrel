@@ -38,29 +38,30 @@ const { guides } = await import(join(work, "guides.mts"));
 // Titres courts et accrocheurs pour l'épingle (sinon : la question du guide).
 // Le mot entre [crochets] est mis en couleur.
 const titles = {
-  "combien-coute-leadpages": "Combien coûte [Leadpages] en 2026 ?",
-  "combien-coute-shopify": "Combien coûte [Shopify] en 2026 ?",
-  "ameliorer-le-taux-de-conversion-de-ses-pages-de-a-a-z": "Plus de [contacts] avec les mêmes visiteurs",
-  "regler-l-expedition-shopify": "Régler ses frais de [livraison] Shopify",
-  "rediger-les-politiques-shopify": "Les [politiques] de votre boutique Shopify",
-  "creer-un-menu-shopify": "Un [menu] clair pour votre boutique",
-  "ouvrir-sa-boutique-shopify-au-public": "Ouvrir sa boutique au [public]",
-  "creer-un-tunnel-de-vente-avec-leadpages-et-shopify-de-a-a-z": "Un [tunnel de vente] Leadpages + Shopify",
-  "ajouter-des-variantes-shopify": "Tailles et couleurs : les [variantes] Shopify",
-  "ajouter-un-formulaire-de-contact-shopify": "Une page [Contact] pour votre boutique",
-  "suivre-ses-commandes-et-expedier-shopify": "Expédier vos [commandes] Shopify",
-  "ajouter-google-analytics-a-une-page-leadpages": "[Google Analytics] sur Leadpages",
-  "creer-une-page-de-remerciement-leadpages": "Une page [Merci] qui convertit",
-  "vendre-sur-instagram-avec-shopify": "Vendre sur [Instagram] avec Shopify",
-  "relancer-les-paniers-abandonnes-shopify": "Relancer les [paniers abandonnés] sur Shopify",
-  "ajouter-un-compte-a-rebours-leadpages": "Un [compte à rebours] sur Leadpages",
-  "creer-une-page-bientot-disponible-html-pub": "Une page [bientôt disponible] avec HTML Pub",
-  "ajouter-des-avis-clients-shopify": "Des [avis clients] sur Shopify",
-  "creer-une-collection-shopify": "Créer une [collection] sur Shopify",
-  "creer-une-page-webinaire-leadpages": "Une page [webinaire] avec Leadpages",
-  "creer-une-carte-cadeau-shopify": "Vendre des [cartes-cadeaux] sur Shopify",
-  "creer-une-page-de-tarifs-html-pub": "Une page de [tarifs] avec HTML Pub",
-  "creer-une-page-lien-en-bio-avec-html-pub": "Votre page [lien en bio] Instagram et TikTok",
+  "c-est-quoi-systeme-io": "[systeme.io], c'est quoi ?",
+  "plan-gratuit-systeme-io": "Le plan [gratuit] de systeme.io",
+  "combien-coute-systeme-io": "Combien coûte [systeme.io] en 2026 ?",
+  "creer-son-compte-systeme-io": "Bien démarrer sur [systeme.io]",
+  "creer-un-tunnel-de-vente-systeme-io": "Créer un [tunnel de vente] systeme.io",
+  "creer-une-page-de-capture-systeme-io": "Une [page de capture] avec systeme.io",
+  "connecter-son-nom-de-domaine-a-systeme-io": "Votre [nom de domaine] sur systeme.io",
+  "creer-un-blog-avec-systeme-io": "Un [blog] avec systeme.io",
+  "vendre-un-produit-numerique-avec-systeme-io": "Vendre un [ebook] avec systeme.io",
+  "connecter-stripe-et-paypal-a-systeme-io": "[Stripe] et PayPal sur systeme.io",
+  "vendre-des-produits-physiques-avec-systeme-io": "Vendre des [produits physiques] avec systeme.io",
+  "ajouter-un-upsell-un-order-bump-et-un-code-promo-systeme-io": "[Upsell], order bump et code promo",
+  "envoyer-une-newsletter-avec-systeme-io": "Envoyer une [newsletter] avec systeme.io",
+  "creer-une-sequence-d-e-mails-automatique-systeme-io": "Une [séquence d'e-mails] automatique",
+  "automatiser-avec-les-regles-systeme-io": "Les [automatisations] de systeme.io",
+  "ameliorer-la-delivrabilite-de-ses-e-mails-systeme-io": "Vos e-mails hors des [spams]",
+  "creer-et-vendre-une-formation-en-ligne-systeme-io": "Vendre une [formation] avec systeme.io",
+  "creer-un-webinaire-automatique-systeme-io": "Un [webinaire] automatique",
+  "creer-son-programme-d-affiliation-systeme-io": "Votre [programme d'affiliation]",
+  "devenir-affilie-systeme-io": "Devenir [affilié] systeme.io",
+  "systeme-io-ou-leadpages": "systeme.io ou [Leadpages] ?",
+  "systeme-io-ou-shopify": "systeme.io ou [Shopify] ?",
+  "migrer-vers-systeme-io": "[Migrer] vers systeme.io",
+  "lancer-son-business-en-ligne-avec-systeme-io-de-a-a-z": "Lancer son business avec [systeme.io]",
 };
 
 const escape = (text) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -71,7 +72,7 @@ const title = (guide) => {
 
 // --variant minimal : troisième épingle, sobre (fond clair, titre et résumé), comme la capa du X.
 function minimal(guide) {
-  const badge = guide.theme === "boutique" ? "Shopify" : guide.slug.includes("html-pub") ? "HTML Pub" : "Leadpages";
+  const badge = "systeme.io";
   const dots = Array.from({ length: 12 }, (_, i) => {
     const a = (i / 12) * 2 * Math.PI;
     return `<circle cx="${12 + 8.1 * Math.sin(a)}" cy="${12 - 8.1 * Math.cos(a)}" r="1.25" fill="#171717"/>`;
@@ -98,7 +99,7 @@ p{margin-top:48px;font-size:36px;line-height:1.4;color:#737373}
 
 // --variant etapes : quatrième épingle, fond noir, titre et toutes les étapes en liste.
 function etapes(guide) {
-  const badge = guide.theme === "boutique" ? "Shopify" : guide.slug.includes("html-pub") ? "HTML Pub" : "Leadpages";
+  const badge = "systeme.io";
   const dots = Array.from({ length: 12 }, (_, i) => {
     const a = (i / 12) * 2 * Math.PI;
     return `<circle cx="${12 + 8.1 * Math.sin(a)}" cy="${12 - 8.1 * Math.cos(a)}" r="1.25" fill="#ffffff"/>`;
@@ -133,8 +134,8 @@ li b{font-weight:900;color:#a0a0a0;width:44px;flex:none}
 function html(guide) {
   if (variant === "minimal") return minimal(guide);
   if (variant === "etapes") return etapes(guide);
-  const shop = guide.theme === "boutique";
-  const badge = shop ? "Shopify" : guide.slug.includes("html-pub") ? "HTML Pub" : "Leadpages";
+  const shop = false;
+  const badge = "systeme.io";
   const errors = variant === "erreurs";
   const shorten = (text) => {
     const head = text.split(/ : |: | \(|, alors que /)[0].replace(/\.$/, "");

@@ -4,9 +4,8 @@ import Base from "../../layouts/Base.astro";
 import { guides } from "../../lib/guides";
 
 const gifts = [
-  { href: "/newsletter/checklist-shopify/", label: "Checklist de lancement Shopify", text: "Les 10 étapes à cocher avant d'ouvrir votre boutique." },
-  { href: "/newsletter/checklist-leadpages/", label: "Checklist : lancer sa première landing page", text: "Les 10 étapes pour une page Leadpages ou HTML Pub qui récolte des contacts." },
-  { href: "/newsletter/modeles-landing-page/", label: "Modèles de textes pour landing page", text: "Titres, boutons, formulaire et remerciement, à copier et compléter." },
+  { href: "/newsletter/checklist-systeme-io/", label: "Checklist : lancer son premier tunnel systeme.io", text: "Les 10 étapes à cocher, du compte gratuit au premier achat test." },
+  { href: "/newsletter/modeles-landing-page/", label: "Modèles de textes pour page de capture", text: "Titres, boutons, formulaire et remerciement, à copier et compléter." },
 ];
 const latest = [...guides].sort((a, b) => b.updatedOn.localeCompare(a.updatedOn)).slice(0, 3);
 ---
@@ -14,7 +13,7 @@ const latest = [...guides].sort((a, b) => b.updatedOn.localeCompare(a.updatedOn)
 <Base title="Inscription confirmée" description="Votre inscription à la newsletter Zunrel est confirmée.">
   <h1 class="text-[22px] font-semibold leading-7 text-white">C'est confirmé, merci !</h1>
   <p class="mt-4 text-[15px] leading-6 text-[#95959b]">
-    Vous recevrez les prochains guides Leadpages, HTML Pub et Shopify par e-mail. Vous pouvez vous désinscrire à tout
+    Vous recevrez les prochains guides systeme.io par e-mail. Vous pouvez vous désinscrire à tout
     moment, en un clic, depuis chaque e-mail.
   </p>
   <p class="mt-4 text-[15px] leading-6 text-[#95959b]">

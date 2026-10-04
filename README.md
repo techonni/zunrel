@@ -1,6 +1,6 @@
 # Zunrel
 
-Guides « comment faire » pour Leadpages, HTML Pub et Shopify, étape par étape : https://zunrel.com
+Guides « comment faire » pour systeme.io, étape par étape (FR complet, PT et EN pour les guides essentiels) : https://zunrel.com
 
 Site statique Astro + Tailwind, publié sur Cloudflare Pages (projet `zunrel`) à chaque push sur `main`. Le Worker `zunrel` ne fait que renvoyer vers `zunrel.pages.dev` : ne pas lancer `wrangler deploy`.
 
