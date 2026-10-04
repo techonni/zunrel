@@ -1,6 +1,6 @@
 <!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Zunrel · Moins d'apps. Plus d'intention. (maquette v4)</title><meta name="description" content="Un magazine léger sur le minimalisme digital : écrans épurés, apps à une action, routines sans notifications."><meta name="robots" content="noindex, nofollow">
-<link rel="icon" type="image/svg+xml" href="logo-zunrel.svg">
+<title>Outils · Zunrel (maquette v4)</title><meta name="description" content="Des réglages et des pratiques simples pour un téléphone plus calme."><meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/svg+xml" href="../logo-zunrel.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -81,23 +81,24 @@ footer nav{display:flex;gap:18px}
 .grid{grid-template-columns:repeat(3,1fr)}
 }
 @media (max-width:480px){.nlf .row{flex-direction:column}.nlf input[type=email]{flex:none;width:100%}.nlf button{width:100%}.nav{gap:16px;font-size:14px}}</style></head><body>
-<header class="hd"><div class="w"><a class="brand" href="./"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 64 64" role="img" aria-label="Zunrel">
+<header class="hd"><div class="w"><a class="brand" href="../"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 64 64" role="img" aria-label="Zunrel">
   <rect width="64" height="64" rx="15" fill="#000"/>
   <path d="M20 21h24L20 43h24" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>Zunrel</a>
-<nav class="nav"><a href="./#articles">Articles</a><a href="./outils/">Outils</a><a href="./#lettre">Lettre</a></nav></div></header>
-<main class="w">
-<section class="hero"><h1><span>Moins d'apps.</span> <span>Plus d'intention.</span></h1><p>Un magazine calme sur le minimalisme digital.</p><a class="btn" href="#articles">Lire les articles</a></section>
-<section id="articles"><h2 class="sl">Derniers articles</h2><ol class="list"><li><a href="./article/"><time datetime="2026-10-04">4 oct. 2026</time><div class="tx"><h3>Désencombrer l'écran d'accueil en 20 minutes</h3><p>Une page, quatre apps dans le dock, le reste rangé. La méthode, minute par minute.</p></div></a></li>
-<li><div class="it"><time datetime="2026-10-04">4 oct. 2026</time><div class="tx"><h3>Une app, une action</h3><p>Pourquoi les outils qui ne font qu'une chose se laissent oublier, et c'est tant mieux.</p></div></div></li>
-<li><div class="it"><time datetime="2026-10-04">4 oct. 2026</time><div class="tx"><h3>Les notifications, à heures fixes</h3><p>Regrouper les alertes non urgentes en deux ou trois rendez-vous par jour.</p></div></div></li>
-<li><div class="it"><time datetime="2026-10-04">4 oct. 2026</time><div class="tx"><h3>Le mode Concentration, réglé une fois</h3><p>Un profil pour le travail, un pour le soir. Ensuite, on n'y touche plus.</p></div></div></li>
-<li><div class="it"><time datetime="2026-10-04">4 oct. 2026</time><div class="tx"><h3>Moins de champs, moins de friction</h3><p>Les bons outils retirent des étapes : pas de titre, pas de dossier, juste la note.</p></div></div></li>
-<li><div class="it"><time datetime="2026-10-04">4 oct. 2026</time><div class="tx"><h3>La première heure sans écran</h3><p>Un réveil à part, le téléphone hors de la chambre, et une matinée qui commence plus calmement.</p></div></div></li></ol></section>
-<section class="letter" id="lettre"><h2>La lettre</h2><p class="t">Un e-mail calme quand un nouvel article paraît. Rien d'autre.</p>
-<form class="nlf" action="https://gmail.us9.list-manage.com/subscribe/post?u=13aa96838d6074fef23022e3e&id=893c08eb5d&f_id=0073d9e1f0" method="post" target="zunrel-newsletter-frame" onsubmit="var m=this.querySelector('.msg');if(!this.EMAIL.value||!this.EMAIL.checkValidity()){m.textContent='Entrez une adresse e-mail valide, par exemple vous@exemple.com.';return false}m.textContent='Dernière étape : ouvrez l\'e-mail envoyé à '+this.EMAIL.value+' et cliquez sur le bouton pour confirmer.';">
-<input type="hidden" name="tags" value="11404680"><label for="email-home">Adresse e-mail</label>
-<div class="row"><input id="email-home" type="email" name="EMAIL" required autocomplete="email" inputmode="email" placeholder="vous@exemple.com"><div class="hp" aria-hidden="true"><input type="text" name="b_13aa96838d6074fef23022e3e_893c08eb5d" tabindex="-1" value=""></div><button type="submit">S'inscrire</button></div>
-<p class="msg" aria-live="polite">Vous recevrez un e-mail pour confirmer. Désinscription en un clic.</p></form><iframe name="zunrel-newsletter-frame" title="Inscription à la lettre" hidden></iframe></section>
+<nav class="nav"><a href="../#articles">Articles</a><a href="../outils/" aria-current="page">Outils</a><a href="../#lettre">Lettre</a></nav></div></header>
+<main class="w wide">
+<section class="oh"><h1>Outils</h1><p>Des réglages et des pratiques simples pour un téléphone plus calme.</p></section>
+<div class="grid"><div><h3>Écran d'accueil épuré</h3><p>Une seule page, quatre apps dans le dock, le reste dans la Bibliothèque d'apps.</p></div>
+<div><h3>Mode Concentration</h3><p>Des profils qui filtrent les apps et les personnes selon le moment de la journée.</p></div>
+<div><h3>Résumé programmé</h3><p>Les notifications non urgentes arrivent ensemble, à heures fixes.</p></div>
+<div><h3>Pastilles désactivées</h3><p>Plus de chiffres rouges sur les icônes, app par app.</p></div>
+<div><h3>Apps à une seule action</h3><p>Un outil qui s'ouvre directement sur la seule chose à faire.</p></div>
+<div><h3>Fond d'écran uni</h3><p>Une couleur calme, pour que les icônes ne se disputent pas l'attention.</p></div>
+<div><h3>Niveaux de gris</h3><p>Un filtre d'affichage qui rend l'écran moins attirant, à activer le soir.</p></div>
+<div><h3>Temps d'arrêt</h3><p>Une plage horaire où seules les apps choisies restent disponibles.</p></div>
+<div><h3>Réveil séparé</h3><p>Un réveil hors du téléphone, et le téléphone hors de la chambre.</p></div>
+<div><h3>Note sans champ</h3><p>Une note qui s'ouvre sur une page blanche, sans titre ni dossier à choisir.</p></div>
+<div><h3>Formulaire court</h3><p>Demander l'adresse e-mail, et rien d'autre.</p></div>
+<div><h3>Une tâche visible</h3><p>Une liste qui n'affiche que la prochaine chose à faire.</p></div></div>
 </main>
-<footer><div class="w"><span>© 2026 Zunrel. Un magazine sur le minimalisme digital.</span><nav><a href="./#articles">Articles</a><a href="./outils/">Outils</a><a href="./#lettre">Lettre</a></nav></div></footer></body></html>
+<footer><div class="w"><span>© 2026 Zunrel. Un magazine sur le minimalisme digital.</span><nav><a href="../#articles">Articles</a><a href="../outils/">Outils</a><a href="../#lettre">Lettre</a></nav></div></footer></body></html>
