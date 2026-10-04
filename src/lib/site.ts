@@ -30,8 +30,13 @@ export const freeGuide = "Guide gratuit : un iPhone épuré en 20 minutes";
 
 export type Post = { title: string; description: string; slug: string; date: string; dateLabel: string };
 
-// Blog : les six articles publiés, dans l'ordre du blog. Le texte de chaque article est dans src/lib/articles/.
+// Blog : ordre d'affichage. Le texte de chaque article est dans src/lib/articles/.
 export const posts: Post[] = [
+  { title: "Enlever les pastilles rouges", description: "Les badges sur les icônes donnent envie d'ouvrir. On les coupe, app par app, en deux minutes.", slug: "enlever-les-pastilles-rouges", date: "2026-10-05", dateLabel: "5 oct. 2026" },
+  { title: "L'iPhone en gris le soir", description: "Le filtre nuances de gris enlève la couleur qui attire. Un triple-clic, et il s'active après 21 h.", slug: "l-iphone-en-gris-le-soir", date: "2026-10-05", dateLabel: "5 oct. 2026" },
+  { title: "Vider Safari en deux minutes", description: "Des dizaines d'onglets ouverts ne sont pas une liste de lecture. On ferme, on garde trois adresses.", slug: "vider-safari-en-deux-minutes", date: "2026-10-05", dateLabel: "5 oct. 2026" },
+  { title: "Une limite pour les apps qui attirent", description: "Temps d'écran peut bloquer une app au bout de vingt minutes, sans toucher au reste du téléphone.", slug: "une-limite-pour-les-apps-qui-attirent", date: "2026-10-05", dateLabel: "5 oct. 2026" },
+  { title: "Le téléphone hors de la chambre", description: "Un réveil séparé, le mode Sommeil, et le téléphone qui charge dans une autre pièce.", slug: "le-telephone-hors-de-la-chambre", date: "2026-10-05", dateLabel: "5 oct. 2026" },
   {
     title: "Une seule liste pour la semaine",
     description: "Avec l'app Rappels : une liste, sept sections, et dix minutes de revue le dimanche.",
