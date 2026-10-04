@@ -1,0 +1,24 @@
+---
+import Base from "../../layouts/Base.astro";
+import { f, shop } from "../../lib/site";
+---
+
+<Base title="Boutique" description={f("Des objets et des fichiers simples pour un téléphone plus calme. Bientôt disponibles : rien n'est encore en vente.")} current="boutique">
+  <main class="w wide">
+    <section class="oh">
+      <h1>Boutique</h1>
+      <p>{f("Des objets et des fichiers simples pour un téléphone plus calme. Rien n'est encore en vente : voici ce qui se prépare.")}</p>
+    </section>
+    <div class="grid">
+      {
+        shop.map(([name, line]) => (
+          <div>
+            <h3>{f(name)}</h3>
+            <p>{f(line)}</p>
+            <span class="soon">Bientôt</span>
+          </div>
+        ))
+      }
+    </div>
+  </main>
+</Base>

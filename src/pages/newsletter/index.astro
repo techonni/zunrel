@@ -1,37 +1,11 @@
 ---
-// Page d'inscription à la newsletter (lien du pied de page et des réseaux sociaux).
 import Base from "../../layouts/Base.astro";
-import NewsletterForm from "../../components/NewsletterForm.astro";
-import GuideRow from "../../components/GuideRow.astro";
-import { guides } from "../../lib/guides";
-
-const latest = [...guides].sort((a, b) => b.updatedOn.localeCompare(a.updatedOn)).slice(0, 3);
+import Letter from "../../components/Letter.astro";
+import { f, freeGuide } from "../../lib/site";
 ---
 
-<Base
-  title="Newsletter"
-  description="Les nouveaux guides systeme.io par e-mail, avec une checklist de lancement et des modèles de textes offerts."
->
-  <h1>La newsletter Zunrel</h1>
-  <div class="mt-4 space-y-4 text-[15px] leading-6 text-[#95959b]">
-    <p>
-      Les nouveaux guides systeme.io par e-mail : tunnels de vente, pages de capture, e-mails automatiques, produits
-      numériques, formations. Chaque guide répond à une seule question, étape par étape.
-    </p>
-    <p>En cadeau :</p>
-    <ul class="list-disc space-y-1.5 pl-5">
-      <li><a href="/newsletter/checklist-systeme-io/" class="text-white underline underline-offset-4 decoration-[#808086] hover:decoration-white">la checklist pour lancer votre premier tunnel systeme.io</a>, les 10 étapes à cocher ;</li>
-      <li><a href="/newsletter/modeles-landing-page/" class="text-white underline underline-offset-4 decoration-[#808086] hover:decoration-white">les modèles de textes pour page de capture</a>, à copier et compléter.</li>
-    </ul>
-    <p>Pas de spam, pas de revente de votre adresse. Désinscription en un clic depuis chaque e-mail.</p>
-  </div>
-
-  <NewsletterForm title="S'inscrire" text="Votre adresse e-mail suffit. Vous recevrez un e-mail pour confirmer." />
-
-  <section class="mt-14">
-    <h2 class="sh">Les derniers guides</h2>
-    <div class="glist">
-      {latest.map((guide) => <GuideRow guide={guide} />)}
-    </div>
-  </section>
+<Base title="La lettre du dimanche" description={f(`Un e-mail court chaque dimanche pour un quotidien numérique plus calme. ${freeGuide}.`)} current="lettre">
+  <main class="w">
+    <div class="oh"><Letter id="email-page" heading="h1" plain /></div>
+  </main>
 </Base>

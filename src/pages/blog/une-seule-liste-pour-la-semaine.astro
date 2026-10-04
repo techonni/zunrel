@@ -1,0 +1,54 @@
+---
+import Base from "../../layouts/Base.astro";
+import Letter from "../../components/Letter.astro";
+import { f, posts, siteName } from "../../lib/site";
+import { body, caption, diagram, minutes } from "../../lib/article-liste-semaine";
+
+const post = posts[0];
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: post.title,
+  description: post.description,
+  datePublished: post.date,
+  dateModified: post.date,
+  inLanguage: "fr",
+  author: { "@type": "Organization", name: siteName, url: "https://zunrel.com/" },
+  publisher: { "@type": "Organization", name: siteName, url: "https://zunrel.com/" },
+  mainEntityOfPage: `https://zunrel.com/blog/${post.slug}/`,
+  image: "https://zunrel.com/og.png",
+};
+---
+
+<Base title={post.title} description={f(post.description)} type="article" current="blog" jsonLd={jsonLd}>
+  <main class="w">
+    <article>
+      <header class="ah">
+        <a class="back" href="/blog/">← Blog</a>
+        <h1>{f(post.title)}</h1>
+        <p class="meta"><time datetime={post.date}>{post.dateLabel}</time> · {minutes}&nbsp;min de lecture</p>
+      </header>
+      <div class="prose">
+        {
+          body.map((b) =>
+            b[0] === "p" ? (
+              <p>{f(b[1])}</p>
+            ) : b[0] === "h2" ? (
+              <h2>{f(b[1])}</h2>
+            ) : b[0] === "ol" ? (
+              <ol>{b[1].map((x) => <li>{f(x)}</li>)}</ol>
+            ) : b[0] === "ul" ? (
+              <ul>{b[1].map((x) => <li>{f(x)}</li>)}</ul>
+            ) : (
+              <figure>
+                <Fragment set:html={diagram} />
+                <figcaption>{f(caption)}</figcaption>
+              </figure>
+            ),
+          )
+        }
+      </div>
+    </article>
+    <Letter id="email-article" />
+  </main>
+</Base>

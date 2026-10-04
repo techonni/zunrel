@@ -1,12 +1,14 @@
 ---
 import Base from "../layouts/Base.astro";
-import { href } from "../lib/paths";
+import { f } from "../lib/site";
 ---
 
-<Base title="Page introuvable" description="Cette page n'existe pas.">
-  <h1>Cette page n'existe pas.</h1>
-  <p class="mt-4 text-[15px] leading-6 text-[#95959b]">Le lien est peut-être ancien. Essayez la recherche ou la liste des guides.</p>
-  <a href={href("/guides")} class="mt-8 block text-[15px] font-medium leading-5 text-white hover:underline">
-    Voir tous les guides →
-  </a>
+<Base title="Page introuvable" description="Cette page n'existe pas." noindex>
+  <main class="w">
+    <section class="oh page">
+      <h1>Cette page n'existe pas.</h1>
+      <p class="lead">{f("Le lien est peut-être ancien. Les articles sont tous sur le blog.")}</p>
+      <a class="btn" href="/blog/">Voir le blog</a>
+    </section>
+  </main>
 </Base>

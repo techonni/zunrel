@@ -1,88 +1,51 @@
 ---
-import "../styles/global.css";
-import SiteFooter from "../components/SiteFooter.astro";
-import SiteHeader from "../components/SiteHeader.astro";
-import Breadcrumbs, { type Crumb } from "../components/Breadcrumbs.astro";
-import { href } from "../lib/paths";
-import { siteName, tagline } from "../lib/guides";
-import { locales, ui, type Lang } from "../lib/i18n";
+import "../styles/site.css";
+import { f, homeDescription, homeTitle, nav, ogImage, siteName, tagline } from "../lib/site";
 
 interface Props {
+  // Titre de la page, sans le nom du site (ajouté automatiquement).
   title?: string;
   description?: string;
-  image?: string;
-  type?: string;
-  // Fil d'Ariane affiché au-dessus du titre, avec ses données structurées BreadcrumbList.
-  breadcrumbs?: Crumb[];
-  // Langue de la page (français par défaut) et versions dans les autres langues (hreflang).
-  lang?: Lang;
-  alternates?: { lang: Lang; path: string }[];
-  // Pages à sections pleine largeur (accueil, guides) : pas de colonne de texte autour du contenu.
-  bare?: boolean;
+  type?: "website" | "article";
+  // Lien du menu à marquer comme page courante.
+  current?: string;
+  // Pages à ne pas indexer (confirmation d'inscription, 404).
+  noindex?: boolean;
+  // Données structurées supplémentaires (JSON-LD).
+  jsonLd?: object;
 }
 
-const {
-  title,
-  description = tagline,
-  image = "/pins/minimal/c-est-quoi-systeme-io.jpg",
-  type = "website",
-  breadcrumbs,
-  lang = "fr",
-  alternates,
-  bare = false,
-} = Astro.props;
-const t = ui[lang];
-const imageUrl = new URL(image, Astro.site);
-
-const documentTitle = title ? `${title} · ${siteName}` : `${siteName} · ${tagline}`;
+const { title, description = homeDescription, type = "website", current, noindex = false, jsonLd } = Astro.props;
+const documentTitle = title ? `${title} · ${siteName}` : homeTitle;
 const canonical = new URL(Astro.url.pathname, Astro.site);
-
-const breadcrumbList = breadcrumbs && {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: breadcrumbs.map((crumb, index) => ({
-    "@type": "ListItem",
-    position: index + 1,
-    name: crumb.name,
-    item: crumb.path ? new URL(href(crumb.path), Astro.site).href : canonical.href,
-  })),
-};
+const imageUrl = new URL(ogImage, Astro.site);
 ---
 
 <!doctype html>
-<html lang={lang}>
+<html lang="fr">
   <head>
     <meta charset="utf-8" />
-    <meta name="impact-site-verification" content="1eabb491-b11d-43a2-a3ae-0a20046de4bc" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
-    <link rel="canonical" href={canonical} />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..800&display=swap" rel="stylesheet" />
     <title>{documentTitle}</title>
     <meta name="description" content={description} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
     <meta property="og:title" content={documentTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content={type} />
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content="fr_FR" />
     <meta property="og:image" content={imageUrl} />
-    <meta property="og:image:width" content="1000" />
-    <meta property="og:image:height" content="1500" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${siteName} : ${tagline}`} />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta property="og:locale" content={locales[lang]} />
-    {
-      alternates
-        ? [
-            ...alternates.map((item) => <link rel="alternate" hreflang={item.lang} href={new URL(item.path, Astro.site)} />),
-            <link rel="alternate" hreflang="x-default" href={new URL(alternates[0].path, Astro.site)} />,
-          ]
-        : null
-    }
     <meta name="p:domain_verify" content="485d0834fb682f692cd0c2e316b227a8" />
-    {breadcrumbList ? <script type="application/ld+json" set:html={JSON.stringify(breadcrumbList)} /> : null}
-    <slot name="head" />
+    {jsonLd ? <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} /> : null}
     <!-- Google Analytics 4 (Consent Mode : rien n'est stocké avant l'accord du visiteur) -->
     <script is:inline>
       window.dataLayer = window.dataLayer || [];
@@ -101,25 +64,31 @@ const breadcrumbList = breadcrumbs && {
     <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-KC42X29LL9"></script>
   </head>
   <body>
-    <SiteHeader lang={lang} alternates={alternates} />
-    <main>
-      {
-        bare ? (
-          <slot />
-        ) : (
-          <div class="pg">
-            {breadcrumbs ? <Breadcrumbs items={breadcrumbs} /> : null}
-            <slot />
-          </div>
-        )
-      }
-    </main>
-    <SiteFooter lang={lang} />
+    <header class="hd">
+      <div class="w">
+        <a class="brand" href="/">
+          <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="15" fill="#000"></rect><path d="M20 21h24L20 43h24" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path></svg>{siteName}
+        </a>
+        <nav class="nav" aria-label="Menu">
+          {nav.map((item) => <a href={item.href} aria-current={current === item.key ? "page" : undefined}>{item.label}</a>)}
+        </nav>
+      </div>
+    </header>
+    <slot />
+    <footer>
+      <div class="w">
+        <span>© 2026 {siteName}. {f(tagline)}</span>
+        <nav class="legal-links" aria-label="Pied de page">
+          {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+          <a href="/conditions-d-utilisation/">Conditions et cookies</a>
+        </nav>
+      </div>
+    </footer>
     <div id="zunrel-consent" hidden class="cns">
-      <p>{t.consent}</p>
+      <p>{f("Zunrel mesure son audience avec Google Analytics, seulement si tu es d'accord.")}</p>
       <div class="b">
-        <button type="button" data-consent="granted">{t.accept}</button>
-        <button type="button" data-consent="denied">{t.refuse}</button>
+        <button type="button" data-consent="granted">Accepter</button>
+        <button type="button" data-consent="denied">Refuser</button>
       </div>
     </div>
     <script is:inline>
@@ -138,35 +107,15 @@ const breadcrumbList = breadcrumbs && {
         });
       })();
     </script>
-    <!-- Événements Google Analytics : clics affiliés, partages, PDF, newsletter -->
+    <!-- Événement Google Analytics : inscription à la lettre -->
     <script is:inline>
-      (function () {
-        var guide = (location.pathname.match(/^\/(?:(?:pt|en)\/)?gui(?:de|a)s\/([^/]+)/) || [])[1] || "";
-        document.addEventListener("click", function (event) {
-          var el = event.target.closest && event.target.closest("a, button");
-          if (!el) return;
-          if (el.matches('a[rel~="sponsored"]')) {
-            gtag("event", "affiliate_click", {
-              tool: el.getAttribute("data-affiliate") || el.hostname,
-              placement: el.getAttribute("data-placement") || "autre",
-              guide: guide,
-              page: location.pathname,
-              link_url: el.href,
-            });
-          } else if (el.hasAttribute("data-share")) {
-            gtag("event", "share", { method: el.getAttribute("data-share"), content_type: "guide", item_id: guide });
-          } else if (el.hasAttribute("data-print")) {
-            gtag("event", "pdf_download", { guide: guide });
-          }
-        });
-        document.addEventListener("submit", function (event) {
-          if (event.target.hasAttribute && event.target.hasAttribute("data-newsletter")) {
-            gtag("event", "sign_up", { method: "newsletter", guide: guide });
-          }
-        });
-      })();
+      document.addEventListener("submit", function (event) {
+        if (event.target.hasAttribute && event.target.hasAttribute("data-newsletter")) {
+          gtag("event", "sign_up", { method: "newsletter", page: location.pathname });
+        }
+      });
     </script>
-    <!-- Vitesse du site (Core Web Vitals : LCP, INP, CLS, FCP, TTFB), seulement après accord -->
+    <!-- Vitesse du site (Core Web Vitals), seulement après accord -->
     <script is:inline>
       window.zunrelVitals = function () {
         if (window.zunrelVitalsStarted) return;
@@ -181,11 +130,7 @@ const breadcrumbList = breadcrumbs && {
                 page: location.pathname,
               });
             }
-            wv.onLCP(send);
-            wv.onINP(send);
-            wv.onCLS(send);
-            wv.onFCP(send);
-            wv.onTTFB(send);
+            wv.onLCP(send); wv.onINP(send); wv.onCLS(send); wv.onFCP(send); wv.onTTFB(send);
           })
           .catch(function () {});
       };

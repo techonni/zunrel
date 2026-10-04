@@ -1,101 +1,35 @@
 ---
-// Accueil v3 (maquette claire v3 approuvée par Dário le 04/10/2026).
 import Base from "../layouts/Base.astro";
-import GuideRow from "../components/GuideRow.astro";
-import NewsletterForm from "../components/NewsletterForm.astro";
-import { affiliateDisclosure, affiliateLinks, getGuide, guides, readingMinutes, type Guide } from "../lib/guides";
-import { appIcon, checkPhone, frTypo, phone, shortDate } from "../lib/v3";
-import { href } from "../lib/paths";
+import Letter from "../components/Letter.astro";
+import PostList from "../components/PostList.astro";
+import { f, homeDescription, promise, promiseSub, siteName, tagline } from "../lib/site";
 
-const g = (slug: string) => getGuide(slug) as Guide;
-const ART = "creer-un-tunnel-de-vente-systeme-io";
-const latest = [ART, "ajouter-un-upsell-un-order-bump-et-un-code-promo-systeme-io", "creer-un-webinaire-automatique-systeme-io", "ameliorer-la-delivrabilite-de-ses-e-mails-systeme-io", "devenir-affilie-systeme-io"].map(g);
-const fonctions: [string, string, string][] = [
-  ["tunnel", "Tunnel de vente", ART],
-  ["capture", "Page de capture", "creer-une-page-de-capture-systeme-io"],
-  ["email", "Emailing", "envoyer-une-newsletter-avec-systeme-io"],
-  ["cours", "Formations", "creer-et-vendre-une-formation-en-ligne-systeme-io"],
-  ["paiement", "Paiements", "connecter-stripe-et-paypal-a-systeme-io"],
-  ["affil", "Affiliation", "creer-son-programme-d-affiliation-systeme-io"],
-];
-const FEAT = g("lancer-son-business-en-ligne-avec-systeme-io-de-a-a-z");
-const lastUpdate = guides.map((item) => item.updatedOn).sort().at(-1) as string;
-const count = guides.length;
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: siteName,
+  url: "https://zunrel.com/",
+  description: homeDescription,
+  inLanguage: "fr",
+};
 ---
 
-<Base
-  bare
-  alternates={[
-    { lang: "fr", path: "/" },
-    { lang: "pt", path: "/pt/" },
-    { lang: "en", path: "/en/" },
-  ]}
->
-  <section class="sec w">
-    <h2 class="sh">Derniers guides. <span>Ce qui est nouveau sur systeme.io.</span></h2>
-    <a class="pill black" href={href("/guides")}>Tout voir</a>
-    <div class="list">{latest.map((guide) => <GuideRow guide={guide} minutes={false} />)}</div>
-  </section>
-
-  <section class="sec next w" id="fonctions">
-    <h2 class="sh">Fonctions. <span>Tout ce que fait systeme.io.</span></h2>
-    <a class="pill black" href={href("/guides")}>Tout voir</a>
-    <div class="fx">
-      {fonctions.map(([icon, name, slug]) => (
-        <a class="fn" href={href(`/guides/${slug}`)}>
-          <div class="fbox" set:html={appIcon(icon)} />
-          <div class="frow"><h3 style="font-size:inherit"><span class="h5">{name}</span></h3><span class="chip">{readingMinutes(g(slug))} min</span></div>
-        </a>
-      ))}
-    </div>
-  </section>
-
-  <section class="sec next w">
-    <h2 class="sh">À la une</h2>
-    <div class="feat">
-      <div class="tx">
-        <h3 class="fh">{frTypo(FEAT.question)}</h3>
-        <p>{FEAT.summary}</p>
-        <a class="pill black" href={href(`/guides/${FEAT.slug}`)}>Lire le guide complet</a>
-      </div>
-      <div class="im" set:html={phone(FEAT.slug)} />
-    </div>
-  </section>
-
-  <section class="blk">
-    <div class="w">
-      <h2>Un seul outil pour vendre en ligne, de la page de capture au paiement.</h2>
-      <a class="pill white" href={href("/guides")}>Voir les {count} guides</a>
-      <p class="meta"><b>{count} guides en français,</b> mis à jour le {shortDate(lastUpdate)}.</p>
-      <p class="meta">Aussi en <a href="/pt/" hreflang="pt" style="text-decoration:underline">português</a> et en <a href="/en/" hreflang="en" style="text-decoration:underline">English</a>.</p>
-      <div class="im" set:html={phone("c-est-quoi-systeme-io")} />
-    </div>
-  </section>
-
-  <section class="lead" id="checklist">
-    <div class="w">
-      <div class="art" set:html={checkPhone()} />
-      <NewsletterForm
-        tone="dark"
-        title="Recevez la checklist systeme.io gratuite"
-        text="La checklist à imprimer pour lancer votre premier tunnel systeme.io, du compte gratuit au premier achat test. Chaque étape renvoie vers un guide détaillé."
-        button="Recevoir la checklist"
-      />
-    </div>
-  </section>
-
-  <section class="hero">
-    <div class="w">
-      <div>
-        <h1><span>Devenez autonome.</span> <span>Vendez en ligne avec systeme.io.</span></h1>
-        <p class="t">Des guides courts et vérifiés pour lancer votre activité, sans assembler cinq outils.</p>
-        <div class="btns">
-          <a class="pill black" href={href("/guides")}>Lire les guides</a>
-          <a class="pill light" href={affiliateLinks.fr} target="_blank" rel="sponsored noopener" data-affiliate="systeme-io" data-placement="accueil">Essayer gratuitement</a>
-        </div>
-        <p class="dsc">{affiliateDisclosure.fr}</p>
-      </div>
-      <div class="im" set:html={phone(ART)} />
-    </div>
-  </section>
+<Base jsonLd={jsonLd}>
+  <main class="w">
+    <section class="hero">
+      <p class="kick">{f(tagline)}</p>
+      <h1>{f(promise)}</h1>
+      <p>{f(promiseSub)}</p>
+      <a class="btn" href="/blog/">Lire le blog</a>
+    </section>
+    <section id="blog">
+      <h2 class="sl">Blog</h2>
+      <PostList />
+    </section>
+    <section class="comm">
+      <h2>{f("Une communauté, pas un fil d'actualité")}</h2>
+      <p>{f("Zunrel avance avec ses lecteurs. Chaque lettre se termine par une question ; tes réponses, tes réglages et tes écrans épurés nourrissent les articles suivants.")}</p>
+    </section>
+    <Letter id="email-home" />
+  </main>
 </Base>

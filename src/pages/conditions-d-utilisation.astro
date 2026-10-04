@@ -1,53 +1,57 @@
 ---
 import Base from "../layouts/Base.astro";
-import { href } from "../lib/paths";
+import { f } from "../lib/site";
 
 const updatedOn = "4 octobre 2026";
 const sections = [
   {
     title: "Objet du site",
     body: [
-      "Zunrel publie des guides pratiques, gratuits, pour utiliser systeme.io. En consultant le site, vous acceptez les présentes conditions.",
+      "Zunrel publie des articles gratuits pour un usage plus calme et plus intentionnel de la technologie, ainsi qu'une lettre d'information hebdomadaire. En consultant le site, tu acceptes les présentes conditions.",
     ],
   },
   {
     title: "Nature des informations",
     body: [
-      "Les guides sont fournis à titre d'information générale. Ils ne constituent pas un conseil juridique, fiscal, comptable ou financier.",
-      "Les outils évoluent vite : noms de boutons, fonctions, prix et conditions peuvent changer après la date de mise à jour indiquée en haut de chaque guide. Vérifiez toujours sur le site officiel de l'outil avant de décider.",
+      "Les articles sont fournis à titre d'information générale. Les applications et les systèmes évoluent : noms de menus, fonctions et réglages peuvent changer après la date de publication d'un article.",
     ],
   },
   {
-    title: "Indépendance et liens affiliés",
+    title: "Indépendance",
     body: [
-      "Zunrel est un site indépendant. Il n'est ni édité, ni sponsorisé, ni validé par systeme.io.",
-      "Les liens vers systeme.io sont des liens affiliés (programme d'affiliation officiel de systeme.io). Si vous créez un compte via ces liens, Zunrel touche une commission, sans aucun coût supplémentaire pour vous. Ces liens sont signalés par la mention « Lien affilié ». Les commissions n'influencent pas le contenu : les limites de l'outil sont toujours indiquées.",
+      "Zunrel est un site indépendant. Les articles ne sont ni sponsorisés, ni validés par les éditeurs des applications ou des appareils cités. Aucun article n'est rémunéré par une marque.",
+    ],
+  },
+  {
+    title: "Boutique",
+    body: [
+      "La page Boutique présente des produits en préparation, signalés par la mention « Bientôt ». Rien n'y est encore en vente et aucun paiement n'est demandé. Des conditions de vente seront publiées avant toute mise en vente.",
     ],
   },
   {
     title: "Liens vers d'autres sites",
     body: [
-      "Les guides renvoient vers des sites externes (aide officielle, pages de tarifs, inscription). Zunrel n'est pas responsable de leur contenu, de leurs prix ni de leurs conditions. Votre relation contractuelle avec un outil (abonnement, paiement, remboursement) se fait directement avec son éditeur.",
+      "Le site peut renvoyer vers des sites externes. Zunrel n'est pas responsable de leur contenu ni de leurs conditions.",
     ],
   },
   {
     title: "Responsabilité",
     body: [
-      "Zunrel fait de son mieux pour que les informations soient exactes et à jour, sans pouvoir le garantir. L'utilisation des informations du site se fait sous votre propre responsabilité. Zunrel ne peut être tenu responsable d'un dommage direct ou indirect lié à leur utilisation, dans les limites prévues par la loi.",
+      "Zunrel fait de son mieux pour que les informations soient exactes et à jour, sans pouvoir le garantir. L'utilisation des informations du site se fait sous ta propre responsabilité, dans les limites prévues par la loi.",
     ],
   },
   {
     title: "Propriété intellectuelle",
     body: [
-      "Les textes et la mise en page de Zunrel sont protégés. Vous pouvez citer un court extrait avec un lien vers la page d'origine. Toute copie complète ou reproduction commerciale demande une autorisation préalable.",
-      "systeme.io, Leadpages, Shopify et les autres noms et logos cités appartiennent à leurs propriétaires respectifs. Ils sont utilisés uniquement pour identifier les outils présentés.",
+      "Les textes, schémas et la mise en page de Zunrel sont protégés. Tu peux citer un court extrait avec un lien vers la page d'origine. Toute copie complète ou reproduction commerciale demande une autorisation préalable.",
+      "Les noms d'applications et d'appareils cités appartiennent à leurs propriétaires respectifs. Ils sont utilisés uniquement pour les identifier.",
     ],
   },
   {
     title: "Données personnelles et cookies",
     body: [
-      "Le site ne demande aucun compte. Une mesure d'audience (Google Analytics 4) n'est activée qu'après votre accord dans le bandeau affiché à la première visite ; sans accord, aucun cookie de mesure n'est déposé. Votre choix est enregistré dans votre navigateur et vous pouvez l'effacer à tout moment en supprimant les données du site.",
-      "Les liens affiliés déposent un cookie chez systeme.io lorsque vous cliquez dessus (d'une durée d'un an selon le centre d'aide de systeme.io), selon ses propres règles de confidentialité.",
+      "Le site ne demande aucun compte. Une mesure d'audience (Google Analytics 4) n'est activée qu'après ton accord dans le bandeau affiché à la première visite ; sans accord, aucun cookie de mesure n'est déposé. Ton choix est enregistré dans ton navigateur et tu peux l'effacer à tout moment en supprimant les données du site.",
+      "Si tu t'inscris à la lettre du dimanche, ton adresse e-mail est conservée par Mailchimp, le service d'envoi utilisé, uniquement pour t'envoyer la lettre. L'inscription est confirmée par e-mail et chaque lettre contient un lien de désinscription en un clic.",
     ],
   },
   {
@@ -59,21 +63,19 @@ const sections = [
 ];
 ---
 
-<Base title="Conditions d'utilisation" description="Les règles d'utilisation de Zunrel : nature des guides, liens affiliés, responsabilité et données personnelles.">
-  <h1>Conditions d'utilisation</h1>
-  <p class="mt-2 text-[13px] leading-5 text-[#808086]">Dernière mise à jour : {updatedOn}</p>
-  {
-    sections.map((section) => (
-      <section class="mt-10">
-        <h2 class="text-[22px] font-semibold text-white">{section.title}</h2>
-        <div class="mt-3 space-y-3 text-[15px] leading-6 text-[#95959b]">
-          {section.body.map((paragraph) => <p>{paragraph}</p>)}
-        </div>
-      </section>
-    ))
-  }
-  <p class="mt-10 text-[15px] leading-6 text-[#95959b]">
-    Voir aussi : <a href={href("/a-propos")} class="text-white underline underline-offset-2">À propos</a> ·
-    <a href={href("/kit-media")} class="text-white underline underline-offset-2">Kit média</a>
-  </p>
+<Base title="Conditions d'utilisation et cookies" description={f("Les règles d'utilisation de Zunrel : nature des articles, boutique, responsabilité, données personnelles et cookies.")}>
+  <main class="w">
+    <section class="oh page legal">
+      <h1>Conditions d'utilisation</h1>
+      <p class="upd">Dernière mise à jour : {updatedOn}</p>
+      {
+        sections.map((section) => (
+          <section>
+            <h2>{f(section.title)}</h2>
+            {section.body.map((paragraph) => <p>{f(paragraph)}</p>)}
+          </section>
+        ))
+      }
+    </section>
+  </main>
 </Base>

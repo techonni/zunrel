@@ -1,0 +1,17 @@
+---
+import Base from "../../layouts/Base.astro";
+import Letter from "../../components/Letter.astro";
+import PostList from "../../components/PostList.astro";
+import { f } from "../../lib/site";
+---
+
+<Base title="Blog" description={f("Les articles de Zunrel : apps iPhone épurées, widgets de l'écran verrouillé, to-do avec Rappels, une seule liste pour la semaine.")} current="blog">
+  <main class="w">
+    <section class="oh">
+      <h1>Blog</h1>
+      <p>{f("Des articles courts pour un téléphone plus calme : un réglage, une méthode, une alternative plus simple.")}</p>
+    </section>
+    <PostList />
+    <Letter id="email-blog" />
+  </main>
+</Base>
