@@ -37,20 +37,20 @@ const searchPage = href("/recherche");
       value={defaultQuery}
       placeholder="Ex. : domaine, formulaire, blog"
       autocomplete="off"
-      class="h-[39px] w-full rounded-[4px] bg-[#e5e5e5] px-3 text-[14px] text-[#171717] outline-none placeholder:text-[#737373] sm:w-[280px]"
+      class="h-[39px] w-full rounded-full bg-black border border-[#3a3a3c] px-4 focus:border-white text-[14px] text-white outline-none placeholder:text-[#808086] sm:w-[280px]"
     />
     <button
       type="submit"
-      class="h-[39px] rounded-[4px] bg-[#262626] px-6 text-[14px] font-medium text-white hover:bg-black"
+      class="h-[39px] rounded-full bg-white px-6 text-[14px] font-medium text-black hover:bg-[#e5e5e5]"
     >
       Rechercher
     </button>
   </form>
-  <p data-search-status aria-live="polite" class:list={["text-[15px] leading-6 text-[#737373]", page ? "mt-10" : "mt-6 empty:hidden"]}>
+  <p data-search-status aria-live="polite" class:list={["text-[15px] leading-6 text-[#95959b]", page ? "mt-10" : "mt-6 empty:hidden"]}>
     {page ? "Tapez un mot : domaine, formulaire, boutique, produit…" : ""}
   </p>
   <div data-search-results class:list={["hidden space-y-8", page ? "mt-10" : "mt-6"]}></div>
-  <a data-search-more href={searchPage} class="mt-6 hidden text-[14px] font-medium leading-5 text-[#171717] hover:underline"></a>
+  <a data-search-more href={searchPage} class="mt-6 hidden text-[14px] font-medium leading-5 text-white hover:underline"></a>
 </div>
 
 <!-- Chargé tel quel : Vite ne doit pas transformer cet import (le bundle Pagefind n'existe qu'après le build). -->
@@ -94,19 +94,19 @@ const searchPage = href("/recherche");
     link.className = "group block";
 
     const title = document.createElement("span");
-    title.className = "block text-[15px] font-medium leading-5 text-[#171717] group-hover:underline";
+    title.className = "block text-[15px] font-medium leading-5 text-white group-hover:underline";
     title.textContent = `${result.meta.title ?? result.url} →`;
 
     // L'extrait vient de Pagefind : texte échappé, seuls les mots trouvés sont entourés de <mark>.
     const excerpt = document.createElement("span");
     excerpt.className =
-      "mt-1 block text-[14px] leading-5 text-[#737373] [&_mark]:bg-transparent [&_mark]:font-medium [&_mark]:text-[#171717]";
+      "mt-1 block text-[14px] leading-5 text-[#95959b] [&_mark]:bg-transparent [&_mark]:font-medium [&_mark]:text-white";
     excerpt.innerHTML = result.excerpt || result.meta.summary || "";
 
     link.append(title, excerpt);
     if (result.meta.minutes) {
       const minutes = document.createElement("span");
-      minutes.className = "mt-1 block text-[13px] leading-5 text-[#a0a0a0]";
+      minutes.className = "mt-1 block text-[13px] leading-5 text-[#808086]";
       minutes.textContent = `Lecture : ${result.meta.minutes} min`;
       link.append(minutes);
     }

@@ -1,6 +1,6 @@
 import { Container, Graphics, Rectangle, type Text } from 'pixi.js';
 import gsap from 'gsap';
-import { C, R } from '../theme';
+import { C, R, textOn } from '../theme';
 import { makeText } from '../text';
 import { sound } from '../audio/Sound';
 import { scrollGesture } from './ScrollBox';
@@ -33,7 +33,7 @@ export class Button extends Container {
     this.h = o.height;
     this.color = o.color ?? C.accent;
     this.radius = o.radius ?? R.btn;
-    this.caption = makeText(o.label, { fontSize: o.fontSize ?? 17, fontWeight: '600', fill: o.textColor ?? C.onAccent });
+    this.caption = makeText(o.label, { fontSize: o.fontSize ?? 17, fontWeight: '600', fill: o.textColor ?? textOn(o.color ?? C.accent) });
     this.caption.anchor.set(0.5);
     this.body.addChild(this.bg, this.caption);
     this.addChild(this.body);
@@ -64,7 +64,7 @@ export class Button extends Container {
     if (this.caption.text !== text) this.caption.text = text;
   }
 
-  setColor(color: number, textColor: number = C.onAccent): void {
+  setColor(color: number, textColor: number = textOn(color)): void {
     this.color = color;
     this.caption.style.fill = textColor;
     this.redraw();

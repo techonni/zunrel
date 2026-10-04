@@ -60,20 +60,20 @@ const sections = [
 ---
 
 <Base title="Conditions d'utilisation" description="Les règles d'utilisation de Zunrel : nature des guides, liens affiliés, responsabilité et données personnelles.">
-  <h1 class="text-[22px] font-semibold leading-7 text-[#171717]">Conditions d'utilisation</h1>
-  <p class="mt-2 text-[13px] leading-5 text-[#a0a0a0]">Dernière mise à jour : {updatedOn}</p>
+  <h1 class="text-[22px] font-semibold leading-7 text-white">Conditions d'utilisation</h1>
+  <p class="mt-2 text-[13px] leading-5 text-[#808086]">Dernière mise à jour : {updatedOn}</p>
   {
     sections.map((section) => (
       <section class="mt-10">
-        <h2 class="text-[15px] font-medium leading-5 text-[#171717]">{section.title}</h2>
-        <div class="mt-3 space-y-3 text-[15px] leading-6 text-[#666666]">
+        <h2 class="text-[15px] font-medium leading-5 text-white">{section.title}</h2>
+        <div class="mt-3 space-y-3 text-[15px] leading-6 text-[#95959b]">
           {section.body.map((paragraph) => <p>{paragraph}</p>)}
         </div>
       </section>
     ))
   }
-  <p class="mt-10 text-[15px] leading-6 text-[#666666]">
-    Voir aussi : <a href={href("/a-propos")} class="text-[#171717] underline underline-offset-2">À propos</a> ·
-    <a href={href("/kit-media")} class="text-[#171717] underline underline-offset-2">Kit média</a>
+  <p class="mt-10 text-[15px] leading-6 text-[#95959b]">
+    Voir aussi : <a href={href("/a-propos")} class="text-white underline underline-offset-2">À propos</a> ·
+    <a href={href("/kit-media")} class="text-white underline underline-offset-2">Kit média</a>
   </p>
 </Base>

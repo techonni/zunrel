@@ -32,24 +32,24 @@ const faq = {
 >
   <script type="application/ld+json" slot="head" set:html={JSON.stringify(faq)} />
 
-  <h1 class="text-[22px] font-semibold leading-7 text-[#171717]">Questions fréquentes</h1>
-  <p class="mt-4 text-[15px] leading-6 text-[#737373]">
+  <h1 class="text-[22px] font-semibold leading-7 text-white">Questions fréquentes</h1>
+  <p class="mt-4 text-[15px] leading-6 text-[#95959b]">
     Une réponse courte à chaque question, puis le guide complet, étape par étape.
   </p>
   {
     sections.map(({ theme, list }) => (
       <section class="mt-14">
-        <a href={href(`/themes/${theme.slug}`)} class="text-[13px] leading-5 text-[#737373] hover:underline">
+        <a href={href(`/themes/${theme.slug}`)} class="text-[13px] leading-5 text-[#95959b] hover:underline">
           {theme.name}
         </a>
         <div class="mt-5 space-y-8">
           {list.map((guide) => (
             <div>
-              <h2 class="text-[15px] font-medium leading-5 text-[#171717]">{guide.question}</h2>
-              <p class="mt-2 text-[15px] leading-6 text-[#666666]">{guide.intro}</p>
+              <h2 class="text-[15px] font-medium leading-5 text-white">{guide.question}</h2>
+              <p class="mt-2 text-[15px] leading-6 text-[#95959b]">{guide.intro}</p>
               <a
                 href={href(`/guides/${guide.slug}`)}
-                class="mt-2 inline-block text-[14px] font-medium leading-5 text-[#171717] hover:underline"
+                class="mt-2 inline-block text-[14px] font-medium leading-5 text-white hover:underline"
               >
                 Lire le guide →
               </a>

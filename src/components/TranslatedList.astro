@@ -29,19 +29,19 @@ const groups = (["express", "complet"] as const)
     { lang: "en", path: "/en/" },
   ]}
 >
-  <h1 class="text-[26px] font-semibold leading-8 tracking-[-0.015em] text-[#171717]">{t.listTitle}</h1>
-  <p class="mt-4 text-[15px] leading-6 text-[#666666]">{t.listIntro}</p>
+  <h1 class="text-[26px] font-semibold leading-8 tracking-[-0.015em] text-white">{t.listTitle}</h1>
+  <p class="mt-4 text-[15px] leading-6 text-[#95959b]">{t.listIntro}</p>
   {
     groups.map((group) => (
       <section class="mt-12">
-        <h2 class="text-[13px] font-medium leading-5 text-[#171717]">
-          {group.title} <span class="font-normal text-[#a0a0a0]">· {group.list.length}</span>
+        <h2 class="text-[13px] font-medium leading-5 text-white">
+          {group.title} <span class="font-normal text-[#808086]">· {group.list.length}</span>
         </h2>
         <div class="mt-5 space-y-8">
           {group.list.map((item) => (
             <a href={translatedPath(lang, item.localSlug)} class="group block">
-              <span class="block text-[15px] font-medium leading-5 text-[#171717] group-hover:underline">{item.question} →</span>
-              <span class="mt-1 block text-[14px] leading-5 text-[#737373]">{item.summary}</span>
+              <span class="block text-[15px] font-medium leading-5 text-white group-hover:underline">{item.question} →</span>
+              <span class="mt-1 block text-[14px] leading-5 text-[#95959b]">{item.summary}</span>
             </a>
           ))}
         </div>
@@ -49,8 +49,8 @@ const groups = (["express", "complet"] as const)
     ))
   }
   <p class="mt-12 text-[14px] leading-6">
-    <a href="/" hreflang="fr" class="text-[#171717] underline underline-offset-4 hover:text-black">Zunrel en français</a>
+    <a href="/" hreflang="fr" class="text-white underline underline-offset-4 decoration-[#808086] hover:decoration-white">Zunrel en français</a>
     ·
-    <a href={lang === "pt" ? "/en/" : "/pt/"} hreflang={lang === "pt" ? "en" : "pt"} class="text-[#171717] underline underline-offset-4 hover:text-black">{t.otherLang}</a>
+    <a href={lang === "pt" ? "/en/" : "/pt/"} hreflang={lang === "pt" ? "en" : "pt"} class="text-white underline underline-offset-4 decoration-[#808086] hover:decoration-white">{t.otherLang}</a>
   </p>
 </Base>

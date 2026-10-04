@@ -35,7 +35,7 @@ const links = [
 ---
 
 <div class="flex flex-wrap items-center gap-2">
-  <span class="mr-1 text-[13px] leading-5 text-[#737373]">Partager ce guide</span>
+  <span class="mr-1 text-[13px] leading-5 text-[#95959b]">Partager ce guide</span>
   {
     links.map((link) => (
       <a
@@ -43,7 +43,7 @@ const links = [
         target="_blank"
         rel="noopener noreferrer"
         data-share={link.platform}
-        class="inline-flex h-[30px] items-center rounded-[4px] bg-[#f3f3f3] px-3 text-[13px] text-[#525252] transition-colors hover:bg-[#262626] hover:text-white"
+        class="inline-flex h-[30px] items-center rounded-full bg-[#202020] px-3 text-[13px] text-[#d1d1d6] transition-colors hover:bg-white hover:text-black"
       >
         {link.label}
       </a>

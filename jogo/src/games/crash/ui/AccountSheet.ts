@@ -116,6 +116,6 @@ export class AccountSheet extends Container {
     this.panel.pivot.set(this.w / 2, h / 2);
     this.panel.position.set(this.W / 2, this.H / 2);
     this.panel.hitArea = new Rectangle(0, 0, this.w, h);
-    this.backdrop.clear().rect(0, 0, this.W, this.H).fill({ color: 0x171717, alpha: 0.28 });
+    this.backdrop.clear().rect(0, 0, this.W, this.H).fill({ color: 0x000000, alpha: 0.6 });
   }
 }

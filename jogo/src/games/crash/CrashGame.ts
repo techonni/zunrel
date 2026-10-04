@@ -226,7 +226,7 @@ export class CrashGame implements GameScene {
     this.badge.addChild(new Graphics().roundRect(0, -11, bw, 22, 11).fill(C.bgPanel).stroke({ width: 1, color: C.border, alignment: 1 }), badgeText);
 
     const plusBg = new Graphics().circle(0, 0, 13).fill(C.ink);
-    this.balancePlus.addChild(plusBg, plusIcon(new Graphics(), C.onAccent, 11));
+    this.balancePlus.addChild(plusBg, plusIcon(new Graphics(), C.onInk, 11));
     this.balancePlus.hitArea = new Rectangle(-18, -18, 36, 36);
     pressable(this.balancePlus, () => this.resetWallet());
     this.balancePill.addChild(this.balanceBg, this.balanceLabel, this.balanceText, this.balancePlus);
@@ -449,7 +449,7 @@ export class CrashGame implements GameScene {
     const sw2 = Math.min(contentW, 440);
     this.helpSheetText.style.wordWrapWidth = sw2 - 48;
     const sh2 = 24 + 36 + this.helpSheetText.height + 28;
-    this.helpSheetBg.clear().rect(0, 0, W, H).fill({ color: 0x171717, alpha: 0.28 });
+    this.helpSheetBg.clear().rect(0, 0, W, H).fill({ color: 0x000000, alpha: 0.6 });
     this.helpSheetBg.roundRect((W - sw2) / 2, (H - sh2) / 2, sw2, sh2, R.panel).fill(C.bgPanel).stroke({ width: 1, color: C.border, alignment: 1 });
     this.helpSheetTitle.position.set((W - sw2) / 2 + 24, (H - sh2) / 2 + 24);
     this.helpSheetText.position.set((W - sw2) / 2 + 24, (H - sh2) / 2 + 60);

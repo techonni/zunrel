@@ -1,6 +1,6 @@
 import { Container, Graphics, Rectangle, type Text } from 'pixi.js';
 import gsap from 'gsap';
-import { C, R } from '../theme';
+import { C, R, textOn } from '../theme';
 import { makeMono, makeText } from '../text';
 import { sound } from '../audio/Sound';
 import { scrollGesture } from '../../../core/ui/ScrollBox';
@@ -166,7 +166,7 @@ export class Chips extends Container {
       const on = i === this.selected;
       it.view.position.set(i * (iw + gap) + iw / 2, h / 2);
       it.bg.clear().roundRect(-iw / 2, -h / 2, iw, h, R.small).fill(on ? C.ink : C.bgPanel).stroke({ width: 1, color: on ? C.ink : C.border, alignment: 1 });
-      it.label.style.fill = on ? C.onAccent : C.text;
+      it.label.style.fill = on ? C.onInk : C.text;
       it.view.hitArea = new Rectangle(-iw / 2, -h / 2, iw, h);
     });
   }
@@ -196,7 +196,7 @@ export class Switch extends Container {
 
   constructor() {
     super();
-    this.knob.circle(0, 0, 9).fill(C.onAccent);
+    this.knob.circle(0, 0, 9).fill(0xffffff);
     this.addChild(this.track, this.knob);
     this.hitArea = new Rectangle(-8, -10, Switch.W + 16, Switch.H + 20);
     pressable(this, () => this.set(!this.isOn, true), () => this.locked, new Container());
@@ -217,7 +217,8 @@ export class Switch extends Container {
   }
 
   private draw(animate: boolean): void {
-    this.track.clear().roundRect(0, 0, Switch.W, Switch.H, Switch.H / 2).fill(this.isOn ? C.accent : C.border);
+    this.track.clear().roundRect(0, 0, Switch.W, Switch.H, Switch.H / 2).fill(this.isOn ? 0x30d158 : C.accentSoft);
+    this.knob.tint = 0xffffff;
     const x = this.isOn ? Switch.W - 12 : 12;
     if (animate) gsap.to(this.knob, { x, duration: 0.2, ease: 'power2.out' });
     else this.knob.x = x;
@@ -256,8 +257,8 @@ export class Segmented extends Container {
     this.w = w;
     const segW = (w - 8) / this.labels.length;
     this.bg.clear().roundRect(0, 0, w, h, 12).fill(C.bgSoft);
-    this.knob.clear().roundRect(0, 1, segW, h - 8, 9).fill({ color: 0x000000, alpha: 0.06 });
-    this.knob.roundRect(0, 0, segW, h - 8, 9).fill(C.bgPanel);
+    this.knob.clear().roundRect(0, 1, segW, h - 8, 9).fill({ color: 0x000000, alpha: 0.4 });
+    this.knob.roundRect(0, 0, segW, h - 8, 9).fill(C.accentSoft);
     this.knob.position.set(4 + this.index * segW, 4);
     this.labels.forEach((t, i) => {
       t.position.set(4 + segW * (i + 0.5), h / 2);
@@ -320,6 +321,10 @@ export class ActionButton extends Container {
     if (this.value.text !== value) this.value.text = value;
     if (color !== this.color) {
       this.color = color;
+      const fg = textOn(color);
+      this.labelText.style.fill = fg;
+      this.caption.style.fill = fg;
+      this.value.style.fill = fg;
       this.redraw();
     }
     this.fit();

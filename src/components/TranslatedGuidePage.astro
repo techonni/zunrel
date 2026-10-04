@@ -60,19 +60,19 @@ const howTo = {
 >
   <script type="application/ld+json" slot="head" set:html={JSON.stringify(howTo)} />
 
-  <h1 class="text-[26px] font-semibold leading-8 tracking-[-0.015em] text-[#171717]">{item.question}</h1>
-  <p class="mt-4 text-[15px] leading-6 text-[#666666]">{item.intro}</p>
-  <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px] leading-5 text-[#a0a0a0]">
+  <h1 class="text-[26px] font-semibold leading-8 tracking-[-0.015em] text-white">{item.question}</h1>
+  <p class="mt-4 text-[15px] leading-6 text-[#95959b]">{item.intro}</p>
+  <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px] leading-5 text-[#808086]">
     <p>{t.reading}: {minutes} min</p>
     <p>{t.updated} {date}</p>
-    <a href={`/guides/${guide.slug}/`} hreflang="fr" class="text-[#737373] hover:underline">{t.frenchVersion}</a>
+    <a href={`/guides/${guide.slug}/`} hreflang="fr" class="text-[#95959b] hover:underline">{t.frenchVersion}</a>
     {otherItem ? (
-      <a href={translatedPath(other, otherItem.localSlug)} hreflang={other} class="text-[#737373] hover:underline">{t.otherLang}</a>
+      <a href={translatedPath(other, otherItem.localSlug)} hreflang={other} class="text-[#95959b] hover:underline">{t.otherLang}</a>
     ) : null}
     <button
       type="button"
       data-print
-      class="no-print inline-flex h-[30px] items-center gap-1.5 rounded-[4px] border border-[#e5e5e5] bg-white px-3 text-[13px] font-medium text-[#171717] hover:bg-[#f3f3f3]"
+      class="no-print inline-flex h-[30px] items-center gap-1.5 rounded-full border border-[#3a3a3c] bg-[#202020] px-3 text-[13px] font-medium text-white hover:bg-[#2c2c2e]"
     >
       <svg aria-hidden="true" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M3 13h10" /></svg>
       {t.downloadPdf}
@@ -84,9 +84,9 @@ const howTo = {
     });
   </script>
 
-  <aside class="no-print mt-6 flex flex-col gap-3 rounded-[6px] border border-[#e5e5e5] bg-white p-4 min-[480px]:flex-row min-[480px]:items-center">
-    <p class="flex-1 text-[14px] leading-6 text-[#666666]">
-      {cta.short} <span class="text-[#a0a0a0]">{t.affiliateShort}</span>
+  <aside class="no-print mt-6 flex flex-col gap-3 rounded-[20px] border border-[#3a3a3c] bg-[#202020] p-4 min-[480px]:flex-row min-[480px]:items-center">
+    <p class="flex-1 text-[14px] leading-6 text-[#95959b]">
+      {cta.short} <span class="text-[#808086]">{t.affiliateShort}</span>
     </p>
     <a
       href={cta.href}
@@ -94,40 +94,40 @@ const howTo = {
       rel="sponsored noopener"
       data-affiliate={cta.tool}
       data-placement={`haut-${lang}`}
-      class="inline-flex h-[36px] shrink-0 items-center justify-center rounded-[4px] bg-[#262626] px-4 text-[14px] font-medium text-white hover:bg-black"
+      class="inline-flex h-[36px] shrink-0 items-center justify-center rounded-full bg-white px-4 text-[14px] font-medium text-black hover:bg-[#e5e5e5]"
     >
       {cta.label}
     </a>
   </aside>
 
-  <section class="mt-10 rounded-[6px] border border-[#e5e5e5] bg-white p-6">
-    <h2 class="text-[15px] font-medium leading-5 text-[#171717]">{t.inShort}</h2>
-    <ol class="mt-4 list-decimal space-y-1.5 pl-5 text-[15px] leading-6 text-[#404040]">
+  <section class="mt-10 rounded-[20px] border border-[#3a3a3c] bg-[#202020] p-6">
+    <h2 class="text-[15px] font-medium leading-5 text-white">{t.inShort}</h2>
+    <ol class="mt-4 list-decimal space-y-1.5 pl-5 text-[15px] leading-6 text-[#d1d1d6]">
       {item.steps.map((step) => <li>{step.title}</li>)}
     </ol>
     {item.pitfalls[0] ? (
-      <p class="mt-4 text-[14px] leading-6 text-[#666666]">
-        <span class="font-medium text-[#171717]">{t.avoid}</span> {item.pitfalls[0]}
+      <p class="mt-4 text-[14px] leading-6 text-[#95959b]">
+        <span class="font-medium text-white">{t.avoid}</span> {item.pitfalls[0]}
       </p>
     ) : null}
-    <a href="#steps" class="no-print mt-4 inline-block text-[14px] font-medium leading-5 text-[#171717] hover:underline">{t.seeDetail}</a>
+    <a href="#steps" class="no-print mt-4 inline-block text-[14px] font-medium leading-5 text-white hover:underline">{t.seeDetail}</a>
   </section>
 
   <section id="steps" class="mt-14 scroll-mt-20">
-    <h2 class="text-[13px] leading-5 text-[#737373]">{t.stepByStep}</h2>
-    <p class="mt-2 text-[13px] leading-5 text-[#a0a0a0]">{t.uiNote}</p>
+    <h2 class="text-[13px] leading-5 text-[#95959b]">{t.stepByStep}</h2>
+    <p class="mt-2 text-[13px] leading-5 text-[#808086]">{t.uiNote}</p>
     <ol class="mt-6 space-y-8">
       {
         item.steps.map((step, index) => {
           return (
             <li class="flex gap-4">
-              <span class="flex size-7 shrink-0 items-center justify-center rounded-full bg-[#171717] text-[13px] font-medium text-white">
+              <span class="flex size-7 shrink-0 items-center justify-center rounded-full bg-white text-[13px] font-medium text-black">
                 {index + 1}
               </span>
               <div>
-                <h3 class="text-[15px] font-medium leading-6 text-[#171717]">{step.title}</h3>
+                <h3 class="text-[15px] font-medium leading-6 text-white">{step.title}</h3>
                 {step.text.split("\n\n").map((paragraph, i) => (
-                  <p class:list={["text-[15px] leading-6 text-[#666666]", i === 0 ? "mt-1" : "mt-3"]}>{paragraph}</p>
+                  <p class:list={["text-[15px] leading-6 text-[#95959b]", i === 0 ? "mt-1" : "mt-3"]}>{paragraph}</p>
                 ))}
               </div>
             </li>
@@ -137,27 +137,27 @@ const howTo = {
     </ol>
   </section>
 
-  <section class="mt-14 rounded-[6px] bg-[#f3f3f3] p-6">
-    <h2 class="text-[15px] font-medium leading-5 text-[#171717]">{t.tryYourself}</h2>
-    <p class="mt-3 text-[14px] leading-6 text-[#666666]">{cta.text}</p>
+  <section class="mt-14 rounded-[20px] bg-[#202020] p-6">
+    <h2 class="text-[15px] font-medium leading-5 text-white">{t.tryYourself}</h2>
+    <p class="mt-3 text-[14px] leading-6 text-[#95959b]">{cta.text}</p>
     <a
       href={cta.href}
       target="_blank"
       rel="sponsored noopener"
       data-affiliate={cta.tool}
       data-placement={`bas-${lang}`}
-      class="mt-5 inline-flex h-[39px] items-center rounded-[4px] bg-[#262626] px-6 text-[14px] font-medium text-white hover:bg-black"
+      class="mt-5 inline-flex h-[39px] items-center rounded-full bg-white px-6 text-[14px] font-medium text-black hover:bg-[#e5e5e5]"
     >
       {cta.label}
     </a>
-    <p class="mt-3 text-[13px] leading-5 text-[#a0a0a0]">{t.affiliate}</p>
+    <p class="mt-3 text-[13px] leading-5 text-[#808086]">{t.affiliate}</p>
   </section>
 
   {
     item.pitfalls.length > 0 ? (
-      <section class="mt-14 rounded-[6px] bg-[#fff6e5] p-6">
-        <h2 class="text-[15px] font-medium leading-5 text-[#171717]">{t.pitfalls}</h2>
-        <ul class="mt-4 list-disc space-y-2 pl-5 text-[15px] leading-6 text-[#5c4a26]">
+      <section class="mt-14 rounded-[20px] bg-[#1e1a10] border border-[#4a3f1f] p-6">
+        <h2 class="text-[15px] font-medium leading-5 text-white">{t.pitfalls}</h2>
+        <ul class="mt-4 list-disc space-y-2 pl-5 text-[15px] leading-6 text-[#e8d9a8]">
           {item.pitfalls.map((pitfall) => <li>{pitfall}</li>)}
         </ul>
       </section>
@@ -167,11 +167,11 @@ const howTo = {
   {
     sources.length > 0 ? (
       <section class="mt-14">
-        <h2 class="text-[13px] leading-5 text-[#737373]">{t.sources}</h2>
+        <h2 class="text-[13px] leading-5 text-[#95959b]">{t.sources}</h2>
         <ul class="mt-4 space-y-2">
           {sources.map((source) => (
             <li>
-              <a href={source.url} target="_blank" rel="noopener" class="text-[15px] font-medium leading-6 text-[#171717] hover:underline">
+              <a href={source.url} target="_blank" rel="noopener" class="text-[15px] font-medium leading-6 text-white hover:underline">
                 {source.label} ↗
               </a>
             </li>
@@ -184,13 +184,13 @@ const howTo = {
   <NewsletterForm lang={lang} tag={shop ? "shopify" : "leadpages"} />
 
   <section class="mt-14">
-    <h2 class="text-[13px] leading-5 text-[#737373]">{t.readNext}</h2>
+    <h2 class="text-[13px] leading-5 text-[#95959b]">{t.readNext}</h2>
     <div class="mt-6 space-y-8">
       {
         related.map((entry) => (
           <a href={translatedPath(lang, entry.localSlug)} class="group block">
-            <span class="block text-[15px] font-medium leading-5 text-[#171717] group-hover:underline">{entry.question} →</span>
-            <span class="mt-1 block text-[14px] leading-5 text-[#737373]">{entry.summary}</span>
+            <span class="block text-[15px] font-medium leading-5 text-white group-hover:underline">{entry.question} →</span>
+            <span class="mt-1 block text-[14px] leading-5 text-[#95959b]">{entry.summary}</span>
           </a>
         ))
       }

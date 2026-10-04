@@ -1,22 +1,39 @@
 @import "tailwindcss";
 @import "@fontsource-variable/geist";
+@import "./tokens.css";
 
+/* Identité commune (tokens.css) : fond noir, gris foncés, texte blanc. */
 @theme inline {
-  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--id-font);
 }
 
 html {
-  background: #fbfbfb;
+  background: var(--id-bg);
+  color-scheme: dark;
 }
 
 body {
-  background: #fbfbfb;
-  color: #171717;
-  font-family: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  background: var(--id-bg);
+  color: var(--id-text);
+  font-family: var(--id-font);
 }
 
 ::selection {
-  background: #e5e5e5;
+  background: #3a3a3c;
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--id-focus);
+  outline-offset: 3px;
+}
+
+/* Liens soulignés : soulignement gris, blanc au survol. */
+main a.underline {
+  text-decoration-color: var(--id-text-3);
+}
+main a.underline:hover {
+  text-decoration-color: var(--id-text);
 }
 
 /* Version imprimable / PDF des guides (bouton « Télécharger en PDF »). */
@@ -63,6 +80,14 @@ body {
 
   a[href^="http"] {
     color: #171717;
+  }
+
+  /* Impression : retour au texte foncé sur papier blanc. */
+  body,
+  body * {
+    color: #171717 !important;
+    background-color: transparent !important;
+    border-color: #d4d4d4 !important;
   }
 
   * {

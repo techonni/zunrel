@@ -42,13 +42,13 @@ function isCurrent(target: string) {
 <!-- Le padding du bas garde la page à la même hauteur qu'avant (la ligne des langues est passée dans le menu). -->
 <header class="px-5 pb-[52px] pt-6 sm:px-8">
   <div class="flex items-center justify-between">
-    <a href={href(homeHref)} aria-label={ui[lang].home} class="flex items-center gap-2 text-[#171717]">
+    <a href={href(homeHref)} aria-label={ui[lang].home} class="flex items-center gap-2 text-white">
       <DottedMark />
       <span class="text-[15px] font-semibold tracking-[-0.01em]">Zunrel</span>
     </a>
     <button
       type="button"
-      class="-my-1.5 -mr-2 flex h-9 w-9 items-center justify-center rounded-md text-[#171717] hover:bg-black/[0.04] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#171717]"
+      class="-my-1.5 flex h-10 w-10 items-center justify-center rounded-full border border-[#3a3a3c] bg-[#202020] text-white transition-colors hover:bg-[#2c2c2e] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
       aria-expanded="false"
       aria-controls="site-menu"
       aria-label="Menu"
@@ -64,7 +64,7 @@ function isCurrent(target: string) {
 <!-- Menu latéral : glisse depuis la droite, sur toute la hauteur, au-dessus de la page assombrie. -->
 <div id="site-menu" hidden class="group/drawer fixed inset-0 z-[60]" data-menu-drawer>
   <div
-    class="absolute inset-0 bg-black/20 opacity-0 transition-opacity duration-300 ease-out group-data-[open]/drawer:opacity-100 motion-reduce:transition-none"
+    class="absolute inset-0 bg-black/60 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 ease-out group-data-[open]/drawer:opacity-100 motion-reduce:transition-none"
     aria-hidden="true"
     data-menu-backdrop
   ></div>
@@ -72,13 +72,13 @@ function isCurrent(target: string) {
     role="dialog"
     aria-modal="true"
     aria-label="Menu"
-    class="absolute inset-y-0 right-0 flex w-[85%] max-w-[360px] translate-x-full flex-col overflow-y-auto border-l border-[#e5e5e5] bg-white px-5 pb-8 pt-6 shadow-[-8px_0_24px_rgba(0,0,0,0.06)] transition-transform duration-300 ease-out group-data-[open]/drawer:translate-x-0 motion-reduce:transition-none sm:w-[320px] sm:px-8"
+    class="absolute inset-y-0 right-0 flex w-[85%] max-w-[360px] translate-x-full flex-col overflow-y-auto border-l border-[#3a3a3c] bg-[#141414] px-5 pb-8 pt-6 shadow-[0_8px_32px_rgb(0_0_0/0.6)] rounded-l-[24px] transition-transform duration-300 ease-out group-data-[open]/drawer:translate-x-0 motion-reduce:transition-none sm:w-[320px] sm:px-8"
     data-menu-panel
   >
     <div class="flex justify-end">
       <button
         type="button"
-        class="-my-1.5 -mr-2 flex h-9 w-9 items-center justify-center rounded-md text-[#171717] hover:bg-black/[0.04] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#171717]"
+        class="-my-1.5 flex h-10 w-10 items-center justify-center rounded-full border border-[#3a3a3c] bg-[#202020] text-white transition-colors hover:bg-[#2c2c2e] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
         aria-label={closeLabel}
         data-menu-close
       >
@@ -87,7 +87,7 @@ function isCurrent(target: string) {
         </svg>
       </button>
     </div>
-    <nav class="-mx-3 mt-8 flex flex-col text-[15px] font-semibold leading-5 tracking-[-0.01em]">
+    <nav class="mt-8 flex flex-col overflow-hidden rounded-[20px] border border-[#3a3a3c] bg-[#202020] text-[17px] font-semibold leading-5 tracking-[-0.01em]">
       {
         links.map((link) => {
           const current = isCurrent(link.href);
@@ -95,9 +95,10 @@ function isCurrent(target: string) {
             <a
               href={href(link.href)}
               aria-current={current ? "page" : undefined}
-              class={`rounded px-3 py-2.5 hover:bg-[#f5f5f5] ${current ? "text-[#0f4bf1]" : "text-[#171717]"}`}
+              class={`flex items-center justify-between border-b border-[#3a3a3c] px-4 py-3.5 text-white last:border-b-0 hover:bg-[#2c2c2e] ${current ? "bg-[#2c2c2e]" : ""}`}
             >
               {link.label}
+              <span aria-hidden="true" class="text-[#95959b]">›</span>
             </a>
           );
         })
@@ -105,14 +106,14 @@ function isCurrent(target: string) {
     </nav>
     <nav
       aria-label="Langue / Language / Idioma"
-      class="mt-6 flex gap-3 border-t border-[#e5e5e5] pt-5 text-[12px] font-medium leading-4 tracking-[0.04em]"
+      class="mt-6 flex w-fit gap-1 rounded-full border border-[#3a3a3c] bg-[#202020] p-1 text-[13px] font-semibold leading-4 tracking-[0.04em]"
     >
       {
         switcher.map((item) =>
           item.code === lang ? (
-            <span aria-current="true" class="text-[#171717]">{item.label}</span>
+            <span aria-current="true" class="rounded-full bg-white px-3.5 py-1.5 text-black">{item.label}</span>
           ) : (
-            <a href={item.href} hreflang={item.code} class="text-[#a0a0a0] hover:text-[#171717]">
+            <a href={item.href} hreflang={item.code} class="rounded-full px-3.5 py-1.5 text-[#95959b] hover:bg-[#2c2c2e] hover:text-white">
               {item.label}
             </a>
           ),

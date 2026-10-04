@@ -10,7 +10,7 @@ export function ringPoints(radius: number): { x: number; y: number }[] {
 }
 
 /** Marca Zunrel: anel de 12 pontos (centrado em 0,0). */
-export function ringLogo(size = 26, color: number = C.ink): Graphics {
+export function ringLogo(size = 26, color: number = C.icon): Graphics {
   const g = new Graphics();
   const s = size / 24;
   for (const p of ringPoints(8.1 * s)) g.circle(p.x, p.y, 1.25 * s).fill(color);
@@ -21,7 +21,7 @@ export function ringLogo(size = 26, color: number = C.ink): Graphics {
 const W = 2;
 
 /** Altifalante com ondas (som ligado) ou com um X (som desligado). */
-export function speaker(g: Graphics, muted: boolean, color: number = C.ink, size = 18): Graphics {
+export function speaker(g: Graphics, muted: boolean, color: number = C.icon, size = 18): Graphics {
   const k = size / 24;
   g.clear();
   g.poly([-1 * k, -7 * k, -6 * k, -3 * k, -9 * k, -3 * k, -9 * k, 3 * k, -6 * k, 3 * k, -1 * k, 7 * k]).stroke({ width: W, color, join: 'round' });
@@ -33,7 +33,7 @@ export function speaker(g: Graphics, muted: boolean, color: number = C.ink, size
   return g;
 }
 
-export function helpIcon(g: Graphics, color: number = C.ink, size = 18): Graphics {
+export function helpIcon(g: Graphics, color: number = C.icon, size = 18): Graphics {
   const k = size / 24;
   g.clear();
   g.circle(0, 0, 9 * k).stroke({ width: W, color });
@@ -45,7 +45,7 @@ export function helpIcon(g: Graphics, color: number = C.ink, size = 18): Graphic
   return g;
 }
 
-export function userIcon(g: Graphics, color: number = C.ink, size = 18): Graphics {
+export function userIcon(g: Graphics, color: number = C.icon, size = 18): Graphics {
   const k = size / 24;
   g.clear();
   g.circle(0, -4 * k, 4 * k).stroke({ width: W, color });
@@ -53,7 +53,7 @@ export function userIcon(g: Graphics, color: number = C.ink, size = 18): Graphic
   return g;
 }
 
-export function menuIcon(g: Graphics, color: number = C.ink, size = 18): Graphics {
+export function menuIcon(g: Graphics, color: number = C.icon, size = 18): Graphics {
   const k = size / 24;
   g.clear();
   for (const y of [-6, 0, 6]) g.moveTo(-8 * k, y * k).lineTo(8 * k, y * k);
@@ -61,7 +61,7 @@ export function menuIcon(g: Graphics, color: number = C.ink, size = 18): Graphic
   return g;
 }
 
-export function resetIcon(g: Graphics, color: number = C.ink, size = 18): Graphics {
+export function resetIcon(g: Graphics, color: number = C.icon, size = 18): Graphics {
   const k = size / 24;
   g.clear();
   g.arc(0, 0, 8 * k, -Math.PI * 0.35, Math.PI * 1.45).stroke({ width: W, color, cap: 'round' });

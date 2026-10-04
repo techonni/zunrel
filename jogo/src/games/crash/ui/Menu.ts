@@ -30,13 +30,13 @@ export class Menu extends Container {
 
   /** Abre com o canto superior direito em (right, top). W/H = tamanho do ecrã (para o fundo que fecha). */
   open(items: MenuItem[], right: number, top: number, W: number, H: number): void {
-    this.backdrop.clear().rect(0, 0, W, H).fill({ color: 0x171717, alpha: 0.12 });
+    this.backdrop.clear().rect(0, 0, W, H).fill({ color: 0x000000, alpha: 0.5 });
     this.panel.removeChildren().forEach((c) => c.destroy({ children: true }));
     const h = items.length * ROW_H + 12;
     this.panel.addChild(
       new Graphics()
         .roundRect(0, 4, MENU_W, h, R.input)
-        .fill({ color: 0x000000, alpha: 0.05 })
+        .fill({ color: 0x000000, alpha: 0.5 })
         .roundRect(0, 0, MENU_W, h, R.input)
         .fill(C.bgPanel)
         .stroke({ width: 1, color: C.border, alignment: 1 }),

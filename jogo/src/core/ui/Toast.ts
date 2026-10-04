@@ -1,6 +1,6 @@
 import { Container, Graphics, type Text } from 'pixi.js';
 import gsap from 'gsap';
-import { C } from '../theme';
+import { C, textOn } from '../theme';
 import { makeText } from '../text';
 
 /** Aviso curto no topo (ganho, perda, saldo insuficiente…). */
@@ -18,7 +18,7 @@ export class Toast extends Container {
     this.visible = false;
   }
 
-  show(text: string, color: number = C.ink, textColor: number = C.onAccent): void {
+  show(text: string, color: number = C.ink, textColor: number = textOn(color)): void {
     this.caption.text = text;
     this.caption.style.fill = textColor;
     const w = this.caption.width + 36;

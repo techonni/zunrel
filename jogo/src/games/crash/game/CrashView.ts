@@ -1,6 +1,6 @@
 import { Container, FillGradient, Graphics, type Text } from 'pixi.js';
 import gsap from 'gsap';
-import { C, R } from '../theme';
+import { C, R, textOn } from '../theme';
 import { makeMono, makeText } from '../text';
 import { fmtMult } from '../format';
 import { ringPoints } from '../icons';
@@ -45,8 +45,8 @@ export class CrashView extends Container {
     start: { x: 0, y: 0 },
     end: { x: 0, y: 1 },
     colorStops: [
-      { offset: 0, color: 'rgba(15,75,241,0.14)' },
-      { offset: 1, color: 'rgba(15,75,241,0)' },
+      { offset: 0, color: 'rgba(255,255,255,0.12)' },
+      { offset: 1, color: 'rgba(255,255,255,0)' },
     ],
   });
 
@@ -167,6 +167,7 @@ export class CrashView extends Container {
     this.tagShown = text !== null;
     if (text !== null) {
       this.tagText.text = text;
+      this.tagText.style.fill = textOn(color);
       const w = this.tagText.width + 24;
       const h = 30;
       this.tagBg.clear().roundRect(-w / 2, -h / 2, w, h, h / 2).fill(color);
@@ -184,7 +185,7 @@ export class CrashView extends Container {
     this.sub.style.fill = C.textMuted;
     this.sub.text = 'próxima ronda';
     this.mult.style.fill = C.text;
-    this.litColor = C.ink;
+    this.litColor = C.textMuted;
     this.lit = -1;
     this.drawCurve(0, false);
   }

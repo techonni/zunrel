@@ -18,8 +18,8 @@ const groups = formats
   {
     groups.map(({ item, list }) => (
       <div>
-        <a href={href(`/formats/${item.slug}`)} class="text-[13px] font-medium leading-5 text-[#171717] hover:underline">
-          {item.name} <span class="font-normal text-[#a0a0a0]">· {list.length}</span>
+        <a href={href(`/formats/${item.slug}`)} class="text-[13px] font-medium leading-5 text-white hover:underline">
+          {item.name} <span class="font-normal text-[#808086]">· {list.length}</span>
         </a>
         <div class="mt-5 space-y-8">
           {list.map((guide) => <GuideRow guide={guide} />)}

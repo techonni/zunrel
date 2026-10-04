@@ -74,7 +74,7 @@ export class Keypad extends Container {
 
   layout(screenW: number, screenH: number, contentX: number, contentW: number): void {
     this.screenH = screenH;
-    this.backdrop.clear().rect(0, 0, screenW, screenH).fill({ color: 0x171717, alpha: 0.28 });
+    this.backdrop.clear().rect(0, 0, screenW, screenH).fill({ color: 0x000000, alpha: 0.6 });
     this.backdrop.hitArea = new Rectangle(0, 0, screenW, screenH);
 
     const w = contentW;
