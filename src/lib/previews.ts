@@ -20,7 +20,6 @@ const status = (fill = INK) =>
 const icon = (x: number, y: number, s: number, glyph: string, fill = "#fff") =>
   `<rect x="${x}" y="${y}" width="${s}" height="${s}" rx="${s * 0.23}" fill="${fill}" stroke="${INK}" stroke-width="1.5"/><g transform="translate(${x} ${y}) scale(${s / 56})" fill="none" stroke="${INK}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">${glyph}</g>`;
 
-// Pictogrammes simples (dessinés dans une case de 56).
 const G = {
   notes: `<path d="M18 19h20M18 28h20M18 37h12"/>`,
   timer: `<circle cx="28" cy="30" r="13"/><path d="M28 30v-7M24 13h8"/>`,
@@ -34,9 +33,7 @@ const G = {
   music: `<path d="M24 37V18l14-3v18"/><circle cx="20" cy="37" r="4"/><circle cx="34" cy="34" r="4"/>`,
 };
 
-// `top` : haut du cadrage des cartes 16:9 (zoom sur la partie de l'écran qui illustre le sujet).
 const screens: Record<string, { fill: string; body: string; light?: boolean; top?: number }> = {
-  // Une seule liste pour la semaine : liste « Semaine » en sections, puis « Plus tard ».
   "une-seule-liste-pour-la-semaine": {
     fill: "#fff",
     body: (() => {
@@ -52,7 +49,6 @@ const screens: Record<string, { fill: string; body: string; light?: boolean; top
       return s;
     })(),
   },
-  // Choisir des apps épurées : six apps simples, chacune cochée.
   "choisir-des-apps-iphone-epurees": {
     fill: "#f4f4f0",
     body: (() => {
@@ -69,7 +65,6 @@ const screens: Record<string, { fill: string; body: string; light?: boolean; top
       return s;
     })(),
   },
-  // Widgets calmes : écran verrouillé, date + météo, heure, trois widgets ronds.
   "des-widgets-calmes-sur-l-ecran-verrouille": {
     fill: "#e8e8e3",
     body: (() => {
@@ -89,7 +84,6 @@ const screens: Record<string, { fill: string; body: string; light?: boolean; top
     })(),
     light: true,
   },
-  // To-do sans bruit : liste « Aujourd'hui », une seule tâche avec heure et alerte.
   "une-to-do-sans-bruit-avec-rappels": {
     fill: "#fff",
     body: (() => {
@@ -112,7 +106,6 @@ const screens: Record<string, { fill: string; body: string; light?: boolean; top
       return s;
     })(),
   },
-  // Écran d'accueil désencombré : une page presque vide, un seul point de page, quatre apps au dock.
   "desencombrer-l-ecran-d-accueil-en-20-minutes": {
     fill: "#ecece7",
     body: (() => {
@@ -127,7 +120,6 @@ const screens: Record<string, { fill: string; body: string; light?: boolean; top
     })(),
     top: 205,
   },
-  // Notifications à heures fixes : écran verrouillé avec un résumé programmé à 12:00.
   "les-notifications-a-heures-fixes": {
     fill: "#e8e8e3",
     body: (() => {
@@ -148,18 +140,108 @@ const screens: Record<string, { fill: string; body: string; light?: boolean; top
     light: true,
     top: 110,
   },
+  "enlever-les-pastilles-rouges": {
+    fill: "#ecece7",
+    body: (() => {
+      let s = "";
+      const glyphs = [G.notes, G.timer, G.calendar, G.map, G.weather, G.list];
+      glyphs.forEach((gl, i) => {
+        const x = X + 26 + (i % 3) * 66, y = Y + 78 + Math.floor(i / 3) * 86;
+        s += icon(x, y, 52, gl);
+        s += line(x + 8, y + 64, 36, "#d6d6d0", 6);
+      });
+      s += `<g opacity=".45"><circle cx="${X + W - 36}" cy="${Y + 70}" r="11" fill="#c45c4a"/><text x="${X + W - 36}" y="${Y + 74}" font-size="11" font-weight="600" fill="#fff" text-anchor="middle">12</text><path d="M${X + W - 48} ${Y + 58}l24 24" stroke="${INK}" stroke-width="2" stroke-linecap="round"/></g>`;
+      s += `<rect x="${X + 12}" y="${Y + 444}" width="${W - 24}" height="66" rx="22" fill="#fff" fill-opacity=".6"/>`;
+      [G.phone, G.message, G.camera, G.music].forEach((g, i) => (s += icon(X + 25 + i * 50, Y + 455, 44, g)));
+      return s;
+    })(),
+    top: 40,
+  },
+  "l-iphone-en-gris-le-soir": {
+    fill: "#d5d5d0",
+    body: (() => {
+      const cx = X + W / 2;
+      let s = t(cx, Y + 100, "lundi 5 octobre", 13, 500, ACC, "middle");
+      s += t(cx, Y + 176, "21:00", 58, 600, INK, "middle");
+      s += `<rect x="${X + 28}" y="${Y + 214}" width="${W - 56}" height="36" rx="18" fill="#fff" fill-opacity=".55"/>`;
+      s += t(cx, Y + 237, "Nuances de gris", 13, 600, ACC, "middle");
+      s += `<circle cx="${cx}" cy="${Y + 310}" r="28" fill="none" stroke="${ACC}" stroke-width="1.6"/>`;
+      s += `<path d="M${cx - 8} ${Y + 300}a14 14 0 1 0 14 16 11 11 0 1 1-14-16z" fill="${ACC}"/>`;
+      s += t(cx, Y + 368, "à partir de 21 h", 12, 500, MUTED, "middle");
+      s += `<rect x="${cx - 50}" y="${Y + 503}" width="100" height="5" rx="2.5" fill="${INK}"/>`;
+      return s;
+    })(),
+    light: true,
+    top: 80,
+  },
+  "vider-safari-en-deux-minutes": {
+    fill: "#f3f3ee",
+    body: (() => {
+      let s = t(X + 22, Y + 78, "Onglets", 22, 600);
+      s += t(X + W - 22, Y + 78, "3", 16, 600, MUTED, "end");
+      const titles = ["Une page", "Signet", "Vide"];
+      titles.forEach((title, i) => {
+        const y = Y + 104 + i * 92;
+        s += `<rect x="${X + 18}" y="${y}" width="${W - 36}" height="78" rx="14" fill="#fff" stroke="${RULE}"/>`;
+        s += `<circle cx="${X + W - 40}" cy="${y + 18}" r="8" fill="#f1f1ed" stroke="${ACC}" stroke-width="1.2"/>`;
+        s += `<path d="M${X + W - 43} ${y + 15}l6 6M${X + W - 37} ${y + 15}l-6 6" stroke="${ACC}" stroke-width="1.4" stroke-linecap="round"/>`;
+        s += t(X + 32, y + 36, title, 14, 600);
+        s += line(X + 32, y + 54, i === 2 ? 40 : 110, "#e2e2dd", 6);
+      });
+      s += t(X + W / 2, Y + 400, "Fermer le reste", 13, 600, ACC, "middle");
+      return s;
+    })(),
+    top: 30,
+  },
+  "une-limite-pour-les-apps-qui-attirent": {
+    fill: "#fff",
+    body: (() => {
+      let s = t(X + 22, Y + 82, "Limites", 22, 600);
+      s += t(X + 22, Y + 112, "Une app", 12, 500, MUTED);
+      s += `<rect x="${X + 22}" y="${Y + 128}" width="${W - 44}" height="64" rx="14" fill="#f4f4f0"/>`;
+      s += icon(X + 34, Y + 140, 40, G.music);
+      s += t(X + 84, Y + 158, "20 min", 16, 600);
+      s += `<rect x="${X + 84}" y="${Y + 168}" width="100" height="6" rx="3" fill="#e4e4df"/>`;
+      s += `<rect x="${X + 84}" y="${Y + 168}" width="78" height="6" rx="3" fill="${ACC}"/>`;
+      s += t(X + 22, Y + 230, "Le reste", 12, 500, MUTED);
+      [[G.phone, "Appels"], [G.message, "Messages"], [G.map, "Plans"]].forEach(([g, label], i) => {
+        const y = Y + 248 + i * 58;
+        s += icon(X + 22, y, 40, g as string);
+        s += t(X + 74, y + 24, label as string, 14, 500);
+        s += t(X + W - 24, y + 24, "sans limite", 11, 500, MUTED, "end");
+      });
+      return s;
+    })(),
+  },
+  "le-telephone-hors-de-la-chambre": {
+    fill: "#e4e4df",
+    body: (() => {
+      const cx = X + W / 2;
+      let s = t(cx, Y + 108, "mardi 6 octobre", 13, 500, ACC, "middle");
+      s += t(cx, Y + 186, "22:30", 52, 600, INK, "middle");
+      s += `<rect x="${X + 36}" y="${Y + 230}" width="${W - 72}" height="72" rx="16" fill="#fff"/>`;
+      s += `<circle cx="${X + 62}" cy="${Y + 266}" r="14" fill="none" stroke="${ACC}" stroke-width="1.6"/>`;
+      s += `<path d="M${X + 62} ${Y + 258}v9l5 3" fill="none" stroke="${INK}" stroke-width="1.6" stroke-linecap="round"/>`;
+      s += t(X + 88, Y + 262, "Réveil", 14, 600);
+      s += t(X + 88, Y + 282, "7:00", 13, 500, MUTED);
+      s += t(cx, Y + 360, "Aucune notification", 12, 500, MUTED, "middle");
+      s += `<rect x="${cx - 50}" y="${Y + 503}" width="100" height="5" rx="2.5" fill="${INK}"/>`;
+      return s;
+    })(),
+    light: true,
+    top: 90,
+  },
 };
 
 export const hasPreview = (slug: string) => slug in screens;
 
-// format « card » : 16:9, cadré sur le téléphone (700 × 393,75) ; « og » : 1200 × 630, téléphone entier.
 export function previewSvg(slug: string, format: "card" | "og" = "card", title = "") {
   const sc = screens[slug];
   if (!sc) return "";
   const vb = format === "og" ? "0 0 1200 630" : `250 ${sc.top ?? 25} 700 393.75`;
   const size = format === "og" ? 'width="1200" height="630"' : "";
   const clip = `pv-${slug.slice(0, 18)}`;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" ${size} font-family="${FONT}" ${title ? `role="img" aria-label="${title.replace(/"/g, "&quot;")}"` : 'aria-hidden="true"'}>
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" ${size} font-family="${FONT}" ${title ? `role="img" aria-label="${title.replace(/"/g, """)}"` : 'aria-hidden="true"'}>
 <rect x="-10" y="-40" width="1220" height="720" fill="#efefea"/>
 <rect x="469" y="51" width="262" height="552" rx="52" fill="#000" opacity=".06"/>
 <rect x="475" y="45" width="250" height="540" rx="48" fill="${INK}"/>
