@@ -18,17 +18,17 @@ const themeTools = tools.filter((tool) => tool.themes.includes(theme.slug));
   description={theme.blurb}
   breadcrumbs={[{ name: "Accueil", path: "/" }, { name: "Guides", path: "/guides" }, { name: theme.name }]}
 >
-  <h1 class="text-[22px] font-semibold leading-7 text-white">{theme.name}</h1>
-  <p class="mt-4 text-[15px] leading-6 text-[#95959b]">{theme.blurb}</p>
+  <h1>{theme.name}</h1>
+  <p class="lede">{theme.blurb}</p>
 
-  <div class="mt-14">
+  <div class="mt-6">
     <FormatGroups guides={list} />
   </div>
 
   {
     themeTools.length > 0 ? (
-      <section class="mt-16">
-        <h2 class="text-[13px] leading-5 text-[#95959b]">Outils pour ce thème</h2>
+      <section class="mt-24">
+        <h2 class="sh">Outils pour ce thème</h2>
         <div class="mt-6 m-list">
           {themeTools.map((tool) => <ToolRow tool={tool} />)}
         </div>

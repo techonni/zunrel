@@ -1,106 +1,101 @@
 ---
+// Accueil v3 (maquette claire v3 approuvée par Dário le 04/10/2026).
 import Base from "../layouts/Base.astro";
-import SearchForm from "../components/SearchForm.astro";
 import GuideRow from "../components/GuideRow.astro";
-import FormatCards from "../components/FormatCards.astro";
-import { affiliateDisclosure, affiliateLinks, guidesInTheme, latestGuides, popularGuides, themes } from "../lib/guides";
+import NewsletterForm from "../components/NewsletterForm.astro";
+import { affiliateDisclosure, affiliateLinks, getGuide, guides, readingMinutes, type Guide } from "../lib/guides";
+import { appIcon, checkPhone, frTypo, phone, shortDate } from "../lib/v3";
 import { href } from "../lib/paths";
+
+const g = (slug: string) => getGuide(slug) as Guide;
+const ART = "creer-un-tunnel-de-vente-systeme-io";
+const latest = [ART, "ajouter-un-upsell-un-order-bump-et-un-code-promo-systeme-io", "creer-un-webinaire-automatique-systeme-io", "ameliorer-la-delivrabilite-de-ses-e-mails-systeme-io", "devenir-affilie-systeme-io"].map(g);
+const fonctions: [string, string, string][] = [
+  ["tunnel", "Tunnel de vente", ART],
+  ["capture", "Page de capture", "creer-une-page-de-capture-systeme-io"],
+  ["email", "Emailing", "envoyer-une-newsletter-avec-systeme-io"],
+  ["cours", "Formations", "creer-et-vendre-une-formation-en-ligne-systeme-io"],
+  ["paiement", "Paiements", "connecter-stripe-et-paypal-a-systeme-io"],
+  ["affil", "Affiliation", "creer-son-programme-d-affiliation-systeme-io"],
+];
+const FEAT = g("lancer-son-business-en-ligne-avec-systeme-io-de-a-a-z");
+const lastUpdate = guides.map((item) => item.updatedOn).sort().at(-1) as string;
+const count = guides.length;
 ---
 
 <Base
+  bare
   alternates={[
     { lang: "fr", path: "/" },
     { lang: "pt", path: "/pt/" },
     { lang: "en", path: "/en/" },
   ]}
 >
-  <p class="text-[13px] leading-5 text-[#95959b]">Guides pratiques systeme.io</p>
-  <h1 class="mt-3 max-w-[542px] text-[26px] font-semibold leading-8 tracking-[-0.015em] text-white">
-    systeme.io : comment faire, étape par étape.
-  </h1>
-  <p class="mt-4 max-w-[520px] text-[15px] leading-6 text-[#95959b]">
-    Des réponses courtes pour lancer son activité en ligne avec systeme.io : plan gratuit et prix, tunnels de vente,
-    pages de capture, e-mails automatiques, produits numériques, formations, affiliation. Avec les pièges à éviter.
-  </p>
-  <div class="mt-6 flex flex-col gap-2">
-    <a
-      href={affiliateLinks.fr}
-      target="_blank"
-      rel="sponsored noopener"
-      data-affiliate="systeme-io"
-      data-placement="accueil"
-      class="inline-flex h-[39px] w-fit items-center rounded-full bg-white px-6 text-[14px] font-medium text-black hover:bg-[#e5e5e5]"
-    >
-      Créer un compte gratuit systeme.io ↗
-    </a>
-    <p class="max-w-[520px] text-[13px] leading-5 text-[#808086]">{affiliateDisclosure.fr}</p>
-  </div>
+  <section class="sec w">
+    <h2 class="sh">Derniers guides. <span>Ce qui est nouveau sur systeme.io.</span></h2>
+    <a class="pill black" href={href("/guides")}>Tout voir</a>
+    <div class="list">{latest.map((guide) => <GuideRow guide={guide} minutes={false} />)}</div>
+  </section>
 
-  <SearchForm class="mt-12" />
-
-  <FormatCards class="mt-12" />
-
-  <p class="mt-6 text-[13px] leading-5 text-[#95959b]">
-    Aussi disponible :
-    <a href="/pt/" hreflang="pt" class="ml-1 underline underline-offset-4 hover:text-white">guias em português</a>
-    <span class="mx-2" aria-hidden="true">·</span>
-    <a href="/en/" hreflang="en" class="underline underline-offset-4 hover:text-white">guides in English</a>
-  </p>
-
-  <div class="mt-10 m-list">
-    <a href={href("/offres")} class="m-row group">
-      <span class="m-body">
-        <span class="block text-[15px] font-medium leading-5 text-white">Offres systeme.io du moment</span>
-        <span class="mt-1 block text-[14px] leading-5 text-[#95959b]">Plan gratuit sans carte, 2 mois offerts en annuel, migration gratuite : les offres systeme.io vérifiées ce mois-ci.</span>
-      </span>
-      <span class="m-arrow" aria-hidden="true">→</span>
-    </a>
-  </div>
-
-  <section class="mt-[72px]">
-    <h2 class="text-[13px] leading-5 text-[#95959b]">Nouveaux guides</h2>
-    <div class="mt-6 m-list">
-      {latestGuides().map((guide) => <GuideRow guide={guide} />)}
+  <section class="sec next w" id="fonctions">
+    <h2 class="sh">Fonctions. <span>Tout ce que fait systeme.io.</span></h2>
+    <a class="pill black" href={href("/guides")}>Tout voir</a>
+    <div class="fx">
+      {fonctions.map(([icon, name, slug]) => (
+        <a class="fn" href={href(`/guides/${slug}`)}>
+          <div class="fbox" set:html={appIcon(icon)} />
+          <div class="frow"><h3 style="font-size:inherit"><span class="h5">{name}</span></h3><span class="chip">{readingMinutes(g(slug))} min</span></div>
+        </a>
+      ))}
     </div>
   </section>
 
-  <section class="mt-16">
-    <h2 class="text-[13px] leading-5 text-[#95959b]">Les questions les plus fréquentes</h2>
-    <div class="mt-6 m-list">
-      {popularGuides().map((guide) => <GuideRow guide={guide} />)}
+  <section class="sec next w">
+    <h2 class="sh">À la une</h2>
+    <div class="feat">
+      <div class="tx">
+        <h3 class="fh">{frTypo(FEAT.question)}</h3>
+        <p>{FEAT.summary}</p>
+        <a class="pill black" href={href(`/guides/${FEAT.slug}`)}>Lire le guide complet</a>
+      </div>
+      <div class="im" set:html={phone(FEAT.slug)} />
     </div>
   </section>
 
-  <section class="mt-16">
-    <h2 class="text-[13px] leading-5 text-[#95959b]">Par thème</h2>
-    <div class="mt-6 m-list">
-      {
-        themes.map((theme) => {
-          const count = guidesInTheme(theme.slug).length;
-          return (
-            <a href={href(`/themes/${theme.slug}`)} class="m-row group">
-              <span class="m-body">
-                <span class="block text-[15px] font-medium leading-5 text-white">{theme.name}</span>
-                <span class="mt-1 block text-[14px] leading-5 text-[#95959b]">
-                  {theme.blurb} {count} {count === 1 ? "guide" : "guides"}.
-                </span>
-              </span>
-              <span class="m-arrow" aria-hidden="true">→</span>
-            </a>
-          );
-        })
-      }
+  <section class="blk">
+    <div class="w">
+      <h2>Un seul outil pour vendre en ligne, de la page de capture au paiement.</h2>
+      <a class="pill white" href={href("/guides")}>Voir les {count} guides</a>
+      <p class="meta"><b>{count} guides en français,</b> mis à jour le {shortDate(lastUpdate)}.</p>
+      <p class="meta">Aussi en <a href="/pt/" hreflang="pt" style="text-decoration:underline">português</a> et en <a href="/en/" hreflang="en" style="text-decoration:underline">English</a>.</p>
+      <div class="im" set:html={phone("c-est-quoi-systeme-io")} />
     </div>
   </section>
 
-  <section class="mt-16 m-flat">
-    <h2 class="text-[15px] font-medium leading-5 text-white">Comment on écrit ces guides</h2>
-    <p class="mt-3 text-[14px] leading-6 text-[#95959b]">
-      Chaque guide suit le même format : les étapes dans l'ordre, les erreurs fréquentes et les liens vers l'aide
-      officielle de systeme.io. L'outil évolue vite : les noms de boutons et les prix peuvent changer, chaque guide indique sa date de vérification.
-    </p>
-    <a href={href("/a-propos")} class="mt-4 block text-[14px] font-medium leading-5 text-white hover:underline">
-      En savoir plus →
-    </a>
+  <section class="lead" id="checklist">
+    <div class="w">
+      <div class="art" set:html={checkPhone()} />
+      <NewsletterForm
+        tone="dark"
+        title="Recevez la checklist systeme.io gratuite"
+        text="La checklist à imprimer pour lancer votre premier tunnel systeme.io, du compte gratuit au premier achat test. Chaque étape renvoie vers un guide détaillé."
+        button="Recevoir la checklist"
+      />
+    </div>
+  </section>
+
+  <section class="hero">
+    <div class="w">
+      <div>
+        <h1><span>Devenez autonome.</span> <span>Vendez en ligne avec systeme.io.</span></h1>
+        <p class="t">Des guides courts et vérifiés pour lancer votre activité, sans assembler cinq outils.</p>
+        <div class="btns">
+          <a class="pill black" href={href("/guides")}>Lire les guides</a>
+          <a class="pill light" href={affiliateLinks.fr} target="_blank" rel="sponsored noopener" data-affiliate="systeme-io" data-placement="accueil">Essayer gratuitement</a>
+        </div>
+        <p class="dsc">{affiliateDisclosure.fr}</p>
+      </div>
+      <div class="im" set:html={phone(ART)} />
+    </div>
   </section>
 </Base>

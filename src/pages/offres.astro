@@ -49,7 +49,7 @@ const offers = [
   description="Plan gratuit, 2 mois offerts en annuel et migration gratuite : les offres systeme.io en cours, vérifiées sur le site officiel."
   breadcrumbs={[{ name: "Accueil", path: "/" }, { name: "Offres systeme.io du moment" }]}
 >
-  <h1 class="text-[26px] font-semibold leading-8 tracking-[-0.015em] text-white">Offres systeme.io du moment</h1>
+  <h1>Offres systeme.io du moment</h1>
   <p class="mt-4 text-[15px] leading-6 text-[#95959b]">
     Ce que systeme.io offre en ce moment : plan gratuit, réduction en annuel, migration gratuite. Chaque offre est
     vérifiée sur le site officiel, et cette page est mise à jour chaque mois.
@@ -60,7 +60,7 @@ const offers = [
     {
       offers.map((offer) => (
         <section class="m-flat">
-          <h2 class="text-[13px] leading-5 text-[#95959b]">{offer.name}</h2>
+          <h2 class="sh">{offer.name}</h2>
           <p class="mt-2 text-[18px] font-semibold leading-6 text-white">{offer.headline}</p>
           <ul class="mt-4 list-disc space-y-1.5 pl-5 text-[15px] leading-6 text-[#95959b]">
             {offer.details.map((detail) => <li>{detail}</li>)}

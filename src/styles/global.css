@@ -1,139 +1,21 @@
 @import "tailwindcss";
-@import "@fontsource-variable/geist";
-@import "./tokens.css";
+@import "./v3.css";
 
-/* Identité commune (tokens.css) : fond noir, gris foncés, texte blanc. */
 @theme inline {
-  --font-sans: var(--id-font);
+  --font-sans: Inter, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
 }
 
-html {
-  background: var(--id-bg);
-  color-scheme: dark;
-  /* Les ancres ne passent pas sous l'en-tête fixe. */
-  scroll-padding-top: 88px;
-}
-
-body {
-  background: var(--id-bg);
-  color: var(--id-text);
-  font-family: var(--id-font);
-}
-
-::selection {
-  background: #3a3a3c;
-  color: #fff;
-}
-
-:focus-visible {
-  outline: 2px solid var(--id-focus);
-  outline-offset: 3px;
-}
-
-/* Liens soulignés : soulignement gris, blanc au survol. */
-main a.underline {
-  text-decoration-color: var(--id-text-3);
-}
-main a.underline:hover {
-  text-decoration-color: var(--id-text);
-}
-
-/* Listes minimalistes (demande de Dário, 04/10/2026) : plus de cartes arrondies.
-   Pas de fond, une ligne fine entre les éléments, titre blanc, résumé gris,
-   et une flèche à droite qui avance et s'éclaire au survol. */
-.m-list {
-  border-top: 1px solid #292929;
-}
-.m-row {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 16px 0;
-  border-bottom: 1px solid #292929;
-}
-.m-row > .m-body {
-  min-width: 0;
-  flex: 1;
-}
-.m-arrow {
-  flex-shrink: 0;
-  margin-left: auto;
-  padding-right: 4px;
-  font-size: 17px;
-  line-height: 20px;
-  color: var(--id-text-2);
-  transition: transform 0.15s, color 0.15s;
-}
-.m-row:hover .m-arrow,
-.m-row:focus-visible .m-arrow {
-  transform: translateX(3px);
-  color: var(--id-text);
-}
-/* Bloc de texte sans cadre : seulement une ligne fine au-dessus. */
-.m-flat {
-  border-top: 1px solid #292929;
-  padding-top: 24px;
-}
-@media (prefers-reduced-motion: reduce) {
-  .m-arrow { transition: none; }
-}
+.sr-only-v3 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 
 /* Version imprimable / PDF des guides (bouton « Télécharger en PDF »). */
 @page {
   margin: 16mm 14mm;
 }
-
 @media print {
-  html,
-  body {
-    background: #ffffff;
-  }
-
-  header,
-  footer,
-  .no-print {
-    display: none !important;
-  }
-
-  main {
-    padding-top: 0 !important;
-  }
-
-  .print-only {
-    display: block !important;
-  }
-
-  li,
-  img,
-  section {
-    break-inside: avoid;
-  }
-
-  h2,
-  h3 {
-    break-after: avoid;
-  }
-
-  img {
-    max-height: 110mm;
-    width: auto !important;
-    max-width: 100%;
-  }
-
-  a[href^="http"] {
-    color: #171717;
-  }
-
-  /* Impression : retour au texte foncé sur papier blanc. */
-  body,
-  body * {
-    color: #171717 !important;
-    background-color: transparent !important;
-    border-color: #d4d4d4 !important;
-  }
-
-  * {
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
+  html, body { background: #ffffff; }
+  main { padding-top: 0 !important; }
+  li, img, section { break-inside: avoid; }
+  h2, h3 { break-after: avoid; }
+  a[href^="http"] { color: #171717; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }

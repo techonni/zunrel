@@ -1,205 +1,90 @@
 ---
-import { href } from "../lib/paths";
-import { langLabels, listPath, ui, type Lang } from "../lib/i18n";
+// En-tête v3 : logo Z + nom, liens sur ordinateur, bouton menu sur mobile.
+// Le bouton menu ouvre une simple liste sous l'en-tête (pas de fenêtre par-dessus la page).
+import { logoSvg } from "../lib/v3";
+import { ui, type Lang } from "../lib/i18n";
 
 interface Props {
   lang?: Lang;
-  // Versions de cette page dans les autres langues (sinon : l'accueil de chaque langue).
   alternates?: { lang: Lang; path: string }[];
 }
+
 const { lang = "fr", alternates } = Astro.props;
-const switcher = (["fr", "en", "pt"] as const).map((code) => ({
-  code,
-  label: langLabels[code],
-  href: alternates?.find((item) => item.lang === code)?.path ?? (code === "fr" ? "/" : listPath(code)),
-}));
 const path = Astro.url.pathname;
-const frLinks = [
-  { href: "/guides", label: "Guides" },
-  { href: "/outils", label: "Outils" },
-  { href: "/faq", label: "FAQ" },
-  { href: "/a-propos", label: "À propos" },
-];
-// Pages traduites : un lien vers la liste des guides de la langue, et un lien vers le site français.
+const homeHref = lang === "pt" ? "/pt/" : lang === "en" ? "/en/" : "/";
+
 const links =
   lang === "fr"
-    ? frLinks
-    : [
-        { href: listPath(lang), label: ui[lang].guides },
-      ];
-const homeHref = lang === "fr" ? "/" : listPath(lang);
-const closeLabel = { fr: "Fermer le menu", en: "Close menu", pt: "Fechar o menu" }[lang];
+    ? [
+        { href: "/guides/", label: "Guides" },
+        { href: "/#fonctions", label: "Fonctions" },
+        { href: "/themes/comparer/", label: "Comparatifs" },
+        { href: "/newsletter/", label: "Newsletter" },
+      ]
+    : lang === "pt"
+      ? [
+          { href: "/pt/", label: "Guias" },
+          { href: "/guides/", label: "Guias em francês" },
+        ]
+      : [
+          { href: "/en/", label: "Guides" },
+          { href: "/guides/", label: "Guides in French" },
+        ];
+const menuExtra =
+  lang === "fr"
+    ? [
+        { href: "/a-propos/", label: "À propos" },
+        { href: "/offres/", label: "Offres du moment" },
+      ]
+    : [];
 
-function isCurrent(target: string) {
-  if (target === "/") return false;
-  if (lang !== "fr") return path.startsWith(target);
-  if (target === "/guides") return path.startsWith("/guides") || path.startsWith("/themes");
-  return path.startsWith(target);
-}
+// Sélecteur de langue : la version traduite de la page si elle existe, sinon l'accueil de la langue.
+const homes: Record<Lang, string> = { fr: "/", pt: "/pt/", en: "/en/" };
+const switcher = (["fr", "pt", "en"] as const).map((code) => ({
+  code,
+  label: code.toUpperCase(),
+  href: alternates?.find((item) => item.lang === code)?.path ?? homes[code],
+}));
+const isCurrent = (href: string) => !href.includes("#") && href !== "/" && path.startsWith(href) && !(href === "/guides/" && lang !== "fr");
 ---
 
-<!-- En-tête fixe en haut (demande de Dário, 04/10/2026) : fond noir, trait fin après défilement.
-     En dessous du menu latéral (z-[60]) ; la barre newsletter et le bandeau cookies sont en bas. -->
-<header data-sticky-header class="sticky top-0 z-40 border-b border-transparent bg-black px-5 py-6 transition-colors duration-200 data-[scrolled]:border-[#292929] sm:px-8">
-  <div class="flex items-center justify-between">
-    <a href={href(homeHref)} aria-label={ui[lang].home} class="flex items-center text-white">
-      <!-- Só o nome em branco, sem logótipo (pedido do Dário, 04/10/2026). -->
-      <span class="text-[15px] font-semibold tracking-[-0.01em]">Zunrel</span>
-    </a>
-    <button
-      type="button"
-      class="-my-1.5 flex h-10 w-10 items-center justify-center rounded-[8px] text-white transition-opacity hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-      aria-expanded="false"
-      aria-controls="site-menu"
-      aria-label="Menu"
-      data-menu-button
-    >
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
-        <path d="M2.5 4.5h13M2.5 9h13M2.5 13.5h13" />
-      </svg>
-    </button>
+<header class="hd" data-sticky-header>
+  <a class="brand" href={homeHref} aria-label={`Zunrel, ${ui[lang].home}`}><Fragment set:html={logoSvg(30)} /><b>Zunrel</b></a>
+  <div class="r">
+    <nav class="nav" aria-label="Menu principal">
+      {links.map((link) => <a href={link.href} aria-current={isCurrent(link.href) ? "page" : undefined}>{link.label}</a>)}
+    </nav>
+    <nav class="langs" aria-label="Langue / Language / Idioma">
+      {switcher.map((item) => (item.code === lang ? <span aria-current="true" style="color:#000">{item.label}</span> : <a href={item.href} hreflang={item.code}>{item.label}</a>))}
+    </nav>
+    <button class="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-menu" data-menu-button><i></i><i></i><i></i></button>
   </div>
 </header>
+<nav id="site-menu" class="mnu" hidden aria-label="Menu">
+  {[...links, ...menuExtra].map((link) => <a href={link.href} aria-current={isCurrent(link.href) ? "page" : undefined}>{link.label}</a>)}
+  <div class="lg">
+    {switcher.map((item) => (item.code === lang ? <span aria-current="true">{item.label}</span> : <a href={item.href} hreflang={item.code}>{item.label}</a>))}
+  </div>
+</nav>
 <script is:inline>
-  // En-tête fixe : un trait fin en bas seulement après défilement.
   (function () {
     var header = document.querySelector("[data-sticky-header]");
-    if (!header) return;
-    var update = function () { header.toggleAttribute("data-scrolled", window.scrollY > 4); };
-    update();
-    window.addEventListener("scroll", update, { passive: true });
+    var button = document.querySelector("[data-menu-button]");
+    var menu = document.getElementById("site-menu");
+    if (header) {
+      var update = function () { header.toggleAttribute("data-scrolled", window.scrollY > 4); };
+      update();
+      window.addEventListener("scroll", update, { passive: true });
+    }
+    if (!button || !menu) return;
+    function set(open) {
+      menu.hidden = !open;
+      button.setAttribute("aria-expanded", open ? "true" : "false");
+    }
+    button.addEventListener("click", function () { set(menu.hidden); });
+    menu.addEventListener("click", function (event) { if (event.target.closest("a")) set(false); });
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && !menu.hidden) { set(false); button.focus(); }
+    });
   })();
-</script>
-<!-- Espace : garde la page à la même hauteur qu'avant (l'en-tête avait 52px de padding en bas). -->
-<div aria-hidden="true" class="h-7"></div>
-
-<!-- Menu latéral : glisse depuis la droite, sur toute la hauteur, au-dessus de la page assombrie. -->
-<div id="site-menu" hidden class="group/drawer fixed inset-0 z-[60]" data-menu-drawer>
-  <div
-    class="absolute inset-0 bg-black/60 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 ease-out group-data-[open]/drawer:opacity-100 motion-reduce:transition-none"
-    aria-hidden="true"
-    data-menu-backdrop
-  ></div>
-  <div
-    role="dialog"
-    aria-modal="true"
-    aria-label="Menu"
-    class="absolute inset-y-0 right-0 flex w-[85%] max-w-[360px] translate-x-full flex-col overflow-y-auto border-l border-[#292929] bg-black px-5 pb-8 pt-6 shadow-[0_8px_32px_rgb(0_0_0/0.6)] transition-transform duration-300 ease-out group-data-[open]/drawer:translate-x-0 motion-reduce:transition-none sm:w-[320px] sm:px-8"
-    data-menu-panel
-  >
-    <div class="flex justify-end">
-      <button
-        type="button"
-        class="-my-1.5 flex h-10 w-10 items-center justify-center rounded-[8px] text-white transition-opacity hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-        aria-label={closeLabel}
-        data-menu-close
-      >
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
-          <path d="M4 4l10 10M14 4L4 14" />
-        </svg>
-      </button>
-    </div>
-    <!-- Lignes simples séparées par un trait fin, flèche › à droite (sans carte groupée). -->
-    <nav class="mt-8 flex flex-col border-t border-[#292929] text-[17px] font-semibold leading-5 tracking-[-0.01em]">
-      {
-        links.map((link) => {
-          const current = isCurrent(link.href);
-          return (
-            <a
-              href={href(link.href)}
-              aria-current={current ? "page" : undefined}
-              class="m-row !py-3.5 text-white aria-[current=page]:underline aria-[current=page]:decoration-[#808086] aria-[current=page]:underline-offset-4"
-            >
-              <span class="m-body">
-                {link.label}
-              </span>
-              <span aria-hidden="true" class="m-arrow !text-[20px]">›</span>
-            </a>
-          );
-        })
-      }
-    </nav>
-    <nav
-      aria-label="Langue / Language / Idioma"
-      class="mt-6 flex w-fit gap-5 text-[13px] font-semibold leading-4 tracking-[0.04em]"
-    >
-      {
-        switcher.map((item) =>
-          item.code === lang ? (
-            <span aria-current="true" class="py-1.5 text-white underline underline-offset-4">{item.label}</span>
-          ) : (
-            <a href={item.href} hreflang={item.code} class="py-1.5 text-[#95959b] hover:text-white">
-              {item.label}
-            </a>
-          ),
-        )
-      }
-    </nav>
-  </div>
-</div>
-
-<script>
-  // Menu latéral : le bouton l'ouvre ; ✕, Échap, clic sur le fond et clic sur un lien le referment.
-  // Le focus entre dans le menu (et y reste) puis revient au bouton ; la page ne défile pas tant qu'il est ouvert.
-  const button = document.querySelector<HTMLButtonElement>("[data-menu-button]");
-  const drawer = document.querySelector<HTMLElement>("[data-menu-drawer]");
-  if (button && drawer) {
-    const panel = drawer.querySelector<HTMLElement>("[data-menu-panel]")!;
-    const closeButton = drawer.querySelector<HTMLButtonElement>("[data-menu-close]")!;
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let hideTimer: number | undefined;
-    const isOpen = () => button.getAttribute("aria-expanded") === "true";
-    const lockScroll = (lock: boolean) => {
-      const root = document.documentElement;
-      if (lock) {
-        const scrollbar = window.innerWidth - root.clientWidth;
-        root.style.overflow = "hidden";
-        if (scrollbar > 0) document.body.style.paddingRight = `${scrollbar}px`;
-      } else {
-        root.style.overflow = "";
-        document.body.style.paddingRight = "";
-      }
-    };
-    const open = () => {
-      window.clearTimeout(hideTimer);
-      drawer.hidden = false;
-      lockScroll(true);
-      void drawer.offsetWidth; // la glissade part de la position fermée
-      drawer.setAttribute("data-open", "");
-      button.setAttribute("aria-expanded", "true");
-      closeButton.focus({ preventScroll: true });
-    };
-    const close = () => {
-      if (!isOpen()) return;
-      drawer.removeAttribute("data-open");
-      button.setAttribute("aria-expanded", "false");
-      lockScroll(false);
-      button.focus({ preventScroll: true });
-      hideTimer = window.setTimeout(() => (drawer.hidden = true), reducedMotion.matches ? 0 : 300);
-    };
-    button.addEventListener("click", () => (isOpen() ? close() : open()));
-    closeButton.addEventListener("click", close);
-    drawer.querySelector("[data-menu-backdrop]")!.addEventListener("click", close);
-    panel.addEventListener("click", (event) => {
-      if ((event.target as Element).closest("a")) close();
-    });
-    document.addEventListener("keydown", (event) => {
-      if (!isOpen()) return;
-      if (event.key === "Escape") {
-        event.preventDefault();
-        close();
-      } else if (event.key === "Tab") {
-        const items = [...panel.querySelectorAll<HTMLElement>("a[href], button")];
-        const first = items[0];
-        const last = items[items.length - 1];
-        if (event.shiftKey && (document.activeElement === first || !panel.contains(document.activeElement))) {
-          event.preventDefault();
-          last.focus();
-        } else if (!event.shiftKey && (document.activeElement === last || !panel.contains(document.activeElement))) {
-          event.preventDefault();
-          first.focus();
-        }
-      }
-    });
-  }
 </script>

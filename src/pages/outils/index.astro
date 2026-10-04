@@ -5,7 +5,7 @@ import { themes, tools } from "../../lib/guides";
 ---
 
 <Base title="Outils" description="systeme.io, l'outil présenté dans tous les guides Zunrel : à qui il sert, et à quoi faire attention.">
-  <h1 class="text-[22px] font-semibold leading-7 text-white">Outils</h1>
+  <h1>Outils</h1>
   <p class="mt-4 text-[15px] leading-6 text-[#95959b]">
     Zunrel ne présente qu'un outil : systeme.io. À qui il sert, et à quoi faire attention.
   </p>
@@ -15,7 +15,7 @@ import { themes, tools } from "../../lib/guides";
       if (list.length === 0) return null;
       return (
         <section class="mt-14">
-          <h2 class="text-[13px] leading-5 text-[#95959b]">{theme.name}</h2>
+          <h2 class="sh">{theme.name}</h2>
           <div class="mt-6 m-list">
             {list.map((tool) => <ToolRow tool={tool} />)}
           </div>

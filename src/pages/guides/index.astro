@@ -7,19 +7,17 @@ import { href } from "../../lib/paths";
 ---
 
 <Base title="Tous les guides" description="Tous les guides pratiques systeme.io, classés par thème : prix, tunnels, e-mails, vente, formations, affiliation.">
-  <h1 class="text-[22px] font-semibold leading-7 text-white">Tous les guides</h1>
-  <p class="mt-4 text-[15px] leading-6 text-[#95959b]">Classés par thème, puis en guides express (une question) et guides complets (un projet de A à Z), du plan gratuit à votre première vente.</p>
+  <h1>Tous les guides</h1>
+  <p class="lede">Classés par thème, puis en guides express (une question) et guides complets (un projet de A à Z), du plan gratuit à votre première vente.</p>
   <FormatCards class="mt-8" />
   {
     themes.map((theme) => {
       const list = guidesInTheme(theme.slug);
       if (list.length === 0) return null;
       return (
-        <section class="mt-14">
-          <a href={href(`/themes/${theme.slug}`)} class="text-[13px] leading-5 text-[#95959b] hover:underline">
-            {theme.name}
-          </a>
-          <div class="mt-5">
+        <section class="mt-24">
+          <h2 class="sh"><a href={href(`/themes/${theme.slug}`)}>{theme.name}.</a> <span>{theme.blurb}</span></h2>
+          <div>
             <FormatGroups guides={list} />
           </div>
         </section>

@@ -14,14 +14,14 @@ const groups = formats
   .filter((group) => group.list.length > 0);
 ---
 
-<div class="space-y-10">
+<div>
   {
     groups.map(({ item, list }) => (
-      <div>
-        <a href={href(`/formats/${item.slug}`)} class="text-[13px] font-medium leading-5 text-white hover:underline">
-          {item.name} <span class="font-normal text-[#808086]">· {list.length}</span>
+      <div class="grp">
+        <a href={href(`/formats/${item.slug}`)} class="kat">
+          {item.name} · {list.length}
         </a>
-        <div class="mt-5 m-list">
+        <div class="glist">
           {list.map((guide) => <GuideRow guide={guide} />)}
         </div>
       </div>

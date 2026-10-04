@@ -1,20 +1,23 @@
 ---
+// Carte de guide v3 : vignette (écran de téléphone ou icône d'app), date, question, résumé.
 import { href } from "../lib/paths";
 import { readingMinutes, type Guide } from "../lib/guides";
+import { frTypo, picInner, shortDate } from "../lib/v3";
 
 interface Props {
   guide: Guide;
+  desc?: boolean;
+  minutes?: boolean;
 }
 
-const { guide } = Astro.props;
+const { guide, desc = true, minutes = true } = Astro.props;
 ---
 
-<!-- Ligne de liste minimaliste (classes m-row / m-arrow dans global.css). -->
-<a href={href(`/guides/${guide.slug}`)} class="m-row group">
-  <span class="m-body">
-    <span class="block text-[15px] font-medium leading-5 text-white">{guide.question}</span>
-    <span class="mt-1 block text-[14px] leading-5 text-[#95959b]">{guide.summary}</span>
-    <span class="mt-1 block text-[13px] leading-5 text-[#808086]">Lecture : {readingMinutes(guide)} min</span>
-  </span>
-  <span class="m-arrow" aria-hidden="true">→</span>
+<a href={href(`/guides/${guide.slug}`)} class="card">
+  <div class="pic" set:html={picInner(guide.slug)} />
+  <div class="ct">
+    <p class="date">{shortDate(guide.updatedOn)}{minutes ? ` · ${readingMinutes(guide)} min` : ""}</p>
+    <h4>{frTypo(guide.question)}</h4>
+    {desc ? <p class="desc">{guide.summary}</p> : null}
+  </div>
 </a>

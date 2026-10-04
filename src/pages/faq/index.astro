@@ -32,7 +32,7 @@ const faq = {
 >
   <script type="application/ld+json" slot="head" set:html={JSON.stringify(faq)} />
 
-  <h1 class="text-[22px] font-semibold leading-7 text-white">Questions fréquentes</h1>
+  <h1>Questions fréquentes</h1>
   <p class="mt-4 text-[15px] leading-6 text-[#95959b]">
     Une réponse courte à chaque question, puis le guide complet, étape par étape.
   </p>
@@ -45,7 +45,7 @@ const faq = {
         <div class="mt-5 space-y-8">
           {list.map((guide) => (
             <div>
-              <h2 class="text-[15px] font-medium leading-5 text-white">{guide.question}</h2>
+              <h2 class="text-[22px] font-semibold text-white">{guide.question}</h2>
               <p class="mt-2 text-[15px] leading-6 text-[#95959b]">{guide.intro}</p>
               <a
                 href={href(`/guides/${guide.slug}`)}

@@ -11,7 +11,7 @@ const latest = [...guides].sort((a, b) => b.updatedOn.localeCompare(a.updatedOn)
 ---
 
 <Base title="Inscription confirmée" description="Votre inscription à la newsletter Zunrel est confirmée.">
-  <h1 class="text-[22px] font-semibold leading-7 text-white">C'est confirmé, merci !</h1>
+  <h1>C'est confirmé, merci !</h1>
   <p class="mt-4 text-[15px] leading-6 text-[#95959b]">
     Vous recevrez les prochains guides systeme.io par e-mail. Vous pouvez vous désinscrire à tout
     moment, en un clic, depuis chaque e-mail.
@@ -21,7 +21,7 @@ const latest = [...guides].sort((a, b) => b.updatedOn.localeCompare(a.updatedOn)
     vos contacts. Si un e-mail arrive dans les indésirables, marquez-le comme « Pas un spam ».
   </p>
   <section class="mt-10 m-flat">
-    <h2 class="text-[15px] font-medium leading-5 text-white">Vos cadeaux</h2>
+    <h2 class="text-[22px] font-semibold text-white">Vos cadeaux</h2>
     <p class="mt-3 text-[14px] leading-6 text-[#95959b]">
       À imprimer ou enregistrer en PDF, selon votre projet.
     </p>
@@ -38,7 +38,7 @@ const latest = [...guides].sort((a, b) => b.updatedOn.localeCompare(a.updatedOn)
       }
     </ul>
   </section>
-  <h2 class="mt-10 text-[15px] font-medium leading-5 text-white">En attendant, les derniers guides</h2>
+  <h2 class="mt-12 text-[22px] font-semibold text-white">En attendant, les derniers guides</h2>
   <ul class="mt-4 space-y-3 text-[15px] leading-6">
     {
       latest.map((guide) => (

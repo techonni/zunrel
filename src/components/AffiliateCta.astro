@@ -1,7 +1,7 @@
 ---
-// Bouton affilié systeme.io d'un guide. Placé deux fois : en haut (juste après l'intro, version
-// courte) et en bas (après les étapes, version complète). `data-placement` part dans l'événement
-// GA4 `affiliate_click` pour savoir quel emplacement convertit le mieux.
+// Encadré affilié systeme.io d'un guide (style v3 : encadré gris clair, bouton noir arrondi).
+// Placé deux fois : en haut (après l'intro, version courte) et en bas (après les étapes).
+// `data-placement` part dans l'événement GA4 `affiliate_click`.
 // Chaque lien affilié : rel="sponsored noopener", nouvel onglet, et la mention affiliée visible.
 import { affiliateLinks, affiliateDisclosure } from "../lib/guides";
 import { ui, type Lang } from "../lib/i18n";
@@ -20,46 +20,15 @@ const cta =
         short: "Pour suivre ce guide, il vous faut un compte systeme.io : le plan gratuit ne demande pas de carte bancaire.",
         text: "systeme.io a un plan gratuit, sans carte bancaire et sans limite de durée. Vous pouvez tout construire avant de payer quoi que ce soit.",
         label: "Créer un compte gratuit systeme.io ↗",
-        title: "Essayer par vous-même",
       }
-    : { short: ui[lang].ctaShort, text: ui[lang].cta, label: ui[lang].ctaLabel, title: ui[lang].tryYourself };
+    : { short: ui[lang].ctaShort, text: ui[lang].cta, label: ui[lang].ctaLabel };
 const href = affiliateLinks[lang];
 const disclosure = affiliateDisclosure[lang];
+const dataPlacement = lang === "fr" ? placement : `${placement}-${lang}`;
 ---
 
-{
-  placement === "haut" ? (
-    <aside data-pagefind-ignore class="no-print mt-6 border-t border-[#292929] pt-4">
-      <div class="flex flex-col gap-3 min-[480px]:flex-row min-[480px]:items-center">
-        <p class="flex-1 text-[14px] leading-6 text-[#95959b]">{cta.short}</p>
-        <a
-          href={href}
-          target="_blank"
-          rel="sponsored noopener"
-          data-affiliate="systeme-io"
-          data-placement="haut"
-          class="inline-flex h-[36px] shrink-0 items-center justify-center rounded-full bg-white px-4 text-[14px] font-medium text-black hover:bg-[#e5e5e5]"
-        >
-          {cta.label}
-        </a>
-      </div>
-      <p class="mt-2 text-[12px] leading-5 text-[#808086]">{disclosure}</p>
-    </aside>
-  ) : (
-    <section data-pagefind-ignore class="mt-14 m-flat">
-      <h2 class="text-[15px] font-medium leading-5 text-white">{cta.title}</h2>
-      <p class="mt-3 text-[14px] leading-6 text-[#95959b]">{cta.text}</p>
-      <a
-        href={href}
-        target="_blank"
-        rel="sponsored noopener"
-        data-affiliate="systeme-io"
-        data-placement="bas"
-        class="mt-5 inline-flex h-[39px] items-center rounded-full bg-white px-6 text-[14px] font-medium text-black hover:bg-[#e5e5e5]"
-      >
-        {cta.label}
-      </a>
-      <p class="mt-3 text-[13px] leading-5 text-[#808086]">{disclosure}</p>
-    </section>
-  )
-}
+<div class="note no-print" data-pagefind-ignore>
+  <p>{placement === "haut" ? cta.short : cta.text}</p>
+  <a class="pill black" href={href} target="_blank" rel="sponsored noopener" data-affiliate="systeme-io" data-placement={dataPlacement}>{cta.label}</a>
+  <small>{disclosure}</small>
+</div>

@@ -3,6 +3,7 @@
 import Base from "../layouts/Base.astro";
 import { getGuide, guideFormat, type Guide } from "../lib/guides";
 import { translatedPath, translations, ui, type OtherLang } from "../lib/i18n";
+import { picInner, shortDate } from "../lib/v3";
 
 interface Props {
   lang: OtherLang;
@@ -29,31 +30,31 @@ const groups = (["express", "complet"] as const)
     { lang: "en", path: "/en/" },
   ]}
 >
-  <h1 class="text-[26px] font-semibold leading-8 tracking-[-0.015em] text-white">{t.listTitle}</h1>
-  <p class="mt-4 text-[15px] leading-6 text-[#95959b]">{t.listIntro}</p>
+  <h1>{t.listTitle}</h1>
+  <p class="lede">{t.listIntro}</p>
   {
     groups.map((group) => (
-      <section class="mt-12">
-        <h2 class="text-[13px] font-medium leading-5 text-white">
-          {group.title} <span class="font-normal text-[#808086]">· {group.list.length}</span>
+      <section class="mt-24">
+        <h2 class="sh">
+          {group.title} <span>· {group.list.length}</span>
         </h2>
-        <div class="mt-5 m-list">
+        <div class="glist">
           {group.list.map((item) => (
-            <a href={translatedPath(lang, item.localSlug)} class="m-row group">
-              <span class="m-body">
-                <span class="block text-[15px] font-medium leading-5 text-white">{item.question}</span>
-                <span class="mt-1 block text-[14px] leading-5 text-[#95959b]">{item.summary}</span>
-              </span>
-              <span class="m-arrow" aria-hidden="true">→</span>
+            <a href={translatedPath(lang, item.localSlug)} class="card">
+              <div class="pic" set:html={picInner(item.slug, true)} />
+              <div class="ct">
+                <p class="date">{shortDate((getGuide(item.slug) as Guide).updatedOn, lang)}</p>
+                <h4>{item.question}</h4>
+                <p class="desc">{item.summary}</p>
+              </div>
             </a>
           ))}
         </div>
       </section>
     ))
   }
-  <p class="mt-12 text-[14px] leading-6">
-    <a href="/" hreflang="fr" class="text-white underline underline-offset-4 decoration-[#808086] hover:decoration-white">Zunrel en français</a>
-    ·
-    <a href={lang === "pt" ? "/en/" : "/pt/"} hreflang={lang === "pt" ? "en" : "pt"} class="text-white underline underline-offset-4 decoration-[#808086] hover:decoration-white">{t.otherLang}</a>
+  <p class="mt-16 flex flex-wrap gap-3">
+    <a href="/" hreflang="fr" class="pill light">Zunrel en français</a>
+    <a href={lang === "pt" ? "/en/" : "/pt/"} hreflang={lang === "pt" ? "en" : "pt"} class="pill light">{t.otherLang}</a>
   </p>
 </Base>

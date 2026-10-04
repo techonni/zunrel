@@ -4,6 +4,8 @@
 import Base from "../layouts/Base.astro";
 import { affiliateLinks, getGuide, type Guide } from "../lib/guides";
 import NewsletterForm from "./NewsletterForm.astro";
+import AffiliateCta from "./AffiliateCta.astro";
+import { appIcon, iconOf, picInner, shortDate } from "../lib/v3";
 import {
   localizeSource,
   getTranslation,
@@ -36,6 +38,9 @@ const minutes = Math.max(1, Math.round(item.steps.map((step) => step.text).join(
 const date = new Intl.DateTimeFormat(lang === "pt" ? "pt-BR" : "en-US", { day: "numeric", month: "long", year: "numeric" }).format(
   new Date(guide.updatedOn),
 );
+const L = lang === "pt"
+  ? { guide: "Guia", by: "Por", copy: "Copiar o link do guia", copied: "Link copiado", pdf: "Baixar em PDF" }
+  : { guide: "Guide", by: "By", copy: "Copy the guide link", copied: "Link copied", pdf: "Download as PDF" };
 const cta = { href: affiliateLinks[lang], tool: "systeme-io", short: t.ctaShort, text: t.cta, label: t.ctaLabel };
 
 const howTo = {
@@ -49,6 +54,7 @@ const howTo = {
 ---
 
 <Base
+  bare
   lang={lang}
   title={item.question}
   description={item.summary}
@@ -59,144 +65,114 @@ const howTo = {
 >
   <script type="application/ld+json" slot="head" set:html={JSON.stringify(howTo)} />
 
-  <h1 class="text-[26px] font-semibold leading-8 tracking-[-0.015em] text-white">{item.question}</h1>
-  <p class="mt-4 text-[15px] leading-6 text-[#95959b]">{item.intro}</p>
-  <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px] leading-5 text-[#808086]">
-    <p>{t.reading}: {minutes} min</p>
-    <p>{t.updated} {date}</p>
-    <a href={`/guides/${guide.slug}/`} hreflang="fr" class="text-[#95959b] hover:underline">{t.frenchVersion}</a>
-    {otherItem ? (
-      <a href={translatedPath(other, otherItem.localSlug)} hreflang={other} class="text-[#95959b] hover:underline">{t.otherLang}</a>
-    ) : null}
-    <button
-      type="button"
-      data-print
-      class="no-print inline-flex h-[30px] items-center gap-1.5 rounded-full border border-[#3a3a3c] bg-[#202020] px-3 text-[13px] font-medium text-white hover:bg-[#2c2c2e]"
-    >
-      <svg aria-hidden="true" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M3 13h10" /></svg>
-      {t.downloadPdf}
-    </button>
-  </div>
-  <script>
-    document.querySelectorAll("[data-print]").forEach((button) => {
-      button.addEventListener("click", () => window.print());
-    });
-  </script>
-
-  <aside class="no-print mt-6 border-t border-[#292929] pt-4">
-    <div class="flex flex-col gap-3 min-[480px]:flex-row min-[480px]:items-center">
-      <p class="flex-1 text-[14px] leading-6 text-[#95959b]">{cta.short}</p>
-      <a
-        href={cta.href}
-        target="_blank"
-        rel="sponsored noopener"
-        data-affiliate={cta.tool}
-        data-placement={`haut-${lang}`}
-        class="inline-flex h-[36px] shrink-0 items-center justify-center rounded-full bg-white px-4 text-[14px] font-medium text-black hover:bg-[#e5e5e5]"
-      >
-        {cta.label}
-      </a>
+  <article>
+    <div class="art3">
+      <p class="kat no-print"><a href={listPath(lang)}>{L.guide}</a></p>
+      <h1>{item.question}</h1>
+      <p class="subt">{item.summary}</p>
+      <div class="byl">
+        <p>
+          {L.by} <a href="/a-propos/" hreflang="fr">Dario Pinheiro</a>
+          <time datetime={guide.updatedOn}>{t.updated} {date} · {t.reading}: {minutes} min</time>
+          <span class="alt no-print">
+            <a href={`/guides/${guide.slug}/`} hreflang="fr">{t.frenchVersion}</a>
+            {otherItem ? <> · <a href={translatedPath(other, otherItem.localSlug)} hreflang={other}>{t.otherLang}</a></> : null}
+          </span>
+        </p>
+        <span class="acts no-print">
+          <button class="cp" type="button" data-print aria-label={L.pdf} title={L.pdf}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19h14" /></svg>
+          </button>
+          <button class="cp" type="button" data-copy aria-label={L.copy} title={L.copy}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1.2 1.2"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1.2-1.2"/></svg><em>{L.copied}</em>
+          </button>
+        </span>
+      </div>
+      <div class="pic" set:html={appIcon(iconOf(guide.slug))} />
     </div>
-    <p class="mt-2 text-[12px] leading-5 text-[#808086]">{t.affiliate}</p>
-  </aside>
 
-  <section class="mt-10 m-flat">
-    <h2 class="text-[15px] font-medium leading-5 text-white">{t.inShort}</h2>
-    <ol class="mt-4 list-decimal space-y-1.5 pl-5 text-[15px] leading-6 text-[#d1d1d6]">
-      {item.steps.map((step) => <li>{step.title}</li>)}
-    </ol>
-    {item.pitfalls[0] ? (
-      <p class="mt-4 text-[14px] leading-6 text-[#95959b]">
-        <span class="font-medium text-white">{t.avoid}</span> {item.pitfalls[0]}
-      </p>
-    ) : null}
-    <a href="#steps" class="no-print mt-4 inline-block text-[14px] font-medium leading-5 text-white hover:underline">{t.seeDetail}</a>
-  </section>
+    <div class="prose">
+      <p>{item.intro}</p>
+      <AffiliateCta placement="haut" lang={lang} />
 
-  <section id="steps" class="mt-14">
-    <h2 class="text-[13px] leading-5 text-[#95959b]">{t.stepByStep}</h2>
-    <p class="mt-2 text-[13px] leading-5 text-[#808086]">{t.uiNote}</p>
-    <ol class="mt-6 space-y-8">
+      <h2>{t.inShort}</h2>
+      <ol>{item.steps.map((step) => <li>{step.title}</li>)}</ol>
+      {item.pitfalls[0] ? <p><strong>{t.avoid}</strong> {item.pitfalls[0]}</p> : null}
+
+      <h2 id="steps">{t.stepByStep}</h2>
+      <p class="uin">{t.uiNote}</p>
+      <ol class="steps3">
+        {item.steps.map((step, index) => (
+          <li>
+            <h3><span>{index + 1}.</span>{step.title}</h3>
+            {step.text.split("\n\n").map((paragraph) => <p>{paragraph}</p>)}
+          </li>
+        ))}
+      </ol>
+
+      <h2 class="no-print">{t.tryYourself}</h2>
+      <AffiliateCta placement="bas" lang={lang} />
+
       {
-        item.steps.map((step, index) => {
-          return (
-            <li class="flex gap-4">
-              <span class="flex size-7 shrink-0 items-center justify-center rounded-full bg-white text-[13px] font-medium text-black">
-                {index + 1}
-              </span>
-              <div>
-                <h3 class="text-[15px] font-medium leading-6 text-white">{step.title}</h3>
-                {step.text.split("\n\n").map((paragraph, i) => (
-                  <p class:list={["text-[15px] leading-6 text-[#95959b]", i === 0 ? "mt-1" : "mt-3"]}>{paragraph}</p>
-                ))}
-              </div>
-            </li>
-          );
-        })
+        item.pitfalls.length > 0 ? (
+          <>
+            <h2>{t.pitfalls}</h2>
+            <ul>{item.pitfalls.map((pitfall) => <li>{pitfall}</li>)}</ul>
+          </>
+        ) : null
       }
-    </ol>
-  </section>
 
-  <section class="mt-14 m-flat">
-    <h2 class="text-[15px] font-medium leading-5 text-white">{t.tryYourself}</h2>
-    <p class="mt-3 text-[14px] leading-6 text-[#95959b]">{cta.text}</p>
-    <a
-      href={cta.href}
-      target="_blank"
-      rel="sponsored noopener"
-      data-affiliate={cta.tool}
-      data-placement={`bas-${lang}`}
-      class="mt-5 inline-flex h-[39px] items-center rounded-full bg-white px-6 text-[14px] font-medium text-black hover:bg-[#e5e5e5]"
-    >
-      {cta.label}
-    </a>
-    <p class="mt-3 text-[13px] leading-5 text-[#808086]">{t.affiliate}</p>
-  </section>
+      {
+        sources.length > 0 ? (
+          <>
+            <h2>{t.sources}</h2>
+            <ul>{sources.map((source) => <li><a href={source.url} target="_blank" rel="noopener">{source.label}</a></li>)}</ul>
+          </>
+        ) : null
+      }
+    </div>
+  </article>
 
-  {
-    item.pitfalls.length > 0 ? (
-      <section class="mt-14 border-l-2 border-[#6b5a26] pl-5">
-        <h2 class="text-[15px] font-medium leading-5 text-white">{t.pitfalls}</h2>
-        <ul class="mt-4 list-disc space-y-2 pl-5 text-[15px] leading-6 text-[#e8d9a8]">
-          {item.pitfalls.map((pitfall) => <li>{pitfall}</li>)}
-        </ul>
-      </section>
-    ) : null
-  }
-
-  {
-    sources.length > 0 ? (
-      <section class="mt-14">
-        <h2 class="text-[13px] leading-5 text-[#95959b]">{t.sources}</h2>
-        <ul class="mt-4 space-y-2">
-          {sources.map((source) => (
-            <li>
-              <a href={source.url} target="_blank" rel="noopener" class="text-[15px] font-medium leading-6 text-white hover:underline">
-                {source.label} ↗
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
-    ) : null
-  }
-
-  <NewsletterForm lang={lang} />
-
-  <section class="mt-14">
-    <h2 class="text-[13px] leading-5 text-[#95959b]">{t.readNext}</h2>
-    <div class="mt-6 m-list">
+  <section class="more3 no-print">
+    <h3 class="sh">{t.readNext}</h3>
+    <div class="list">
       {
         related.map((entry) => (
-          <a href={translatedPath(lang, entry.localSlug)} class="m-row group">
-            <span class="m-body">
-              <span class="block text-[15px] font-medium leading-5 text-white">{entry.question}</span>
-              <span class="mt-1 block text-[14px] leading-5 text-[#95959b]">{entry.summary}</span>
-            </span>
-            <span class="m-arrow" aria-hidden="true">→</span>
+          <a href={translatedPath(lang, entry.localSlug)} class="card">
+            <div class="pic" set:html={picInner(entry.slug, true)} />
+            <div class="ct">
+              <p class="date">{shortDate((getGuide(entry.slug) as Guide).updatedOn, lang)}</p>
+              <h4>{entry.question}</h4>
+            </div>
           </a>
         ))
       }
     </div>
   </section>
+
+  <section class="sub3 no-print" id="newsletter">
+    <NewsletterForm lang={lang} />
+  </section>
+
+  <script>
+    document.querySelectorAll<HTMLButtonElement>("[data-print]").forEach((button) => {
+      button.addEventListener("click", () => window.print());
+    });
+    document.querySelectorAll<HTMLButtonElement>("[data-copy]").forEach((button) => {
+      button.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(location.href);
+        } catch {
+          const t = document.createElement("textarea");
+          t.value = location.href;
+          document.body.append(t);
+          t.select();
+          document.execCommand("copy");
+          t.remove();
+        }
+        button.classList.add("done");
+        setTimeout(() => button.classList.remove("done"), 1600);
+      });
+    });
+  </script>
 </Base>
