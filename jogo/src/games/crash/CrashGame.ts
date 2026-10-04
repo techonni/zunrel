@@ -2,7 +2,7 @@ import { Container, Graphics, Rectangle, type Text } from 'pixi.js';
 import gsap from 'gsap';
 import { C, R } from './theme';
 import { makeMono, makeText } from './text';
-import { helpIcon, menuIcon, plusIcon, resetIcon, ringLogo, speaker, userIcon } from './icons';
+import { helpIcon, menuIcon, plusIcon, resetIcon, speaker, userIcon } from './icons';
 import type { GameScene } from '../../core/scene';
 import { ScrollBox } from '../../core/ui/ScrollBox';
 import { sound } from './audio/Sound';
@@ -74,7 +74,6 @@ export class CrashGame implements GameScene {
 
   // Cabeçalho
   private readonly header = new Container();
-  private readonly logo = ringLogo(26);
   private readonly brand: Text;
   private readonly sep: Text;
   private readonly gameName: Text;
@@ -242,7 +241,7 @@ export class CrashGame implements GameScene {
     userIcon(this.userBtn.icon);
     userIcon(this.menuBtn.icon);
     this.drawAccountIcon();
-    this.header.addChild(this.logo, this.brand, this.sep, this.gameName, this.badge, this.balancePill, this.soundBtn, this.helpBtn, this.userBtn, this.menuBtn);
+    this.header.addChild(this.brand, this.sep, this.gameName, this.badge, this.balancePill, this.soundBtn, this.helpBtn, this.userBtn, this.menuBtn);
   }
 
   private drawSoundIcon(): void {
@@ -462,10 +461,8 @@ export class CrashGame implements GameScene {
   private layoutHeader(ox: number, contentW: number, cy: number, wide: boolean): void {
     const fs = wide ? 15 : 14;
     for (const t of [this.brand, this.sep, this.gameName]) t.style.fontSize = fs;
-    this.logo.scale.set(wide ? 1 : 0.85);
-    let x = ox + (wide ? 13 : 11);
-    this.logo.position.set(x, cy);
-    x += wide ? 23 : 19;
+    // Cabeçalho só com o nome « Zunrel » em branco, sem logótipo (pedido do Dário, 04/10/2026).
+    let x = ox;
     this.brand.position.set(x, cy);
     x += this.brand.width + (wide ? 10 : 7);
     this.sep.position.set(x, cy);
