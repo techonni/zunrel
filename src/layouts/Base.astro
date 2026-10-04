@@ -13,12 +13,15 @@ interface Props {
   noindex?: boolean;
   // Données structurées supplémentaires (JSON-LD).
   jsonLd?: object;
+  // Image og propre à la page (sinon l'image générale du site).
+  image?: string;
+  imageAlt?: string;
 }
 
-const { title, description = homeDescription, type = "website", current, noindex = false, jsonLd } = Astro.props;
+const { title, description = homeDescription, type = "website", current, noindex = false, jsonLd, image = ogImage, imageAlt } = Astro.props;
 const documentTitle = title ? `${title} · ${siteName}` : homeTitle;
 const canonical = new URL(Astro.url.pathname, Astro.site);
-const imageUrl = new URL(ogImage, Astro.site);
+const imageUrl = new URL(image, Astro.site);
 ---
 
 <!doctype html>
@@ -42,7 +45,7 @@ const imageUrl = new URL(ogImage, Astro.site);
     <meta property="og:image" content={imageUrl} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content={`${siteName} : ${tagline}`} />
+    <meta property="og:image:alt" content={imageAlt ?? `${siteName} : ${tagline}`} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="p:domain_verify" content="485d0834fb682f692cd0c2e316b227a8" />
     {jsonLd ? <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} /> : null}

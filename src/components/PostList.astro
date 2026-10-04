@@ -1,20 +1,20 @@
 ---
+// Cartes du blog : aperçu 16:9 (iPhone dessiné en SVG), puis date, titre et description.
 import { f, posts } from "../lib/site";
+import { previewSvg } from "../lib/previews";
 ---
 
-<ol class="list">
+<ol class="cards">
   {
-    posts.map((post) => {
-      const inner = (
-        <Fragment>
+    posts.map((post) => (
+      <li>
+        <a href={`/blog/${post.slug}/`}>
+          <span class="pv" set:html={previewSvg(post.slug)} />
           <time datetime={post.date}>{post.dateLabel}</time>
-          <div class="tx">
-            <h3>{f(post.title)}</h3>
-            <p>{f(post.description)}</p>
-          </div>
-        </Fragment>
-      );
-      return <li><a href={`/blog/${post.slug}/`}>{inner}</a></li>;
-    })
+          <h3>{f(post.title)}</h3>
+          <p>{f(post.description)}</p>
+        </a>
+      </li>
+    ))
   }
 </ol>

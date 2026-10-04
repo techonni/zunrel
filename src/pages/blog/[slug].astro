@@ -4,6 +4,7 @@ import Letter from "../../components/Letter.astro";
 import { f, posts, siteName, type Post } from "../../lib/site";
 import { articles } from "../../lib/articles";
 import { readingMinutes } from "../../lib/articles/common";
+import { previewSvg } from "../../lib/previews";
 
 export function getStaticPaths() {
   return posts.map((post, i) => ({ params: { slug: post.slug }, props: { post, next: posts[(i + 1) % posts.length] } }));
@@ -24,11 +25,11 @@ const jsonLd = {
   author: { "@type": "Organization", name: siteName, url: "https://zunrel.com/" },
   publisher: { "@type": "Organization", name: siteName, url: "https://zunrel.com/" },
   mainEntityOfPage: url,
-  image: "https://zunrel.com/og.png",
+  image: `https://zunrel.com/og/${post.slug}.png`,
 };
 ---
 
-<Base title={post.title} description={f(post.description)} type="article" current="blog" jsonLd={jsonLd}>
+<Base title={post.title} description={f(post.description)} type="article" current="blog" jsonLd={jsonLd} image={`/og/${post.slug}.png`} imageAlt={`Aperçu : ${post.title}`}>
   <main class="w">
     <article>
       <header class="ah">
@@ -36,6 +37,7 @@ const jsonLd = {
         <h1>{f(post.title)}</h1>
         <p class="meta"><time datetime={post.date}>{post.dateLabel}</time> · {minutes}&nbsp;min de lecture</p>
       </header>
+      <div class="pv pv-top" set:html={previewSvg(post.slug)} />
       <div class="prose">
         {
           body.map((b) =>
