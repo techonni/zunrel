@@ -1,6 +1,6 @@
 // Outils communs aux articles du blog.
 export type Block = ["p" | "h2", string] | ["ol" | "ul", string[]] | ["figure"];
-export type Article = { body: Block[]; caption: string; diagram: string };
+export type Article = { body: Block[]; caption: string; diagram: string; points?: string[] };
 
 export const readingMinutes = (body: Block[]) => {
   const words = body

@@ -44,6 +44,18 @@ export const posts: Post[] = [
   { title: "Créer une liste de tâches dans Notion", description: "Une base de données simple avec un nom, un statut et une date.", slug: "creer-une-liste-de-taches-notion", date: "2026-10-05", dateLabel: "5 oct. 2026" },
   { title: "Créer un modèle pour ne plus recommencer", description: "Garder une page toute prête pour les réunions, lectures ou tâches répétées.", slug: "creer-ton-propre-modele-notion", date: "2026-10-05", dateLabel: "5 oct. 2026" },
   { title: "Relier deux bases de données", description: "Rattacher chaque tâche à son projet avec une propriété Relation.", slug: "relier-deux-bases-de-donnees", date: "2026-10-05", dateLabel: "5 oct. 2026" },
+  { title: "Créer un calendrier dans Notion", description: "Afficher tes tâches et tes dates sur un calendrier, sans rien recopier.", slug: "creer-un-calendrier-dans-notion", date: "2026-10-05", dateLabel: "5 oct. 2026" },
+  { title: "Prendre des notes de réunion dans Notion", description: "Une page simple pour l'ordre du jour, les décisions et les actions à suivre.", slug: "prendre-des-notes-de-reunion-notion", date: "2026-10-05", dateLabel: "5 oct. 2026" },
+  { title: "Les blocs de base de Notion", description: "Titres, listes, cases à cocher, citations : les blocs que tu utiliseras tous les jours.", slug: "les-blocs-de-base-de-notion", date: "2026-10-05", dateLabel: "5 oct. 2026" },
+  { title: "Organiser ses pages avec des sous-pages", description: "Ranger tes pages comme des dossiers, sans te perdre dans la barre latérale.", slug: "organiser-ses-pages-avec-des-sous-pages", date: "2026-10-05", dateLabel: "5 oct. 2026" },
+  { title: "Les raccourcis clavier de Notion", description: "Cinq gestes pour écrire plus vite : barre oblique, @, mise en forme, recherche et annuler.", slug: "les-raccourcis-clavier-notion", date: "2026-10-05", dateLabel: "5 oct. 2026" },
+  { title: "Créer un suivi des habitudes dans Notion", description: "Une base de données simple pour cocher chaque jour tes habitudes.", slug: "creer-un-suivi-des-habitudes-notion", date: "2026-10-05", dateLabel: "5 oct. 2026" },
+  { title: "Partager une page Notion", description: "Inviter une personne ou publier une page : choisir ce que les autres peuvent faire.", slug: "partager-une-page-notion", date: "2026-10-05", dateLabel: "5 oct. 2026" },
+  { title: "Ajouter des images et des fichiers dans Notion", description: "Glisser une photo, un PDF ou un document dans une page, et le garder avec ses notes.", slug: "ajouter-des-images-et-fichiers-notion", date: "2026-10-05", dateLabel: "5 oct. 2026" },
+  { title: "Créer un tableau kanban dans Notion", description: "Faire glisser tes tâches de À faire à Terminé, comme des cartes sur un mur.", slug: "creer-un-tableau-kanban-notion", date: "2026-10-05", dateLabel: "5 oct. 2026" },
+  { title: "Utiliser les mentions et les liens dans Notion", description: "Relier tes pages entre elles avec @ et des liens, pour tout retrouver en un clic.", slug: "utiliser-les-mentions-et-liens-notion", date: "2026-10-05", dateLabel: "5 oct. 2026" },
+  { title: "Créer une page d'accueil dans Notion", description: "Une seule page de départ, avec des liens vers tout ce que tu utilises.", slug: "creer-une-page-d-accueil-notion", date: "2026-10-05", dateLabel: "5 oct. 2026" },
+  { title: "Ranger ses lectures et ses idées dans Notion", description: "Une base de données pour ne plus perdre un livre à lire ou une idée à creuser.", slug: "ranger-ses-lectures-et-idees-notion", date: "2026-10-05", dateLabel: "5 oct. 2026" },
 ];
 
 // Boutique : modèles Notion prévus, rien n'est en vente.
