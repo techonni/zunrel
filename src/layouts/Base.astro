@@ -3,17 +3,12 @@ import "../styles/site.css";
 import { f, homeDescription, homeTitle, nav, ogImage, siteName, tagline } from "../lib/site";
 
 interface Props {
-  // Titre de la page, sans le nom du site (ajouté automatiquement).
   title?: string;
   description?: string;
   type?: "website" | "article";
-  // Lien du menu à marquer comme page courante.
   current?: string;
-  // Pages à ne pas indexer (confirmation d'inscription, 404).
   noindex?: boolean;
-  // Données structurées supplémentaires (JSON-LD).
   jsonLd?: object;
-  // Image og propre à la page (sinon l'image générale du site).
   image?: string;
   imageAlt?: string;
 }
@@ -49,7 +44,6 @@ const imageUrl = new URL(image, Astro.site);
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="p:domain_verify" content="485d0834fb682f692cd0c2e316b227a8" />
     {jsonLd ? <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} /> : null}
-    <!-- Google Analytics 4 (Consent Mode : rien n'est stocké avant l'accord du visiteur) -->
     <script is:inline>
       window.dataLayer = window.dataLayer || [];
       function gtag() { dataLayer.push(arguments); }
@@ -83,6 +77,7 @@ const imageUrl = new URL(image, Astro.site);
         <span>© 2026 {siteName}. {f(tagline)}</span>
         <nav class="legal-links" aria-label="Pied de page">
           {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+          <a href="https://dariopinheiro.com/">Dário Pinheiro</a>
           <a href="/conditions-d-utilisation/">Conditions et cookies</a>
         </nav>
       </div>
@@ -110,7 +105,6 @@ const imageUrl = new URL(image, Astro.site);
         });
       })();
     </script>
-    <!-- Événement Google Analytics : inscription à la lettre -->
     <script is:inline>
       document.addEventListener("submit", function (event) {
         if (event.target.hasAttribute && event.target.hasAttribute("data-newsletter")) {
@@ -118,7 +112,6 @@ const imageUrl = new URL(image, Astro.site);
         }
       });
     </script>
-    <!-- Vitesse du site (Core Web Vitals), seulement après accord -->
     <script is:inline>
       window.zunrelVitals = function () {
         if (window.zunrelVitalsStarted) return;
