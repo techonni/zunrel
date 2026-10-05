@@ -40,6 +40,10 @@ export const posts: Post[] = [
   { title: "Voir la même base de données de plusieurs façons", description: "Table, tableau, calendrier, galerie : une seule base, plusieurs vues.", slug: "les-vues-d-une-base-de-donnees", date: "2026-10-05", dateLabel: "5 oct. 2026" },
   { title: "Filtrer et trier sans rien perdre", description: "Afficher seulement ce qui compte aujourd'hui, sans supprimer le reste.", slug: "filtrer-et-trier-sans-rien-perdre", date: "2026-10-05", dateLabel: "5 oct. 2026" },
   { title: "Dupliquer un modèle Notion", description: "Récupérer un modèle partagé, le vider de ses exemples et le faire à toi.", slug: "dupliquer-un-modele-notion", date: "2026-10-05", dateLabel: "5 oct. 2026" },
+  { title: "Utiliser Notion sur ton téléphone", description: "Installer l'application, retrouver tes pages et noter vite, où que tu sois.", slug: "notion-sur-ton-telephone", date: "2026-10-05", dateLabel: "5 oct. 2026" },
+  { title: "Créer une liste de tâches dans Notion", description: "Une base de données simple avec un nom, un statut et une date.", slug: "creer-une-liste-de-taches-notion", date: "2026-10-05", dateLabel: "5 oct. 2026" },
+  { title: "Créer un modèle pour ne plus recommencer", description: "Garder une page toute prête pour les réunions, lectures ou tâches répétées.", slug: "creer-ton-propre-modele-notion", date: "2026-10-05", dateLabel: "5 oct. 2026" },
+  { title: "Relier deux bases de données", description: "Rattacher chaque tâche à son projet avec une propriété Relation.", slug: "relier-deux-bases-de-donnees", date: "2026-10-05", dateLabel: "5 oct. 2026" },
 ];
 
 // Boutique : modèles Notion prévus, rien n'est en vente.
