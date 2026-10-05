@@ -10,7 +10,19 @@ Data: 28/09/2026 (7.ª sessão do dia: resultados dos lotes 2, P e 4; link Shopi
 
 ---
 
-## Pivot systeme.io (04/10/2026): LER PRIMEIRO
+## Pivot Notion (05/10/2026): LER PRIMEIRO
+
+Pedido do Dário: o Zunrel passa a ser um site **« Notion para principiantes, em francês »**, para depois vender **modelos Notion** na Boutique. O desenho (UI) não muda, só o conteúdo.
+
+- **Feito:** `src/lib/site.ts` (promessa, descrição, 8 artigos, Boutique de modelos « Bientôt »), 8 artigos novos em `src/lib/articles/`, aperçus novos em `src/lib/previews.ts` (janela de página genérica, sem logótipo nem interface do Notion), imagens og novas em `public/og/`, redirecionamentos 301 dos 11 artigos antigos de minimalismo digital em `public/_redirects`, frase de independência / marca Notion em « Conditions et cookies ».
+- **Regras:** nunca usar o logótipo nem o nome de marca como se o site fosse oficial; o site não é afiliado à Notion Labs, Inc. Plano gratuito e limites do Notion verificados a 05/10/2026 em notion.com/fr-fr/pricing; rever antes de citar números novos. Nenhum modelo está à venda: não pôr preços nem « Acheter » antes de existir um modelo real.
+- **Logo:** o Dário vai pôr um avatar estilo Notion como logótipo (original, desenhado por ele). Locais a mudar: o `<svg>` em `src/layouts/Base.astro` (cabeçalho), `public/favicon.svg`, `public/icon.svg`, `public/email/zunrel-mark.png`.
+- **Pendente do lado dele:** (1) rever no Mailchimp o e-mail de boas-vindas, que ainda pode prometer o guia « iPhone épuré » (a promessa foi retirada do site); (2) escolher o primeiro modelo a construir; (3) conferir os nomes dos botões do Notion nos artigos (a interface muda).
+- **Obsoleto:** `public/pins/minimal/`, os CSV do Pinterest e os pins de minimalismo digital apontam para artigos agora redirecionados. Não agendar.
+
+---
+
+## Pivot systeme.io (04/10/2026): histórico
 
 Pedido do Dário: o site passa a falar **só de systeme.io**, com o link de afiliado systeme.io. Tudo o que está abaixo sobre Leadpages, HTML Pub e Shopify é **histórico**.
 

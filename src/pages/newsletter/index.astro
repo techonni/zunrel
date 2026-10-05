@@ -1,10 +1,10 @@
 ---
 import Base from "../../layouts/Base.astro";
 import Letter from "../../components/Letter.astro";
-import { f, freeGuide } from "../../lib/site";
+import { f } from "../../lib/site";
 ---
 
-<Base title="La lettre du dimanche" description={f(`Un e-mail court chaque dimanche pour un quotidien numérique plus calme. ${freeGuide}.`)} current="lettre">
+<Base title="La lettre du dimanche" description={f(`Un e-mail court chaque dimanche : une astuce Notion et une idée de modèle.`)} current="lettre">
   <main class="w">
     <div class="oh"><Letter id="email-page" heading="h1" plain /></div>
   </main>

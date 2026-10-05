@@ -1,7 +1,7 @@
 ---
 // La lettre du dimanche : formulaire « embedded » Mailchimp (double opt-in géré par Mailchimp).
 // Envoi en arrière-plan (point d'accès JSONP « post-json ») ; sinon, envoi dans une iframe cachée.
-import { f, freeGuide, newsletter } from "../lib/site";
+import { f, newsletter } from "../lib/site";
 
 interface Props {
   id: string;
@@ -13,7 +13,7 @@ const { id, heading = "h2", plain = false } = Astro.props;
 const Heading = heading;
 const messages = {
   send: "Envoi…",
-  button: "Recevoir le guide",
+  button: "Recevoir la lettre",
   thanks: "Merci !",
   confirm: f("Dernière étape : ouvre l'e-mail envoyé à {email} et clique sur le bouton pour confirmer."),
   already: f("Tu es déjà inscrit."),
@@ -26,9 +26,8 @@ const messages = {
 
 <section class:list={[plain ? "page" : "letter"]} id="lettre" data-newsletter-block data-messages={JSON.stringify(messages)}>
   <Heading>La lettre du dimanche</Heading>
-  <p class:list={[plain ? "lead" : "t"]}>{f("Chaque semaine, un e-mail court : une idée, un réglage, une alternative plus simple. Rien d'autre.")}</p>
+  <p class:list={[plain ? "lead" : "t"]}>{f("Chaque semaine, un e-mail court : une astuce Notion et une idée de modèle. Rien d'autre.")}</p>
   <div data-newsletter-intro>
-    <p class="gift">{f(`À l'inscription, reçois le ${freeGuide.replace("Guide gratuit", "guide gratuit")}.`)}</p>
     <form class="nlf" action={newsletter.action} method="post" target="zunrel-newsletter-frame" novalidate data-newsletter>
       <input type="hidden" name="tags" value={newsletter.tag} />
       <label for={id}>Adresse e-mail</label>
