@@ -6,6 +6,20 @@ import { articles } from "../../lib/articles";
 import { readingMinutes } from "../../lib/articles/common";
 import { previewSvg } from "../../lib/previews";
 
+const related: Record<string, string[]> = {
+  "enlever-les-pastilles-rouges": ["desencombrer-l-ecran-d-accueil-en-20-minutes", "les-notifications-a-heures-fixes", "choisir-des-apps-iphone-epurees"],
+  "l-iphone-en-gris-le-soir": ["le-telephone-hors-de-la-chambre", "les-notifications-a-heures-fixes", "des-widgets-calmes-sur-l-ecran-verrouille"],
+  "vider-safari-en-deux-minutes": ["une-seule-liste-pour-la-semaine", "desencombrer-l-ecran-d-accueil-en-20-minutes", "une-to-do-sans-bruit-avec-rappels"],
+  "une-limite-pour-les-apps-qui-attirent": ["enlever-les-pastilles-rouges", "l-iphone-en-gris-le-soir", "les-notifications-a-heures-fixes"],
+  "le-telephone-hors-de-la-chambre": ["l-iphone-en-gris-le-soir", "les-notifications-a-heures-fixes", "des-widgets-calmes-sur-l-ecran-verrouille"],
+  "une-seule-liste-pour-la-semaine": ["une-to-do-sans-bruit-avec-rappels", "vider-safari-en-deux-minutes", "desencombrer-l-ecran-d-accueil-en-20-minutes"],
+  "choisir-des-apps-iphone-epurees": ["enlever-les-pastilles-rouges", "une-limite-pour-les-apps-qui-attirent", "des-widgets-calmes-sur-l-ecran-verrouille"],
+  "des-widgets-calmes-sur-l-ecran-verrouille": ["l-iphone-en-gris-le-soir", "les-notifications-a-heures-fixes", "choisir-des-apps-iphone-epurees"],
+  "une-to-do-sans-bruit-avec-rappels": ["une-seule-liste-pour-la-semaine", "les-notifications-a-heures-fixes", "une-limite-pour-les-apps-qui-attirent"],
+  "desencombrer-l-ecran-d-accueil-en-20-minutes": ["enlever-les-pastilles-rouges", "choisir-des-apps-iphone-epurees", "des-widgets-calmes-sur-l-ecran-verrouille"],
+  "les-notifications-a-heures-fixes": ["enlever-les-pastilles-rouges", "l-iphone-en-gris-le-soir", "une-limite-pour-les-apps-qui-attirent"],
+};
+
 export function getStaticPaths() {
   return posts.map((post, i) => ({ params: { slug: post.slug }, props: { post, next: posts[(i + 1) % posts.length] } }));
 }
@@ -13,6 +27,7 @@ export function getStaticPaths() {
 const { post, next } = Astro.props as { post: Post; next: Post };
 const { body, caption, diagram } = articles[post.slug];
 const minutes = readingMinutes(body);
+const also = (related[post.slug] ?? []).map((slug) => posts.find((p) => p.slug === slug)).filter((p) => p !== undefined);
 const url = `https://zunrel.com/blog/${post.slug}/`;
 const jsonLd = {
   "@context": "https://schema.org",
@@ -57,6 +72,18 @@ const jsonLd = {
             ),
           )
         }
+        {also.length > 0 && (
+          <p>
+            {f("Dans la même veine : ")}
+            {also.map((p, i) => (
+              <>
+                {i > 0 ? ", " : ""}
+                <a href={`/blog/${p.slug}/`}>{f(p.title)}</a>
+              </>
+            ))}
+            .
+          </p>
+        )}
       </div>
     </article>
     <nav class="next" aria-label="Article suivant">
