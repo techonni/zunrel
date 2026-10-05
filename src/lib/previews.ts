@@ -241,7 +241,7 @@ export function previewSvg(slug: string, format: "card" | "og" = "card", title =
   const vb = format === "og" ? "0 0 1200 630" : `250 ${sc.top ?? 25} 700 393.75`;
   const size = format === "og" ? 'width="1200" height="630"' : "";
   const clip = `pv-${slug.slice(0, 18)}`;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" ${size} font-family="${FONT}" ${title ? `role="img" aria-label="${title.replace(/"/g, """)}"` : 'aria-hidden="true"'}>
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb}" ${size} font-family="${FONT}" ${title ? `role="img" aria-label="${title.replace(/"/g, String.fromCharCode(38) + "quot;")}"` : 'aria-hidden="true"'}>
 <rect x="-10" y="-40" width="1220" height="720" fill="#efefea"/>
 <rect x="469" y="51" width="262" height="552" rx="52" fill="#000" opacity=".06"/>
 <rect x="475" y="45" width="250" height="540" rx="48" fill="${INK}"/>
