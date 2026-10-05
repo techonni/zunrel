@@ -29,7 +29,7 @@ import * as a26 from "./ranger-tes-pages-dans-la-barre-laterale";
 import * as a27 from "./les-blocs-repliables";
 import * as a28 from "./ajouter-une-image-un-fichier-ou-un-lien";
 import * as a29 from "./les-mentions-et-les-rappels";
-import * as a30 from "./partager-une-page-notion-avec-un-lien";
+import * as a30 from "./les-icones-et-couvertures-de-page";
 import * as a31 from "./publier-une-page-sur-le-web";
 import * as a32 from "./retrouver-une-page-supprimee";
 import * as a33 from "./un-journal-quotidien-dans-notion";
@@ -67,7 +67,7 @@ export const articles: Record<string, Article> = {
   "les-blocs-repliables": a27,
   "ajouter-une-image-un-fichier-ou-un-lien": a28,
   "les-mentions-et-les-rappels": a29,
-  "partager-une-page-notion-avec-un-lien": a30,
+  "les-icones-et-couvertures-de-page": a30,
   "publier-une-page-sur-le-web": a31,
   "retrouver-une-page-supprimee": a32,
   "un-journal-quotidien-dans-notion": a33,

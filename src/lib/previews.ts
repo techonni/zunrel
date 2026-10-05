@@ -277,13 +277,12 @@ const screens: Record<string, string> = {
     s += bar(320, 420, 300) + t(320, 480, "Notification à l'heure choisie", 22, 500, MUTED);
     return s;
   })(),
-  "partager-une-page-notion-avec-un-lien": (() => {
-    let s = box(230, 170, 400, 340, 18) + bar(262, 222, 160, INK, 22) + bar(262, 280, 280) + bar(262, 316, 220);
-    s += `<rect x="262" y="370" width="200" height="44" rx="12" fill="${SOFT}"/>` + t(362, 400, "lien de la page", 20, 500, ACC, "middle");
-    s += `<path d="M670 340h50M708 330l12 10-12 10" fill="none" stroke="${ACC}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
-    [[220, "lecture", false], [300, "commenter", false], [380, "modifier", true]].forEach(([y, l, d]) => {
-      s += pill(760, (y as number) - 17, 140, l as string, d as boolean);
-    });
+  "les-icones-et-couvertures-de-page": (() => {
+    let s = box(280, 160, 640, 360, 18);
+    s += `<rect x="280" y="160" width="640" height="110" rx="18" fill="${SOFT}"/>`;
+    s += box(320, 240, 70, 70, 16) + `<rect x="338" y="258" width="34" height="34" rx="8" fill="${ACC}"/>`;
+    s += bar(410, 275, 220, INK, 22);
+    s += bar(320, 360, 400) + bar(320, 400, 320) + bar(320, 440, 360);
     return s;
   })(),
   "publier-une-page-sur-le-web": (() => {

@@ -61,7 +61,7 @@ export const posts: Post[] = [
   { title: "Les blocs repliables", description: "Cache le détail, garde l'essentiel : ouvrir et fermer un toggle en un clic.", slug: "les-blocs-repliables", date: "2026-10-06", dateLabel: "6 oct. 2026" },
   { title: "Ajouter une image, un fichier ou un lien", description: "Glisse, dépose, c'est rangé : images, PDF et liens dans tes pages.", slug: "ajouter-une-image-un-fichier-ou-un-lien", date: "2026-10-06", dateLabel: "6 oct. 2026" },
   { title: "Les mentions et les rappels", description: "Tape @ et une date : Notion s'en souvient et peut te prévenir.", slug: "les-mentions-et-les-rappels", date: "2026-10-06", dateLabel: "6 oct. 2026" },
-  { title: "Partager une page Notion", description: "Un lien, et tu choisis qui lit, commente ou modifie.", slug: "partager-une-page-notion-avec-un-lien", date: "2026-10-06", dateLabel: "6 oct. 2026" },
+  { title: "Les icônes et les couvertures de page", description: "Une icône pour reconnaître la page, une couverture pour le haut : deux gestes simples.", slug: "les-icones-et-couvertures-de-page", date: "2026-10-06", dateLabel: "6 oct. 2026" },
   { title: "Publier une page sur le web", description: "Ta page Notion devient un site simple, lisible sans compte.", slug: "publier-une-page-sur-le-web", date: "2026-10-06", dateLabel: "6 oct. 2026" },
   { title: "Retrouver une page supprimée", description: "La corbeille garde tout un moment : restaure avant que ce soit trop tard.", slug: "retrouver-une-page-supprimee", date: "2026-10-06", dateLabel: "6 oct. 2026" },
   { title: "Un journal quotidien dans Notion", description: "Une page par jour, trois lignes : Fait, Demain, Note.", slug: "un-journal-quotidien-dans-notion", date: "2026-10-06", dateLabel: "6 oct. 2026" },

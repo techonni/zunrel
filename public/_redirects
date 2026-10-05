@@ -1,5 +1,9 @@
 # Redirections Cloudflare Pages.
 # Anciens articles « minimalisme digital » (05/10/2026) : le site parle maintenant de Notion.
+# Remplacement de l'article doublon « partager avec un lien » (05/10/2026 soir).
+/blog/partager-une-page-notion-avec-un-lien /blog/partager-une-page-notion/ 301
+/blog/partager-une-page-notion-avec-un-lien/ /blog/partager-une-page-notion/ 301
+
 /blog/enlever-les-pastilles-rouges /blog/ 301
 /blog/enlever-les-pastilles-rouges/ /blog/ 301
 /blog/l-iphone-en-gris-le-soir /blog/ 301

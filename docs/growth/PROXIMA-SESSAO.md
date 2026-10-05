@@ -19,6 +19,8 @@ Data: 28/09/2026 (7.ª sessão do dia: resultados dos lotes 2, P e 4; link Shopi
 - Pins A + B générés ; CSV `pinterest-notion-4.csv` (12 lignes A, comme `pinterest-notion.csv`). Copie Mac : `Documents/Arquivo/Para rever/Pinterest Notion nouveaux.csv`. **Falta o Techonni carregar o CSV.**
 - Corrigé le conflit de fusion resté dans `scripts/make-pins.mjs` (support `OUT=`).
 
+- **Correction soirée :** l'article doublon `partager-une-page-notion-avec-un-lien` a été remplacé par `les-icones-et-couvertures-de-page` (301 vers l'article Partager existant). CSV `-4` mis à jour.
+
 ## Sessão de 05/10/2026 (tarde): 24 artigos Notion e pins
 
 - **24 artigos** em `src/lib/site.ts` (8 do pivot + 4 + 12). Cada artigo novo tem texto, desenho, `points` (3 frases para o pin escuro), imagem og e links entre artigos (`related` em `src/pages/blog/[slug].astro`).
