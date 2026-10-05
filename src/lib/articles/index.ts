@@ -12,7 +12,6 @@ import * as a9 from "./notion-sur-ton-telephone";
 import * as a10 from "./creer-une-liste-de-taches-notion";
 import * as a11 from "./creer-ton-propre-modele-notion";
 import * as a12 from "./relier-deux-bases-de-donnees";
-<<<<<<< HEAD
 import * as a13 from "./creer-un-calendrier-dans-notion";
 import * as a14 from "./prendre-des-notes-de-reunion-notion";
 import * as a15 from "./les-blocs-de-base-de-notion";
@@ -25,8 +24,6 @@ import * as a21 from "./creer-un-tableau-kanban-notion";
 import * as a22 from "./utiliser-les-mentions-et-liens-notion";
 import * as a23 from "./creer-une-page-d-accueil-notion";
 import * as a24 from "./ranger-ses-lectures-et-idees-notion";
-=======
->>>>>>> origin/main
 
 export const articles: Record<string, Article> = {
   "notion-c-est-quoi": a1,
@@ -41,7 +38,6 @@ export const articles: Record<string, Article> = {
   "creer-une-liste-de-taches-notion": a10,
   "creer-ton-propre-modele-notion": a11,
   "relier-deux-bases-de-donnees": a12,
-<<<<<<< HEAD
   "creer-un-calendrier-dans-notion": a13,
   "prendre-des-notes-de-reunion-notion": a14,
   "les-blocs-de-base-de-notion": a15,
@@ -54,6 +50,4 @@ export const articles: Record<string, Article> = {
   "utiliser-les-mentions-et-liens-notion": a22,
   "creer-une-page-d-accueil-notion": a23,
   "ranger-ses-lectures-et-idees-notion": a24,
-=======
->>>>>>> origin/main
 };
