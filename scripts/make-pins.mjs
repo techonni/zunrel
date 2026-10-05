@@ -1,13 +1,16 @@
 // Crée les pins Pinterest (1000 × 1500, 2:3, minimalistes, couleurs du site) dans public/pins/<slug>.jpg
-// et le CSV docs/growth/pinterest-notion.csv (sans date : publication immédiate).
+// et le CSV docs/growth/pinterest-notion.csv (ou -2 si on donne des slugs ; sans date : publication immédiate).
 // Usage : node --experimental-strip-types scripts/make-pins.mjs (Playwright requis).
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { chromium } from "playwright";
 const root = new URL("..", import.meta.url).pathname;
 const { previewSvg } = await import(`${root}src/lib/previews.ts`);
 const site = readFileSync(`${root}src/lib/site.ts`, "utf8");
-const posts = [...site.matchAll(/title: "((?:[^"\\]|\\.)+)", description: "((?:[^"\\]|\\.)+)", slug: "([^"]+)"/g)]
+const only = process.argv.slice(2);
+const all = [...site.matchAll(/title: "((?:[^"\\]|\\.)+)", description: "((?:[^"\\]|\\.)+)", slug: "([^"]+)"/g)]
   .map((m) => ({ title: m[1].replace(/\\"/g, '"'), description: m[2], slug: m[3] }));
+const posts = only.length ? all.filter((p) => only.includes(p.slug)) : all;
+const out = only.length ? "pinterest-notion-2.csv" : "pinterest-notion.csv";
 const BOARD = "Notion pour débutants";
 mkdirSync(`${root}public/pins`, { recursive: true });
 const html = (p) => `<!doctype html><html><head><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"><style>
@@ -41,4 +44,4 @@ for (const p of posts) {
   console.log("ok", p.slug);
 }
 await b.close();
-writeFileSync(`${root}docs/growth/pinterest-notion.csv`, rows.join("\n") + "\n");
+writeFileSync(`${root}docs/growth/${out}`, rows.join("\n") + "\n");

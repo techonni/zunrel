@@ -107,6 +107,39 @@ const screens: Record<string, string> = {
     });
     return s;
   })(),
+  "notion-sur-ton-telephone": (() => {
+    let s = box(230, 170, 440, 340, 18) + bar(262, 214, 160, INK, 20) + bar(262, 262, 300) + bar(262, 298, 250) + bar(262, 334, 280);
+    s += box(740, 160, 190, 380, 30) + bar(780, 214, 90, INK, 16) + check(780, 254, true, 22) + bar(816, 265, 80) + check(780, 296, false, 22) + bar(816, 307, 70) + bar(780, 358, 120) + bar(780, 388, 100);
+    s += `<path d="M690 340h30M710 332l10 8-10 8" fill="none" stroke="${ACC}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
+    return s;
+  })(),
+  "creer-une-liste-de-taches-notion": (() => {
+    let s = box(230, 170, 750, 340, 18);
+    s += `<path d="M230 240h750M230 320h750M230 400h750M580 170v340M800 170v340" stroke="#d6d6d0" stroke-width="2"/>`;
+    s += t(254, 214, "Nom", 24, 600) + t(604, 214, "Statut", 24, 600) + t(824, 214, "Date", 24, 600);
+    [[280, "Terminé", true, 220], [360, "En cours", false, 180], [440, "À faire", false, 250]].forEach(([y, label, done, w]) => {
+      s += check(254, (y as number) - 13, done as boolean, 30) + bar(300, y as number, w as number) + pill(604, (y as number) - 17, 110, label as string, done as boolean) + bar(824, y as number, 90);
+    });
+    return s;
+  })(),
+  "creer-ton-propre-modele-notion": (() => {
+    let s = t(230, 160, "Modèle", 24, 600, MUTED) + t(690, 160, "Nouvelles pages", 24, 600, MUTED);
+    s += box(230, 184, 340, 340, 18) + bar(262, 232, 140, INK, 20) + check(262, 276) + bar(304, 289, 190) + check(262, 322) + bar(304, 335, 150) + bar(262, 388, 270) + bar(262, 420, 230);
+    s += `<path d="M590 354h60M640 344l10 10-10 10" fill="none" stroke="${ACC}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
+    [0, 1].forEach((i) => {
+      const x = 690 + i * 150;
+      s += box(x, 184, 130, 340, 16) + bar(x + 20, 226, 70, INK, 14) + bar(x + 20, 280, 90) + bar(x + 20, 312, 70) + bar(x + 20, 344, 80);
+    });
+    return s;
+  })(),
+  "relier-deux-bases-de-donnees": (() => {
+    let s = t(230, 160, "Tâches", 24, 600, MUTED) + t(690, 160, "Projets", 24, 600, MUTED);
+    s += box(230, 184, 360, 340, 18) + `<path d="M230 270h360M230 356h360M230 442h360" stroke="#d6d6d0" stroke-width="2"/>`;
+    [227, 313, 399, 485].forEach((y, i) => { s += bar(254, y, 160 - i * 16) + pill(444, y - 17, 120, i % 2 ? "Projet B" : "Projet A", i % 2 === 1); });
+    s += box(690, 184, 290, 340, 18) + `<path d="M690 354h290" stroke="#d6d6d0" stroke-width="2"/>`;
+    s += bar(714, 248, 120, INK, 18) + t(714, 302, "2 tâches reliées", 20, 500, MUTED) + bar(714, 418, 100, INK, 18) + t(714, 472, "2 tâches reliées", 20, 500, MUTED);
+    return s;
+  })(),
 };
 
 export const hasPreview = (slug: string) => slug in screens;
