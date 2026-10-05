@@ -8,17 +8,14 @@ import { readingMinutes } from "../../lib/articles/common";
 import { previewSvg } from "../../lib/previews";
 
 const related: Record<string, string[]> = {
-  "enlever-les-pastilles-rouges": ["desencombrer-l-ecran-d-accueil-en-20-minutes", "les-notifications-a-heures-fixes", "choisir-des-apps-iphone-epurees"],
-  "l-iphone-en-gris-le-soir": ["le-telephone-hors-de-la-chambre", "les-notifications-a-heures-fixes", "des-widgets-calmes-sur-l-ecran-verrouille"],
-  "vider-safari-en-deux-minutes": ["une-seule-liste-pour-la-semaine", "desencombrer-l-ecran-d-accueil-en-20-minutes", "une-to-do-sans-bruit-avec-rappels"],
-  "une-limite-pour-les-apps-qui-attirent": ["enlever-les-pastilles-rouges", "l-iphone-en-gris-le-soir", "les-notifications-a-heures-fixes"],
-  "le-telephone-hors-de-la-chambre": ["l-iphone-en-gris-le-soir", "les-notifications-a-heures-fixes", "des-widgets-calmes-sur-l-ecran-verrouille"],
-  "une-seule-liste-pour-la-semaine": ["une-to-do-sans-bruit-avec-rappels", "vider-safari-en-deux-minutes", "desencombrer-l-ecran-d-accueil-en-20-minutes"],
-  "choisir-des-apps-iphone-epurees": ["enlever-les-pastilles-rouges", "une-limite-pour-les-apps-qui-attirent", "des-widgets-calmes-sur-l-ecran-verrouille"],
-  "des-widgets-calmes-sur-l-ecran-verrouille": ["l-iphone-en-gris-le-soir", "les-notifications-a-heures-fixes", "choisir-des-apps-iphone-epurees"],
-  "une-to-do-sans-bruit-avec-rappels": ["une-seule-liste-pour-la-semaine", "les-notifications-a-heures-fixes", "une-limite-pour-les-apps-qui-attirent"],
-  "desencombrer-l-ecran-d-accueil-en-20-minutes": ["enlever-les-pastilles-rouges", "choisir-des-apps-iphone-epurees", "des-widgets-calmes-sur-l-ecran-verrouille"],
-  "les-notifications-a-heures-fixes": ["enlever-les-pastilles-rouges", "l-iphone-en-gris-le-soir", "une-limite-pour-les-apps-qui-attirent"],
+  "notion-c-est-quoi": ["creer-ta-premiere-page-notion", "page-ou-base-de-donnees", "notion-est-il-gratuit"],
+  "notion-est-il-gratuit": ["notion-c-est-quoi", "creer-ta-premiere-page-notion", "dupliquer-un-modele-notion"],
+  "creer-ta-premiere-page-notion": ["notion-c-est-quoi", "page-ou-base-de-donnees", "les-proprietes-d-une-base-de-donnees"],
+  "page-ou-base-de-donnees": ["les-proprietes-d-une-base-de-donnees", "les-vues-d-une-base-de-donnees", "creer-ta-premiere-page-notion"],
+  "les-proprietes-d-une-base-de-donnees": ["page-ou-base-de-donnees", "les-vues-d-une-base-de-donnees", "filtrer-et-trier-sans-rien-perdre"],
+  "les-vues-d-une-base-de-donnees": ["filtrer-et-trier-sans-rien-perdre", "les-proprietes-d-une-base-de-donnees", "page-ou-base-de-donnees"],
+  "filtrer-et-trier-sans-rien-perdre": ["les-vues-d-une-base-de-donnees", "les-proprietes-d-une-base-de-donnees", "dupliquer-un-modele-notion"],
+  "dupliquer-un-modele-notion": ["notion-c-est-quoi", "filtrer-et-trier-sans-rien-perdre", "les-vues-d-une-base-de-donnees"],
 };
 
 export function getStaticPaths() {

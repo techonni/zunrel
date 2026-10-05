@@ -1,4 +1,28 @@
 # Redirections Cloudflare Pages.
+# Anciens articles « minimalisme digital » (05/10/2026) : le site parle maintenant de Notion.
+/blog/enlever-les-pastilles-rouges /blog/ 301
+/blog/enlever-les-pastilles-rouges/ /blog/ 301
+/blog/l-iphone-en-gris-le-soir /blog/ 301
+/blog/l-iphone-en-gris-le-soir/ /blog/ 301
+/blog/vider-safari-en-deux-minutes /blog/ 301
+/blog/vider-safari-en-deux-minutes/ /blog/ 301
+/blog/une-limite-pour-les-apps-qui-attirent /blog/ 301
+/blog/une-limite-pour-les-apps-qui-attirent/ /blog/ 301
+/blog/le-telephone-hors-de-la-chambre /blog/ 301
+/blog/le-telephone-hors-de-la-chambre/ /blog/ 301
+/blog/une-seule-liste-pour-la-semaine /blog/ 301
+/blog/une-seule-liste-pour-la-semaine/ /blog/ 301
+/blog/choisir-des-apps-iphone-epurees /blog/ 301
+/blog/choisir-des-apps-iphone-epurees/ /blog/ 301
+/blog/des-widgets-calmes-sur-l-ecran-verrouille /blog/ 301
+/blog/des-widgets-calmes-sur-l-ecran-verrouille/ /blog/ 301
+/blog/une-to-do-sans-bruit-avec-rappels /blog/ 301
+/blog/une-to-do-sans-bruit-avec-rappels/ /blog/ 301
+/blog/desencombrer-l-ecran-d-accueil-en-20-minutes /blog/ 301
+/blog/desencombrer-l-ecran-d-accueil-en-20-minutes/ /blog/ 301
+/blog/les-notifications-a-heures-fixes /blog/ 301
+/blog/les-notifications-a-heures-fixes/ /blog/ 301
+
 # Zunrel ne parle plus de systeme.io : tous les anciens guides (FR, PT, EN), outils, thèmes,
 # formats, offres et pages annexes renvoient vers le blog, en une seule étape (pas de chaîne).
 
