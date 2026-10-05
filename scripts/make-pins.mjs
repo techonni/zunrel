@@ -10,7 +10,11 @@ const only = process.argv.slice(2);
 const all = [...site.matchAll(/title: "((?:[^"\\]|\\.)+)", description: "((?:[^"\\]|\\.)+)", slug: "([^"]+)"/g)]
   .map((m) => ({ title: m[1].replace(/\\"/g, '"'), description: m[2], slug: m[3] }));
 const posts = only.length ? all.filter((p) => only.includes(p.slug)) : all;
+<<<<<<< HEAD
 const out = process.env.OUT || (only.length ? "pinterest-notion-2.csv" : "pinterest-notion.csv");
+=======
+const out = only.length ? "pinterest-notion-2.csv" : "pinterest-notion.csv";
+>>>>>>> origin/main
 const BOARD = "Notion pour débutants";
 mkdirSync(`${root}public/pins/b`, { recursive: true });
 const pointsOf = (slug) => { const m = readFileSync(`${root}src/lib/articles/${slug}.ts`, "utf8").match(/export const points = (\[.*\]);/); return m ? JSON.parse(m[1]) : []; };
