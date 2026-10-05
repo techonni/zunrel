@@ -24,6 +24,18 @@ import * as a21 from "./creer-un-tableau-kanban-notion";
 import * as a22 from "./utiliser-les-mentions-et-liens-notion";
 import * as a23 from "./creer-une-page-d-accueil-notion";
 import * as a24 from "./ranger-ses-lectures-et-idees-notion";
+import * as a25 from "./les-raccourcis-notion-a-connaitre";
+import * as a26 from "./ranger-tes-pages-dans-la-barre-laterale";
+import * as a27 from "./les-blocs-repliables";
+import * as a28 from "./ajouter-une-image-un-fichier-ou-un-lien";
+import * as a29 from "./les-mentions-et-les-rappels";
+import * as a30 from "./partager-une-page-notion-avec-un-lien";
+import * as a31 from "./publier-une-page-sur-le-web";
+import * as a32 from "./retrouver-une-page-supprimee";
+import * as a33 from "./un-journal-quotidien-dans-notion";
+import * as a34 from "./un-suivi-d-habitudes";
+import * as a35 from "./un-tableau-de-bord-personnel";
+import * as a36 from "./importer-tes-notes-dans-notion";
 
 export const articles: Record<string, Article> = {
   "notion-c-est-quoi": a1,
@@ -50,4 +62,16 @@ export const articles: Record<string, Article> = {
   "utiliser-les-mentions-et-liens-notion": a22,
   "creer-une-page-d-accueil-notion": a23,
   "ranger-ses-lectures-et-idees-notion": a24,
+  "les-raccourcis-notion-a-connaitre": a25,
+  "ranger-tes-pages-dans-la-barre-laterale": a26,
+  "les-blocs-repliables": a27,
+  "ajouter-une-image-un-fichier-ou-un-lien": a28,
+  "les-mentions-et-les-rappels": a29,
+  "partager-une-page-notion-avec-un-lien": a30,
+  "publier-une-page-sur-le-web": a31,
+  "retrouver-une-page-supprimee": a32,
+  "un-journal-quotidien-dans-notion": a33,
+  "un-suivi-d-habitudes": a34,
+  "un-tableau-de-bord-personnel": a35,
+  "importer-tes-notes-dans-notion": a36,
 };

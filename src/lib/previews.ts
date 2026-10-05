@@ -238,6 +238,104 @@ const screens: Record<string, string> = {
     });
     return s;
   })(),
+
+  "les-raccourcis-notion-a-connaitre": (() => {
+    let s = "";
+    [["/", "bloc"], ["@", "mention"], ["P", "chercher"], ["B", "gras"], ["Z", "annuler"]].forEach(([k, l], i) => {
+      const x = 240 + i * 152;
+      s += box(x, 250, 120, 120, 22) + t(x + 60, 330, k, 64, 600, INK, "middle") + t(x + 60, 420, l, 24, 500, MUTED, "middle");
+    });
+    return s;
+  })(),
+  "ranger-tes-pages-dans-la-barre-laterale": (() => {
+    let s = box(230, 170, 280, 350, 18) + bar(262, 222, 140, INK, 20);
+    [290, 350, 410, 470].forEach((y, i) => { s += bar(262, y, 160 - i * 10); });
+    s += `<path d="M560 346h60M608 336l12 10-12 10" fill="none" stroke="${ACC}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
+    s += box(670, 170, 310, 350, 18) + bar(702, 222, 120, INK, 20);
+    [290, 350].forEach((y) => { s += `<path d="M720 246v${y - 246}h20" fill="none" stroke="#c8c8c2" stroke-width="2"/>` + bar(754, y, 140); });
+    s += bar(702, 420, 100, INK, 18) + bar(754, 470, 120);
+    return s;
+  })(),
+  "les-blocs-repliables": (() => {
+    let s = t(230, 170, "Fermé", 24, 600, MUTED) + t(690, 170, "Ouvert", 24, 600, MUTED);
+    s += box(230, 196, 360, 300, 18);
+    s += `<path d="M262 280l14 10-14 10" fill="none" stroke="${ACC}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>` + bar(296, 290, 220, INK, 16);
+    s += box(690, 196, 290, 300, 18);
+    s += `<path d="M722 250l10-14 10 14" fill="none" stroke="${ACC}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>` + bar(756, 250, 180, INK, 16);
+    s += bar(756, 310, 180) + bar(756, 350, 150) + bar(756, 390, 160);
+    return s;
+  })(),
+  "ajouter-une-image-un-fichier-ou-un-lien": (() => {
+    let s = box(230, 170, 230, 340, 18) + box(250, 210, 190, 160, 12, SOFT) + `<path d="M250 350l50-44 40 32 34-22 66 34" fill="none" stroke="#b9b9b3" stroke-width="3"/><circle cx="300" cy="250" r="14" fill="#c8c8c2"/>` + bar(250, 410, 120) + t(280, 480, "Image", 22, 600, MUTED, "middle");
+    s += box(490, 170, 230, 340, 18) + box(510, 250, 190, 70, 12) + t(605, 295, "PDF", 28, 600, ACC, "middle") + bar(510, 360, 140) + t(605, 480, "Fichier", 22, 600, MUTED, "middle");
+    s += box(750, 170, 230, 340, 18) + box(770, 250, 190, 70, 12) + t(865, 295, "Lien", 28, 600, ACC, "middle") + bar(770, 360, 150) + t(865, 480, "Web", 22, 600, MUTED, "middle");
+    return s;
+  })(),
+  "les-mentions-et-les-rappels": (() => {
+    let s = box(280, 170, 640, 340, 18) + bar(320, 220, 180, INK, 22) + bar(320, 280, 400);
+    s += pill(320, 330, 140, "@ Projet", true) + pill(480, 330, 200, "@remind demain", false);
+    s += bar(320, 420, 300) + t(320, 480, "Notification à l'heure choisie", 22, 500, MUTED);
+    return s;
+  })(),
+  "partager-une-page-notion-avec-un-lien": (() => {
+    let s = box(230, 170, 400, 340, 18) + bar(262, 222, 160, INK, 22) + bar(262, 280, 280) + bar(262, 316, 220);
+    s += `<rect x="262" y="370" width="200" height="44" rx="12" fill="${SOFT}"/>` + t(362, 400, "lien de la page", 20, 500, ACC, "middle");
+    s += `<path d="M670 340h50M708 330l12 10-12 10" fill="none" stroke="${ACC}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
+    [[220, "lecture", false], [300, "commenter", false], [380, "modifier", true]].forEach(([y, l, d]) => {
+      s += pill(760, (y as number) - 17, 140, l as string, d as boolean);
+    });
+    return s;
+  })(),
+  "publier-une-page-sur-le-web": (() => {
+    let s = box(230, 170, 340, 340, 18) + bar(262, 222, 150, INK, 22) + bar(262, 280, 250) + bar(262, 316, 200);
+    s += `<rect x="262" y="380" width="120" height="44" rx="22" fill="${ACC}"/>` + t(322, 410, "Publier", 22, 600, "#fff", "middle");
+    s += `<path d="M600 340h50M638 330l12 10-12 10" fill="none" stroke="${ACC}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
+    s += box(680, 170, 300, 340, 18);
+    s += `<circle cx="710" cy="210" r="7" fill="#d6d6d0"/><circle cx="734" cy="210" r="7" fill="#d6d6d0"/><circle cx="758" cy="210" r="7" fill="#d6d6d0"/>`;
+    s += bar(710, 270, 140, INK, 18) + bar(710, 320, 200) + bar(710, 356, 160) + t(830, 470, "site public", 22, 500, MUTED, "middle");
+    return s;
+  })(),
+  "retrouver-une-page-supprimee": (() => {
+    let s = box(230, 170, 340, 340, 18) + t(400, 230, "Corbeille", 28, 600, MUTED, "middle");
+    s += box(280, 260, 240, 160, 14) + bar(310, 300, 160, INK, 16) + bar(310, 340, 120);
+    s += `<path d="M600 340h50M638 330l12 10-12 10" fill="none" stroke="${ACC}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
+    s += box(680, 170, 300, 340, 18) + t(830, 230, "Restaurée", 28, 600, MUTED, "middle") + bar(720, 300, 180, INK, 18) + bar(720, 350, 140);
+    return s;
+  })(),
+  "un-journal-quotidien-dans-notion": (() => {
+    let s = box(330, 160, 540, 380, 18) + bar(370, 210, 200, INK, 22);
+    s += t(370, 270, "Fait", 22, 600, MUTED) + bar(370, 300, 300);
+    s += t(370, 360, "Demain", 22, 600, MUTED) + bar(370, 390, 260);
+    s += t(370, 450, "Note", 22, 600, MUTED) + bar(370, 480, 280);
+    return s;
+  })(),
+  "un-suivi-d-habitudes": (() => {
+    let s = box(230, 170, 750, 350, 18);
+    s += `<path d="M230 240h750M230 310h750M230 380h750M230 450h750M440 170v350M600 170v350M760 170v350" stroke="#d6d6d0" stroke-width="2"/>`;
+    s += t(254, 214, "Jour", 24, 600) + t(464, 214, "Eau", 24, 600) + t(624, 214, "Marche", 24, 600) + t(784, 214, "Lecture", 24, 600);
+    [275, 345, 415, 485].forEach((y, i) => {
+      s += bar(254, y, 100) + check(500, y - 15, i % 2 === 0, 30) + check(660, y - 15, i !== 1, 30) + check(820, y - 15, i < 3, 30);
+    });
+    return s;
+  })(),
+  "un-tableau-de-bord-personnel": (() => {
+    let s = box(230, 170, 750, 360, 18) + bar(262, 220, 180, INK, 24);
+    s += t(262, 290, "Aujourd'hui", 22, 600, MUTED) + t(540, 290, "Notes", 22, 600, MUTED) + t(780, 290, "Liens", 22, 600, MUTED);
+    s += check(262, 320, false, 26) + bar(304, 333, 160) + check(262, 370, true, 26) + bar(304, 383, 140);
+    s += bar(540, 333, 140) + bar(540, 383, 110);
+    s += pill(780, 320, 120, "@ Tâches", true) + pill(780, 380, 120, "@ Journal", false);
+    return s;
+  })(),
+  "importer-tes-notes-dans-notion": (() => {
+    let s = "";
+    [["Docs", 230], ["Evernote", 430], ["Fichier", 630]].forEach(([l, x]) => {
+      s += box(x as number, 190, 150, 80, 14) + t((x as number) + 75, 240, l as string, 24, 600, ACC, "middle");
+    });
+    s += `<path d="M305 280v40M505 280v40M705 280v40M305 320h400" fill="none" stroke="${ACC}" stroke-width="3" stroke-linecap="round"/><path d="M690 310l15 10-15 10" fill="none" stroke="${ACC}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
+    s += box(400, 360, 400, 140, 18) + bar(440, 410, 160, INK, 18) + bar(440, 450, 200) + t(600, 480, "Notion", 22, 500, MUTED, "middle");
+    return s;
+  })(),
+
 };
 
 export const hasPreview = (slug: string) => slug in screens;

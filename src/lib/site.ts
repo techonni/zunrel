@@ -56,6 +56,18 @@ export const posts: Post[] = [
   { title: "Utiliser les mentions et les liens dans Notion", description: "Relier tes pages entre elles avec @ et des liens, pour tout retrouver en un clic.", slug: "utiliser-les-mentions-et-liens-notion", date: "2026-10-05", dateLabel: "5 oct. 2026" },
   { title: "Créer une page d'accueil dans Notion", description: "Une seule page de départ, avec des liens vers tout ce que tu utilises.", slug: "creer-une-page-d-accueil-notion", date: "2026-10-05", dateLabel: "5 oct. 2026" },
   { title: "Ranger ses lectures et ses idées dans Notion", description: "Une base de données pour ne plus perdre un livre à lire ou une idée à creuser.", slug: "ranger-ses-lectures-et-idees-notion", date: "2026-10-05", dateLabel: "5 oct. 2026" },
+  { title: "Les raccourcis Notion à connaître", description: "Tape / et tout s'ouvre : les gestes utiles pour écrire sans chercher dans les menus.", slug: "les-raccourcis-notion-a-connaitre", date: "2026-10-06", dateLabel: "6 oct. 2026" },
+  { title: "Ranger tes pages dans la barre latérale", description: "Des sous-pages, pas un fouillis : garder la barre latérale courte et lisible.", slug: "ranger-tes-pages-dans-la-barre-laterale", date: "2026-10-06", dateLabel: "6 oct. 2026" },
+  { title: "Les blocs repliables", description: "Cache le détail, garde l'essentiel : ouvrir et fermer un toggle en un clic.", slug: "les-blocs-repliables", date: "2026-10-06", dateLabel: "6 oct. 2026" },
+  { title: "Ajouter une image, un fichier ou un lien", description: "Glisse, dépose, c'est rangé : images, PDF et liens dans tes pages.", slug: "ajouter-une-image-un-fichier-ou-un-lien", date: "2026-10-06", dateLabel: "6 oct. 2026" },
+  { title: "Les mentions et les rappels", description: "Tape @ et une date : Notion s'en souvient et peut te prévenir.", slug: "les-mentions-et-les-rappels", date: "2026-10-06", dateLabel: "6 oct. 2026" },
+  { title: "Partager une page Notion", description: "Un lien, et tu choisis qui lit, commente ou modifie.", slug: "partager-une-page-notion-avec-un-lien", date: "2026-10-06", dateLabel: "6 oct. 2026" },
+  { title: "Publier une page sur le web", description: "Ta page Notion devient un site simple, lisible sans compte.", slug: "publier-une-page-sur-le-web", date: "2026-10-06", dateLabel: "6 oct. 2026" },
+  { title: "Retrouver une page supprimée", description: "La corbeille garde tout un moment : restaure avant que ce soit trop tard.", slug: "retrouver-une-page-supprimee", date: "2026-10-06", dateLabel: "6 oct. 2026" },
+  { title: "Un journal quotidien dans Notion", description: "Une page par jour, trois lignes : Fait, Demain, Note.", slug: "un-journal-quotidien-dans-notion", date: "2026-10-06", dateLabel: "6 oct. 2026" },
+  { title: "Un suivi d'habitudes", description: "Une case par jour. Rien de plus.", slug: "un-suivi-d-habitudes", date: "2026-10-06", dateLabel: "6 oct. 2026" },
+  { title: "Un tableau de bord personnel", description: "Tes tâches, tes notes, une seule page pour démarrer la journée.", slug: "un-tableau-de-bord-personnel", date: "2026-10-06", dateLabel: "6 oct. 2026" },
+  { title: "Importer tes notes dans Notion", description: "Google Docs, Evernote, fichiers : tout rentre, puis tu ranges.", slug: "importer-tes-notes-dans-notion", date: "2026-10-06", dateLabel: "6 oct. 2026" },
 ];
 
 // Boutique : modèles Notion prévus, rien n'est en vente.

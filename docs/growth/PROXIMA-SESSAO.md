@@ -10,7 +10,14 @@ Data: 28/09/2026 (7.ª sessão do dia: resultados dos lotes 2, P e 4; link Shopi
 
 ---
 
-**Artigos publicados: 24** (o número também aparece em zunrel.com/blog/, calculado sozinho; atualizar só esta linha).
+**Artigos publicados: 36** (o número também aparece em zunrel.com/blog/, calculado sozinho; atualizar só esta linha).
+
+
+## Sessão de 05/10/2026 (noite Grok Bot): +12 artigos Notion
+
+- **12 artigos novos** (datés 6 oct. 2026) : raccourcis à connaître, barre latérale, blocs repliables, image/fichier/lien, mentions et rappels, partager avec un lien, publier sur le web, corbeille, journal quotidien, suivi d'habitudes, tableau de bord, importer des notes.
+- Pins A + B générés ; CSV `pinterest-notion-4.csv` (12 lignes A, comme `pinterest-notion.csv`). Copie Mac : `Documents/Arquivo/Para rever/Pinterest Notion nouveaux.csv`. **Falta o Techonni carregar o CSV.**
+- Corrigé le conflit de fusion resté dans `scripts/make-pins.mjs` (support `OUT=`).
 
 ## Sessão de 05/10/2026 (tarde): 24 artigos Notion e pins
 
