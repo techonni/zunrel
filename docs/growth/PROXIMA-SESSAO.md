@@ -10,6 +10,16 @@ Data: 28/09/2026 (7.ª sessão do dia: resultados dos lotes 2, P e 4; link Shopi
 
 ---
 
+## Sessão de 05/10/2026 (tarde): 24 artigos Notion e pins
+
+- **24 artigos** em `src/lib/site.ts` (8 do pivot + 4 + 12). Cada artigo novo tem texto, desenho, `points` (3 frases para o pin escuro), imagem og e links entre artigos (`related` em `src/pages/blog/[slug].astro`).
+- **Pins** (2:3, 1000×1500): `scripts/make-pins.mjs`. Sem argumentos = todos; com slugs = só esses (`OUT=ficheiro.csv` escolhe o CSV). Variante A clara (`public/pins/<slug>.jpg`) e variante B escura « À retenir » (`public/pins/b/<slug>.jpg`). CSV sem data = publicação imediata, quadro « Notion pour débutants ».
+- **CSV:** `pinterest-notion.csv` (8 artigos, carregado), `pinterest-notion-2.csv` (4 artigos), `pinterest-notion-3.csv` (12 artigos × 2 pins = 24). **Falta o Techonni carregar o `-2` (se ainda não) e o `-3`** (Criar Pins em massa). Títulos únicos por CSV.
+- **X / LinkedIn:** o Techonni disse que por agora não é preciso publicar.
+- **Pendente:** conferir os nomes dos botões do Notion nos artigos (a interface muda); primeiro modelo da Boutique; logótipo novo; e-mail de boas-vindas no Mailchimp.
+
+---
+
 ## Pivot Notion (05/10/2026): LER PRIMEIRO
 
 Pedido do Dário: o Zunrel passa a ser um site **« Notion para principiantes, em francês »**, para depois vender **modelos Notion** na Boutique. O desenho (UI) não muda, só o conteúdo.

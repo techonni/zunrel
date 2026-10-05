@@ -10,9 +10,10 @@ const only = process.argv.slice(2);
 const all = [...site.matchAll(/title: "((?:[^"\\]|\\.)+)", description: "((?:[^"\\]|\\.)+)", slug: "([^"]+)"/g)]
   .map((m) => ({ title: m[1].replace(/\\"/g, '"'), description: m[2], slug: m[3] }));
 const posts = only.length ? all.filter((p) => only.includes(p.slug)) : all;
-const out = only.length ? "pinterest-notion-2.csv" : "pinterest-notion.csv";
+const out = process.env.OUT || (only.length ? "pinterest-notion-2.csv" : "pinterest-notion.csv");
 const BOARD = "Notion pour débutants";
-mkdirSync(`${root}public/pins`, { recursive: true });
+mkdirSync(`${root}public/pins/b`, { recursive: true });
+const pointsOf = (slug) => { const m = readFileSync(`${root}src/lib/articles/${slug}.ts`, "utf8").match(/export const points = (\[.*\]);/); return m ? JSON.parse(m[1]) : []; };
 const html = (p) => `<!doctype html><html><head><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"><style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{width:1000px;height:1500px;background:#fafaf7;color:#111;font-family:Inter,-apple-system,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;padding:90px 80px;display:flex;flex-direction:column}
@@ -30,6 +31,24 @@ p{font-size:36px;line-height:1.4;color:#6e6e6e}
 <h1>${p.title}</h1><div class="rule"></div><p>${p.description}</p>
 <div class="foot"><span>Notion pour débutants</span><b>zunrel.com</b></div>
 </body></html>`;
+const htmlB = (p, pts) => `<!doctype html><html><head><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"><style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:1000px;height:1500px;background:#111;color:#fafaf7;font-family:Inter,-apple-system,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;padding:90px 80px;display:flex;flex-direction:column}
+.brand{display:flex;align-items:center;gap:16px;font-size:34px;font-weight:600}
+.k{margin-top:150px;font-size:30px;letter-spacing:.14em;text-transform:uppercase;color:#8a8a85}
+h1{margin-top:28px;font-size:88px;line-height:1.05;font-weight:600;letter-spacing:-.03em}
+.pts{margin-top:80px;border-top:2px solid #3d3d3d}
+.pt{display:flex;gap:36px;align-items:baseline;padding:36px 0;border-bottom:2px solid #3d3d3d;font-size:40px;line-height:1.3}
+.pt i{font-style:normal;font-size:30px;color:#8a8a85;min-width:44px}
+.foot{margin-top:auto;display:flex;justify-content:space-between;font-size:30px;color:#8a8a85}
+.foot b{color:#fafaf7;font-weight:600}
+</style></head><body>
+<div class="brand"><svg width="52" height="52" viewBox="0 0 64 64"><rect width="64" height="64" rx="15" fill="#fafaf7"/><path d="M20 21h24L20 43h24" fill="none" stroke="#111" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>Zunrel</div>
+<div class="k">À retenir</div>
+<h1>${p.title}</h1>
+<div class="pts">${pts.map((t, i) => `<div class="pt"><i>0${i + 1}</i><span>${t}</span></div>`).join("")}</div>
+<div class="foot"><span>Notion pour débutants</span><b>zunrel.com</b></div>
+</body></html>`;
 const b = await chromium.launch();
 const pg = await (await b.newContext({ viewport: { width: 1000, height: 1500 } })).newPage();
 const q = (s) => `"${String(s).replace(/"/g, '""')}"`;
@@ -41,6 +60,14 @@ for (const p of posts) {
   const desc = `${p.description} Guide gratuit en français sur zunrel.com.`;
   rows.push([q(p.title), `https://zunrel.com/pins/${p.slug}.jpg`, q(BOARD), "", q(desc),
     `https://zunrel.com/blog/${p.slug}/?utm_source=pinterest&utm_medium=social&utm_campaign=pin-notion&utm_content=${p.slug}`, "", q("notion, notion débutant, productivité, organisation, base de données")].join(","));
+  const pts = pointsOf(p.slug);
+  if (pts.length) {
+    await pg.setContent(htmlB(p, pts), { waitUntil: "networkidle" });
+    await pg.evaluate(() => document.fonts.ready);
+    await pg.screenshot({ path: `${root}public/pins/b/${p.slug}.jpg`, type: "jpeg", quality: 92 });
+    rows.push([q(`À retenir : ${p.title}`), `https://zunrel.com/pins/b/${p.slug}.jpg`, q(BOARD), "", q(`${pts.join(" · ")}. Guide gratuit en français sur zunrel.com.`),
+      `https://zunrel.com/blog/${p.slug}/?utm_source=pinterest&utm_medium=social&utm_campaign=pin-notion&utm_content=${p.slug}-b`, "", q("notion, notion débutant, productivité, astuces notion, organisation")].join(","));
+  }
   console.log("ok", p.slug);
 }
 await b.close();
