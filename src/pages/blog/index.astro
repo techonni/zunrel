@@ -2,7 +2,7 @@
 import Base from "../../layouts/Base.astro";
 import Letter from "../../components/Letter.astro";
 import PostList from "../../components/PostList.astro";
-import { f } from "../../lib/site";
+import { f, posts } from "../../lib/site";
 ---
 
 <Base title="Blog" description={f("Les articles de Zunrel : Notion pour débutants, en français. Pages, blocs, bases de données, vues, filtres et modèles à dupliquer.")} current="blog">
@@ -10,6 +10,7 @@ import { f } from "../../lib/site";
     <section class="oh">
       <h1>Blog</h1>
       <p>{f("Des articles courts pour bien démarrer avec Notion : une idée, un exemple, un geste à reproduire.")}</p>
+      <p>{posts.length} articles publiés</p>
     </section>
     <PostList />
     <Letter id="email-blog" />
