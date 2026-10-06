@@ -21,6 +21,16 @@ Data: 28/09/2026 (7.ª sessão do dia: resultados dos lotes 2, P e 4; link Shopi
 
 - **Correction soirée :** l'article doublon `partager-une-page-notion-avec-un-lien` a été remplacé par `les-icones-et-couvertures-de-page` (301 vers l'article Partager existant). CSV `-4` mis à jour.
 
+## Plano pessoal do Dário (06/10/2026): ler com cuidado
+
+- Contexto: o Dário tem 35 anos, vive com os pais, ganha ~1000 €/mês, tem depressão e tenta há anos viver da internet. Hoje estava a 6/10. Tratar com calma, sem pressão, sem promessas de dinheiro rápido. Não repetir o sermão sobre apoio profissional; já foi dito (SNS 24: 808 24 24 24).
+- Ele **não quer Notion** (não domina o assunto). O que domina: **Shopify** (2 lojas de dropshipping no passado, forte no Instagram). Valoriza muito **números de seguidores** (meta emocional: 5000). Não faz vídeos dele; pode mostrar a cara em fotos.
+- Plano proposto (aguarda a resposta dele, **hoje não quis falar de Shopify**): conta de Instagram « Shopify para principiantes » em português neutro, com **carrosséis** (1080×1350) 3×/semana, preparados pelo Claude. Marcos: 100, 500, 1000 seguidores reais. Nomes sugeridos: `@shopify.sem.complicar`, `@loja.do.zero`, `@primeira.loja.shopify`. Primeiros 5 temas: erros da 1.ª loja; o que preciso antes de abrir; dropshipping que ninguém explica; escolher produto; não gastar à toa. Ele deve acrescentar a experiência pessoal (nunca inventar experiência por ele).
+- Em paralelo (opcional): serviço de montar lojas Shopify (Shopify Partners é grátis) e vender os packs de ícones genéricos (24 + 80, sem marcas; os de marcas são só uso pessoal).
+- Zoé (influenciadora IA do Zunrel) e a fiche `ia-influenceuse-zoe.md` ficam em espera.
+
+---
+
 ## Sessão de 05/10/2026 (tarde): 24 artigos Notion e pins
 
 - **24 artigos** em `src/lib/site.ts` (8 do pivot + 4 + 12). Cada artigo novo tem texto, desenho, `points` (3 frases para o pin escuro), imagem og e links entre artigos (`related` em `src/pages/blog/[slug].astro`).
