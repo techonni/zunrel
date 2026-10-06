@@ -126,3 +126,77 @@ footer .legal-links{display:flex;gap:18px}
 .cards a:hover h3{text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}
 .pv-top{margin-top:32px}
 @media (min-width:720px){.cards{grid-template-columns:1fr 1fr;column-gap:32px;row-gap:48px}.cards h3{font-size:20px}}
+/* ===== Style Apple + animations (couleurs inchangées) ===== */
+:root{--ease-out:cubic-bezier(.23,1,.32,1);--r-s:12px;--r-m:20px}
+html{scroll-behavior:smooth}
+body{font-feature-settings:"cv11","ss03";text-rendering:optimizeLegibility}
+::selection{background:var(--accent);color:#fff}
+/* En-tête : matière translucide, sans filet dur */
+.hd{background:rgba(250,250,247,.72);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid transparent;transition:border-color .3s ease,background-color .3s ease}
+.hd.scrolled{border-bottom-color:var(--rule);background:rgba(250,250,247,.82)}
+.brand{transition:opacity .15s ease}
+.brand:active{opacity:.6}
+.nav a{position:relative;transition:color .2s ease}
+.nav a[aria-current]{text-decoration:none}
+.nav a::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease-out)}
+.nav a[aria-current]::after{transform:scaleX(1)}
+/* Typographie : tracking serré sur les grands titres */
+h1,h2{letter-spacing:-.03em}
+.hero h1{line-height:1.04;letter-spacing:-.04em;text-wrap:balance}
+.hero p{text-wrap:pretty}
+.ah h1,.oh h1{letter-spacing:-.035em;line-height:1.06;text-wrap:balance}
+.kick{letter-spacing:.01em}
+/* Boutons : arrondis, réponse immédiate à l'appui */
+.btn,.nlf button,.cns button{border-radius:980px;transition:background-color .2s ease,transform .12s var(--ease-out)}
+.btn{height:48px;padding:0 26px}
+.nlf button{padding:0 24px}
+.btn:active,.nlf button:active,.cns button:active{transform:scale(.97)}
+.nlf input[type=email]{border-radius:var(--r-s);transition:border-color .2s ease,box-shadow .2s ease}
+.nlf input:focus{outline:none;box-shadow:0 0 0 4px rgba(61,61,61,.14)}
+.cns{border-radius:var(--r-m);box-shadow:0 12px 40px rgba(0,0,0,.1);background:rgba(255,255,255,.82);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px)}
+.cns:not([hidden]){animation:rise .5s var(--ease-out) .6s backwards}
+/* Cartes du blog */
+.pv{border-radius:var(--r-m);transition:transform .5s var(--ease-out),box-shadow .5s var(--ease-out);transform-origin:center}
+.cards a:active .pv{transform:scale(.985);transition-duration:.12s}
+.cards a:hover h3{text-decoration:none}
+.cards h3{transition:color .2s ease}
+.grid,.prose figure{border-radius:var(--r-m)}
+.letter{border-top-color:var(--rule)}
+.comm{padding:36px;margin-top:88px;background:#fff;border:1px solid var(--rule);border-radius:var(--r-m)}
+.done{animation:rise .5s var(--ease-out)}
+.done[hidden]{display:none}
+footer{border-top-color:var(--rule)}
+footer a{transition:color .2s ease}
+footer a:hover{color:var(--ink)}
+/* Animations */
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.hero>*{animation:rise .8s var(--ease-out) backwards}
+.hero>:nth-child(2){animation-delay:.07s}
+.hero>:nth-child(3){animation-delay:.14s}
+.hero>:nth-child(4){animation-delay:.21s}
+.ah>*,.oh>*{animation:rise .7s var(--ease-out) backwards}
+.ah>:nth-child(2),.oh>:nth-child(2){animation-delay:.07s}
+.ah>:nth-child(3),.oh>:nth-child(3){animation-delay:.14s}
+.js .rv{opacity:0;transform:translateY(18px);transition:opacity .7s var(--ease-out),transform .7s var(--ease-out)}
+.js .rv.in{opacity:1;transform:none}
+.js .cards li:nth-child(2n).rv{transition-delay:.07s}
+@media (hover:hover) and (pointer:fine){
+  .btn:hover,.nlf button:hover{background:#111}
+  .cards a:hover .pv{transform:scale(1.02);box-shadow:0 18px 48px rgba(0,0,0,.12)}
+  .cards a:hover h3{color:var(--accent)}
+  .nav a:hover::after{transform:scaleX(1)}
+  .nav a:hover{color:var(--ink)}
+}
+@media (min-width:720px){.hero h1{font-size:76px}.hero p{font-size:22px;max-width:640px}.hero .kick{font-size:15px}.comm{padding:48px}}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .hero>*,.ah>*,.oh>*,.cns:not([hidden]),.done{animation:fade .3s ease backwards}
+  .js .rv{transform:none;transition:opacity .3s ease}
+  .pv,.cards a:hover .pv,.cards a:active .pv{transform:none}
+  .btn:active,.nlf button:active,.cns button:active{transform:none}
+}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-transparency:reduce){
+  .hd,.hd.scrolled{background:var(--bg);backdrop-filter:none;-webkit-backdrop-filter:none}
+  .cns{background:#fff;backdrop-filter:none;-webkit-backdrop-filter:none}
+}

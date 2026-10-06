@@ -47,6 +47,7 @@ const imageUrl = new URL(image, Astro.site);
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="p:domain_verify" content="485d0834fb682f692cd0c2e316b227a8" />
     {jsonLd ? <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} /> : null}
+    <script is:inline>document.documentElement.classList.add("js");</script>
     <script is:inline>
       window.dataLayer = window.dataLayer || [];
       function gtag() { dataLayer.push(arguments); }
@@ -106,6 +107,20 @@ const imageUrl = new URL(image, Astro.site);
           box.hidden = true;
           if (choice === "granted") window.zunrelVitals();
         });
+      })();
+    </script>
+    <script is:inline>
+      (function () {
+        var hd = document.querySelector(".hd");
+        function onScroll() { hd.classList.toggle("scrolled", window.scrollY > 8); }
+        onScroll();
+        window.addEventListener("scroll", onScroll, { passive: true });
+        var items = document.querySelectorAll(".cards li, .comm, .letter, .grid, .prose figure, .sl");
+        if (!("IntersectionObserver" in window)) return;
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+        }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
+        items.forEach(function (el) { el.classList.add("rv"); io.observe(el); });
       })();
     </script>
     <script is:inline>
